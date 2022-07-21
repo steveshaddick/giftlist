@@ -1,0 +1,17 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  title: MyString
+  description: MyText
+  price_low: 1
+  price_high: 1
+  asker: one
+  getter: one
+
+two:
+  title: MyString
+  description: MyText
+  price_low: 1
+  price_high: 1
+  asker: two
+  getter: two
