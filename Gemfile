@@ -69,3 +69,4 @@ gem "mini_racer", platforms: :ruby
 gem "jsonapi-serializer", "~> 2.2"
 
 gem "pg", "~> 1.4"
+gem "mini_racer", platforms: :ruby
