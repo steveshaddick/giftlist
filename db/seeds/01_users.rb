@@ -12,7 +12,7 @@ default_users.each.with_index(1) do |new_user, index|
     unless user
         user = User.new({
             email: new_user[:email],
-            name: new_user[:username],
+            name: new_user[:name],
             password: "password",
             password_confirmation: "password",
         })
