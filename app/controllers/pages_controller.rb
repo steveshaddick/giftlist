@@ -59,6 +59,7 @@ class PagesController < ApplicationController
   def prepare_giftlist(gifts)
     gifts.map do |gift|
       {
+        id: gift[:id],
         title: gift[:title],
         description: gift[:description],
         priceLow: format_money(gift[:price_low]),

@@ -21,6 +21,10 @@ export const Title = styled.h1`
   cursor: pointer;
   margin-top: 0;
   font-family: 'Assistant', sans-serif;
+
+  &:hover, &:active {
+    text-decoration: underline;
+  }
 `;
 
 export const Description = styled.div`

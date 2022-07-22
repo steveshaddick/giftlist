@@ -5,10 +5,12 @@ import * as styled from './_styles';
 
 const GiftItem = (props) => {
   const {
+    index,
     title,
     priceLow,
     priceHigh,
     description,
+    getItHandler
    } = props;
 
    const [ isExpanded, setIsExpanded ] = useState(false);
@@ -16,7 +18,7 @@ const GiftItem = (props) => {
   return (
     <styled.Component>
       <styled.SummaryRow>
-        <styled.Title onClick={()=> {
+        <styled.Title role="button" onClick={()=> {
           setIsExpanded(!isExpanded)
         }}>
           { title }
@@ -41,7 +43,7 @@ const GiftItem = (props) => {
       }
     
     <styled.ActionRow>
-      <styled.ActionButton>I'll get it</styled.ActionButton>
+      <styled.ActionButton data-item-index={ index } onClick={ getItHandler }>I'll get it</styled.ActionButton>
     </styled.ActionRow>
 
     </styled.Component>
