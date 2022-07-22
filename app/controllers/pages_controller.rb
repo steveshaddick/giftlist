@@ -3,7 +3,26 @@
 class PagesController < ApplicationController
   include FormatterConcern
 
+  before_action :authenticate_user!
+
   layout "client_application"
+
+  def home
+    gift_lists = current_user.gift_groups.map do |gift_group|
+      {
+        title: gift_group[:title],
+        members: gift_group.users.map do |user|
+            {
+              id: user[:id],
+              name: user[:name]
+            }
+          end
+      }
+    end
+    assign_props({
+      gift_lists: gift_lists
+    })
+  end
 
   def giftlist
     user = User.find(params[:id])

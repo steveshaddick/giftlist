@@ -1,4 +1,6 @@
 Rails.application.routes.draw do
+  resources :memberships
+  resources :gift_groups
   resources :gifts
   devise_for :users
   get 'hello_world', to: 'hello_world#index'
@@ -7,7 +9,7 @@ Rails.application.routes.draw do
   # Defines the root path route ("/")
   # root "articles#index"
 
-  root to: "hello_world#index"
+  root to: "pages#home"
 
   get 'users/:id/giftlist', to: 'pages#giftlist'
 end

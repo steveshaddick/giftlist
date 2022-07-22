@@ -1,0 +1,2 @@
+module GiftGroupsHelper
+end
