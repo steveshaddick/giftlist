@@ -8,19 +8,19 @@ class PagesController < ApplicationController
   layout "client_application"
 
   def home
-    gift_lists = current_user.gift_groups.map do |gift_group|
+    gift_groups = current_user.gift_groups.map do |gift_group|
       {
         title: gift_group[:title],
         members: gift_group.users.map do |user|
-            {
-              id: user[:id],
-              name: user[:name]
-            }
-          end
+          {
+            id: user[:id],
+            name: user[:name]
+          }
+        end
       }
     end
     assign_props({
-      gift_lists: gift_lists
+      gift_groups: gift_groups
     })
   end
 

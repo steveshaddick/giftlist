@@ -1,12 +1,12 @@
 import React, {createContext, useReducer} from 'react';
 
 const initialState = {
-  currentAccount: null
+  currentUser: null
 };
 const store = createContext(initialState);
 const { Provider } = store;
 
-const StateProvider = ({ currentAccount, children } ) => {
+const StateProvider = ({ currentUser, children } ) => {
   const [state, dispatch] = useReducer((state, action) => {
     switch(action.type) {
       case 'actionType':
@@ -15,7 +15,7 @@ const StateProvider = ({ currentAccount, children } ) => {
         throw new Error();
     };
   }, {
-    currentAccount
+    currentUser
   });
 
   return <Provider value={{ state, dispatch }}>{children}</Provider>;

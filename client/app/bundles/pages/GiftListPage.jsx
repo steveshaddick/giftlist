@@ -8,12 +8,12 @@ import GiftList from 'components/GiftList/GiftList';
 import * as styled from './_styles';
 
 const GiftListPage = (props) => {
-  const { currentAccount, gifts } = props;
+  const { currentUser, gifts } = props;
 
   return (
     <>
       <styled.GlobalStyle />
-      <StateProvider currentAccount={currentAccount} >
+      <StateProvider currentUser={currentUser} >
         <MainHeader />
         <styled.PageContainer id="GiftListPage">
           <GiftList items={ gifts } />

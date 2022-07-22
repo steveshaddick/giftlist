@@ -3,32 +3,21 @@ import { StateProvider } from 'utilities/store.js';
 
 import MainHeader from 'components/MainHeader/MainHeader';
 import MainFooter from 'components/MainFooter/MainFooter';
+import GiftGroup from 'components/GiftGroup/GiftGroup';
 
 import * as styled from './_styles';
 
 const HomePage = (props) => {
-  const { currentAccount, giftLists } = props;
-  console.log(giftLists);
+  const { currentUser, giftGroups } = props;
 
   return (
     <>
       <styled.GlobalStyle />
-      <StateProvider currentAccount={currentAccount} >
+      <StateProvider currentUser={currentUser} >
         <MainHeader />
         <styled.PageContainer id="HomePage">
-          {giftLists.map((list) => {
-            return (<div>
-              <h2>{list.title}</h2>
-              <ul>
-                {list.members.map((member) => {
-                  return (
-                    <li>
-                      <a href={`/users/${member.id}/giftlist`}>{member.name}</a>
-                    </li>
-                  )
-                })}
-              </ul>
-            </div>)
+          {giftGroups.map((group) => {
+            return <GiftGroup currentUser={ currentUser } data={ group } />
           })}
         </styled.PageContainer>
         <MainFooter />
