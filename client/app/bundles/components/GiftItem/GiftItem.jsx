@@ -41,9 +41,9 @@ const GiftItem = (props) => {
       }
     
     <styled.ActionRow>
-    
+      <styled.ActionButton>I'll get it</styled.ActionButton>
     </styled.ActionRow>
-      <button>I'll get it</button>
+
     </styled.Component>
   );
 };

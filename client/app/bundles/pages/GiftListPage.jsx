@@ -8,7 +8,8 @@ import GiftList from 'components/GiftList/GiftList';
 import * as styled from './_styles';
 
 const GiftListPage = (props) => {
-  const { currentUser, gifts } = props;
+  const { currentUser, user, gifts } = props;
+  const { name } = user;
 
   return (
     <>
@@ -16,7 +17,7 @@ const GiftListPage = (props) => {
       <StateProvider currentUser={currentUser} >
         <MainHeader />
         <styled.PageContainer id="GiftListPage">
-          <GiftList items={ gifts } />
+          <GiftList name={ name } items={ gifts } />
         </styled.PageContainer>
         <MainFooter />
       </StateProvider>
