@@ -6,7 +6,7 @@ one:
   price_low: 1
   price_high: 1
   asker: one
-  getter: one
+  claimer: one
 
 two:
   title: MyString
@@ -14,4 +14,4 @@ two:
   price_low: 1
   price_high: 1
   asker: two
-  getter: two
+  claimer: two

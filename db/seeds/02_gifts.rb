@@ -15,7 +15,7 @@ User.all.each do |user|
     }
 
     if rand() > 0.8
-      create_data[:getter] = User.find(rand(1..User.count))
+      create_data[:claimer] = User.find(rand(1..User.count))
     end
 
     Gift.create!(create_data)

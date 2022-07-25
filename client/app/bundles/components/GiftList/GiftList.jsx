@@ -3,10 +3,10 @@ import PropTypes from 'prop-types';
 import Modal from 'react-modal';
 
 import { store } from 'utilities/store.js';
-import { getGift as apiGetGift } from 'utilities/api';
+import { claimGift as apiClaimGift } from 'utilities/api';
 
 import GiftItem from 'components/GiftItem/GiftItem';
-import GetGiftConfirm from 'components/GetGiftConfirm/GetGiftConfirm';
+import ClaimGiftConfirm from 'components/ClaimGiftConfirm/ClaimGiftConfirm';
 
 import * as styled from './_styles';
 
@@ -39,8 +39,8 @@ const GiftList = (props) => {
     openModal();
   }
 
-  const confirmGetGiftHandler = () => {
-    apiGetGift({
+  const confirmClaimGiftHandler = () => {
+    apiClaimGift({
       gift: selectedItem,
       currentUser: currentUser,
     })
@@ -75,7 +75,7 @@ const GiftList = (props) => {
         contentLabel="Confirm Gift"
       >
         { selectedItem && 
-          <GetGiftConfirm name={ name } gift={ selectedItem } yesHandler={ confirmGetGiftHandler } cancelHandler={ closeModal } />
+          <ClaimGiftConfirm name={ name } gift={ selectedItem } yesHandler={ confirmClaimGiftHandler } cancelHandler={ closeModal } />
         }
       </Modal>
     </styled.Component>

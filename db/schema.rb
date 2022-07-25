@@ -28,12 +28,12 @@ ActiveRecord::Schema[7.0].define(version: 2022_07_22_153443) do
     t.integer "price_low"
     t.integer "price_high"
     t.bigint "asker_id", null: false
-    t.bigint "getter_id"
+    t.bigint "claimer_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.boolean "received", default: false
     t.index ["asker_id"], name: "index_gifts_on_asker_id"
-    t.index ["getter_id"], name: "index_gifts_on_getter_id"
+    t.index ["claimer_id"], name: "index_gifts_on_claimer_id"
   end
 
   create_table "memberships", force: :cascade do |t|
@@ -59,7 +59,7 @@ ActiveRecord::Schema[7.0].define(version: 2022_07_22_153443) do
   end
 
   add_foreign_key "gifts", "users", column: "asker_id"
-  add_foreign_key "gifts", "users", column: "getter_id"
+  add_foreign_key "gifts", "users", column: "claimer_id"
   add_foreign_key "memberships", "gift_groups"
   add_foreign_key "memberships", "users"
 end

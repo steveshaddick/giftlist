@@ -10,8 +10,12 @@ const GiftItem = (props) => {
     priceLow,
     priceHigh,
     description,
-    getItHandler
+    getItHandler,
+    claimer,
    } = props;
+
+   const { id, name } = claimer || {};
+   const isClaimed = claimer !== null;
 
    const [ isExpanded, setIsExpanded ] = useState(false);
 

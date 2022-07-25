@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 
 import * as styled from './_styles';
 
-const GetGiftConfirm = (props) => {
+const ClaimGiftConfirm = (props) => {
   const {
     name,
     gift,
@@ -25,7 +25,7 @@ const GetGiftConfirm = (props) => {
   );
 };
 
-GetGiftConfirm.propTypes = {
+ClaimGiftConfirm.propTypes = {
 };
 
-export default GetGiftConfirm;
+export default ClaimGiftConfirm;
