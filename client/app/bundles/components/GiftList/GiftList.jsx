@@ -1,11 +1,14 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import PropTypes from 'prop-types';
 import Modal from 'react-modal';
 
+import { store } from 'utilities/store.js';
+import { getGift as apiGetGift } from 'utilities/api';
+
 import GiftItem from 'components/GiftItem/GiftItem';
+import GetGiftConfirm from 'components/GetGiftConfirm/GetGiftConfirm';
 
 import * as styled from './_styles';
-import GetGiftConfirm from '../GetGiftConfirm/GetGiftConfirm';
 
 const customStyles = {
   content: {
@@ -23,15 +26,29 @@ const customStyles = {
 Modal.setAppElement('#AppContainer');
 
 const GiftList = (props) => {
+  const globalState = useContext(store);
+  const { currentUser } = globalState.state;
+
   const { name, items } = props;
 
   const [isModalOpen, setModalOpen] = React.useState(false);
   const [selectedItem, setSelectedItem] = React.useState(null); 
 
   const getItHandler = (e) => {
-    console.log(items[e.currentTarget.dataset.itemIndex]);
     setSelectedItem(items[e.currentTarget.dataset.itemIndex]);
     openModal();
+  }
+
+  const confirmGetGiftHandler = () => {
+    apiGetGift({
+      gift: selectedItem,
+      currentUser: currentUser,
+    })
+      .then(response => {
+        console.log("CONFIRM GET GIFT", response);
+      });
+    
+    setModalOpen(false);
   }
 
   function openModal() {
@@ -58,7 +75,7 @@ const GiftList = (props) => {
         contentLabel="Confirm Gift"
       >
         { selectedItem && 
-          <GetGiftConfirm name={ name } gift={ selectedItem } yesHandler={ closeModal } cancelHandler={ closeModal } />
+          <GetGiftConfirm name={ name } gift={ selectedItem } yesHandler={ confirmGetGiftHandler } cancelHandler={ closeModal } />
         }
       </Modal>
     </styled.Component>

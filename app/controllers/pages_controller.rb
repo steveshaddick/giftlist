@@ -26,7 +26,7 @@ class PagesController < ApplicationController
 
   def giftlist
     user = User.find(params[:id])
-    gifts = user.giftlist.where(received: false)
+    gifts = user.giftlist.where(received: false).order(:getter_id: :asc)
 
     assign_props({
       user: {
@@ -58,12 +58,22 @@ class PagesController < ApplicationController
 
   def prepare_giftlist(gifts)
     gifts.map do |gift|
+      getter = if (gift[:asker_id] != current_user.id) && gift.getter
+        {
+          id: gift.getter[:id],
+          name: gift.getter[:name],
+        }
+      else
+        nil
+      end
+
       {
         id: gift[:id],
         title: gift[:title],
         description: gift[:description],
         priceLow: format_money(gift[:price_low]),
         priceHigh: format_money(gift[:price_high]),
+        getter: getter,
       }
     end
   end

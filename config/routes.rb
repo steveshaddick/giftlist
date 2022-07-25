@@ -12,4 +12,13 @@ Rails.application.routes.draw do
   root to: "pages#home"
 
   get 'users/:id/giftlist', to: 'pages#giftlist'
+
+  #api
+  namespace :api do
+    namespace :v1 do
+
+      patch 'gifts/:id', to: 'gifts#update'
+
+    end
+  end
 end
