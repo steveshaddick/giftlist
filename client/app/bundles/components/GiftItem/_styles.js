@@ -4,6 +4,24 @@ export const Component = styled.article`
   width: 100%;
   border-bottom: 1px solid #ddd;
   padding-bottom: 1rem;
+
+  ${props => {
+    if (props.isClaimed) {
+      if (props.currentUserClaimed) {
+        return `
+          background: #d4eadc;
+          padding: 1rem;
+          border-radius: 10px;
+          color: #12620f;
+          border: none;
+        `;
+      } else {
+        return `
+          opacity: 0.5;
+        `;
+      }
+    }
+  }}
 `;
 
 export const SummaryRow = styled.div`
@@ -60,5 +78,21 @@ export const ActionButton = styled.button`
   &:hover, &:active {
     background: #aaa;
     color: white;
+  }
+`;
+
+export const ClaimedRow = styled.div`
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+
+  ${ActionButton} {
+    color: #9b4343;
+
+    &:hover {
+      border: 1px solid #9b4343;
+      background: #9b4343;
+      color: #fff;
+    }
   }
 `;

@@ -3,10 +3,10 @@ import PropTypes from 'prop-types';
 import Modal from 'react-modal';
 
 import { store } from 'utilities/store.js';
-import { claimGift as apiClaimGift } from 'utilities/api';
+import { claimGift as apiClaimGift, unClaimGift as apiUnClaimGift } from 'utilities/api';
 
 import GiftItem from 'components/GiftItem/GiftItem';
-import ClaimGiftConfirm from 'components/ClaimGiftConfirm/ClaimGiftConfirm';
+import ConfirmActionModal from 'components/ConfirmActionModal/ConfirmActionModal';
 
 import * as styled from './_styles';
 
@@ -32,23 +32,65 @@ const GiftList = (props) => {
   const { name, items } = props;
 
   const [isModalOpen, setModalOpen] = React.useState(false);
-  const [selectedItem, setSelectedItem] = React.useState(null); 
+  const [selectedItem, setSelectedItem] = React.useState(null);
+  const [giftAction, setGiftAction] = React.useState(null); 
 
-  const getItHandler = (e) => {
+  const claimHandler = (e) => {
     setSelectedItem(items[e.currentTarget.dataset.itemIndex]);
+    setGiftAction('claim');
     openModal();
   }
 
-  const confirmClaimGiftHandler = () => {
-    apiClaimGift({
-      gift: selectedItem,
-      currentUser: currentUser,
-    })
-      .then(response => {
-        console.log("CONFIRM GET GIFT", response);
-      });
+  const unClaimHandler = (e) => {
+    setSelectedItem(items[e.currentTarget.dataset.itemIndex]);
+    setGiftAction('unclaim');
+    openModal();
+  }
+
+  const confirmActionHandler = () => {
+    switch (giftAction) {
+      case 'claim':
+        apiClaimGift({
+          gift: selectedItem,
+          currentUser: currentUser,
+        })
+          .then(response => {
+            selectedItem.claimer = {
+              id: currentUser.id,
+              name: currentUser.name,
+            };
+            setSelectedItem(null);
+            setGiftAction(null);
+          });
+        break;
+      
+      case 'unclaim':
+        apiUnClaimGift({
+          gift: selectedItem,
+        })
+          .then(response => {
+            selectedItem.claimer = null;
+            setSelectedItem(null);
+            setGiftAction(null);
+          });
+        break;
+    }
     
     setModalOpen(false);
+  }
+
+  function confirmMessage() {
+    switch (giftAction) {
+      case 'claim':
+        return (
+          <p>You want to get <span className="gift-title">{ selectedItem.title }</span> for { name }?</p>
+        );
+
+      case 'unclaim':
+        return (
+          <p>Unclaim <span className="gift-title">{ selectedItem.title }</span>?</p>
+        );
+    }
   }
 
   function openModal() {
@@ -64,7 +106,13 @@ const GiftList = (props) => {
       <styled.List>
         {items.map((item, index) => (
           <styled.ListItem key={ item.id }>
-            <GiftItem getItHandler={ getItHandler } index={ index } {...item} />
+            <GiftItem
+              claimHandler={ claimHandler }
+              unClaimHandler = { unClaimHandler }
+              index={ index }
+              currentUser={ currentUser }
+              {...item}
+              />
           </styled.ListItem>
         ))}
       </styled.List>
@@ -75,7 +123,11 @@ const GiftList = (props) => {
         contentLabel="Confirm Gift"
       >
         { selectedItem && 
-          <ClaimGiftConfirm name={ name } gift={ selectedItem } yesHandler={ confirmClaimGiftHandler } cancelHandler={ closeModal } />
+          <ConfirmActionModal
+            message={ confirmMessage() }
+            yesHandler={ confirmActionHandler }
+            cancelHandler={ closeModal } 
+            />
         }
       </Modal>
     </styled.Component>

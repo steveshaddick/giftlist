@@ -10,17 +10,19 @@ const GiftItem = (props) => {
     priceLow,
     priceHigh,
     description,
-    getItHandler,
+    claimHandler,
+    unClaimHandler,
     claimer,
+    currentUser,
    } = props;
 
-   const { id, name } = claimer || {};
    const isClaimed = claimer !== null;
+   const currentUserClaimed = claimer && claimer.id === currentUser.id;
 
    const [ isExpanded, setIsExpanded ] = useState(false);
 
   return (
-    <styled.Component>
+    <styled.Component isClaimed={ isClaimed } currentUserClaimed={ currentUserClaimed }>
       <styled.SummaryRow>
         <styled.Title role="button" onClick={()=> {
           setIsExpanded(!isExpanded)
@@ -46,9 +48,25 @@ const GiftItem = (props) => {
         </styled.Description>
       }
     
-    <styled.ActionRow>
-      <styled.ActionButton data-item-index={ index } onClick={ getItHandler }>I'll get it</styled.ActionButton>
-    </styled.ActionRow>
+    {isClaimed &&
+      <styled.ClaimedRow>
+        {currentUserClaimed &&
+          <>
+          <p>You are getting this.</p>
+          <styled.ActionButton data-item-index={ index } onClick={ unClaimHandler }>Cancel</styled.ActionButton>
+          </>
+        }
+        {!currentUserClaimed &&
+          <p>{ claimer.name } is getting this.</p>
+        }
+      </styled.ClaimedRow>
+    }
+
+    {!isClaimed &&
+      <styled.ActionRow>
+        <styled.ActionButton data-item-index={ index } onClick={ claimHandler }>I'll get it</styled.ActionButton>
+      </styled.ActionRow>
+    }
 
     </styled.Component>
   );

@@ -3,9 +3,9 @@ import PropTypes from 'prop-types';
 
 import * as styled from './_styles';
 
-const ClaimGiftConfirm = (props) => {
+const ConfirmActionModal = (props) => {
   const {
-    name,
+    message,
     gift,
     yesHandler,
     cancelHandler
@@ -14,7 +14,7 @@ const ClaimGiftConfirm = (props) => {
   return (
     <styled.Component>
       <styled.TextContainer>
-        <p>You want to get <span className="gift-title">{ gift.title }</span> for { name }?</p>
+        { message }
       </styled.TextContainer>
 
       <styled.ButtonsContainer>
@@ -25,7 +25,7 @@ const ClaimGiftConfirm = (props) => {
   );
 };
 
-ClaimGiftConfirm.propTypes = {
+ConfirmActionModal.propTypes = {
 };
 
-export default ClaimGiftConfirm;
+export default ConfirmActionModal;

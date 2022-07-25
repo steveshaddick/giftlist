@@ -26,7 +26,13 @@ class PagesController < ApplicationController
 
   def giftlist
     user = User.find(params[:id])
-    gifts = user.giftlist.where(received: false).order(claimer_id: :desc)
+    if (user === current_user)
+      gifts = user.active_giftlist
+    else
+      current_user_claimed = user.active_giftlist.where(claimer_id: current_user[:id])
+      other_gifts = user.active_giftlist.where.not(claimer_id: current_user[:id]).or(user.active_giftlist.where(claimer_id: nil)).order(claimer_id: :desc)
+      gifts = current_user_claimed + other_gifts
+    end
 
     assign_props({
       user: {
@@ -58,7 +64,7 @@ class PagesController < ApplicationController
 
   def prepare_giftlist(gifts)
     gifts.map do |gift|
-      claimer = (gift[:asker_id] != current_user.id) && gift.claimer ?
+      claimer = gift.claimer ?
         {
           id: gift.claimer[:id],
           name: gift.claimer[:name],

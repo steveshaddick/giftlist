@@ -9,4 +9,8 @@ class User < ApplicationRecord
   
   has_many :memberships
   has_many :gift_groups, through: :memberships
+
+  def active_giftlist
+    giftlist.where(received: false)
+  end
 end
