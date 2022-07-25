@@ -13,4 +13,8 @@ class User < ApplicationRecord
   def active_giftlist
     giftlist.where(received: false)
   end
+
+  def claimlist
+    gifts_claimed.where(received: false)
+  end
 end

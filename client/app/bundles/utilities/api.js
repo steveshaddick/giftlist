@@ -39,3 +39,15 @@ export async function unClaimGift(data) {
 
   return response;
 }
+
+export async function getClaimList(data) {
+  const { currentUser } = data;
+
+  const response = await fetch(`/api/v1/users/${currentUser.id}/claimlist`, {
+    headers,
+  });
+
+  const jsonRepsponse = await response.json();
+
+  return jsonRepsponse;
+}

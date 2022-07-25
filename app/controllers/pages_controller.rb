@@ -26,7 +26,8 @@ class PagesController < ApplicationController
 
   def giftlist
     user = User.find(params[:id])
-    if (user === current_user)
+    is_current_user_list = (user === current_user)
+    if is_current_user_list
       gifts = user.active_giftlist
     else
       current_user_claimed = user.active_giftlist.where(claimer_id: current_user[:id])
@@ -39,8 +40,12 @@ class PagesController < ApplicationController
         id: user.id,
         name: user.name,
       },
-      gifts: prepare_giftlist(gifts),
+      gifts: prepare_giftlist(gifts, is_current_user_list),
     })
+  end
+
+  def user_profile
+    assign_props
   end
 
   private
@@ -62,9 +67,9 @@ class PagesController < ApplicationController
     end
   end
 
-  def prepare_giftlist(gifts)
+  def prepare_giftlist(gifts, is_current_user_list)
     gifts.map do |gift|
-      claimer = gift.claimer ?
+      claimer = !is_current_user_list && gift.claimer ?
         {
           id: gift.claimer[:id],
           name: gift.claimer[:name],
