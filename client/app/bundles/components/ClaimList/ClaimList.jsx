@@ -3,9 +3,9 @@ import PropTypes from 'prop-types';
 import Modal from 'react-modal';
 
 import { store } from 'utilities/store.js';
-import { unClaimGift as apiUnClaimGift } from 'utilities/api';
+import { unClaimGift as apiUnClaimGift, setGiftGot as apiSetGiftGot } from 'utilities/api';
 
-import GiftItem from 'components/GiftItem/GiftItem';
+import ClaimListItem from 'components/ClaimListItem/ClaimListItem';
 import ConfirmActionModal from 'components/ConfirmActionModal/ConfirmActionModal';
 
 import * as styled from './_styles';
@@ -34,11 +34,28 @@ const ClaimList = (props) => {
   const [selectedItem, setSelectedItem] = React.useState(null);
   const [giftAction, setGiftAction] = React.useState(null);
   const [claims, setClaims] = React.useState({});
+  const [isApi, setIsApi] = React.useState(false);
 
   const unClaimHandler = (e) => {
-    setSelectedItem(items[e.currentTarget.dataset.itemIndex]);
+    const parent = e.currentTarget.closest('[data-item-index]');
+    const item = items[parent.dataset.itemIndex];
+    setSelectedItem(item);
     setGiftAction('unclaim');
     openModal();
+  }
+
+  const gotHandler = (e) => {
+    const parent = e.currentTarget.closest('[data-item-index]');
+    const item = items[parent.dataset.itemIndex];
+
+    item.isGot = !item.isGot;
+
+    setIsApi(true);
+    apiSetGiftGot({
+      gift: item,
+    }).then(response => {
+      setIsApi(false);
+    });
   }
 
   const confirmActionHandler = () => {
@@ -48,7 +65,8 @@ const ClaimList = (props) => {
           gift: selectedItem,
         })
           .then(response => {
-            selectedItem.claimer = null;
+            // ugh
+            location.reload();
             setSelectedItem(null);
             setGiftAction(null);
           });
@@ -76,19 +94,36 @@ const ClaimList = (props) => {
 
   useEffect(() => {
     // This really needs to be refactored
-    let claims = {};
+    let tmpClaims = {};
     for (let i=0; i<items.length; i++) {
       const item = items[i];
-      if (!claims[item.asker.id]) {
-        claims[item.asker.id] = {
+      if (!tmpClaims[item.asker.id]) {
+        tmpClaims[item.asker.id] = {
+          id: item.asker.id,
+          allGot: true,
           name: item.asker.name,
           gifts: [],
         }
       }
+      item.originalId = i;
 
-      claims[item.asker.id].gifts.push(item);
-      console.log("EFFECT", claims);
+      if (item.isGot) {
+        tmpClaims[item.asker.id].gifts.push(item);
+      } else {
+        tmpClaims[item.asker.id].gifts.unshift(item);
+        tmpClaims[item.asker.id].allGot = false;
+      }
     }
+
+    let claims = [];
+    for (let key in tmpClaims) {
+      if (tmpClaims[key].allGot) {
+        claims.push(tmpClaims[key]);
+      } else {
+        claims.unshift(tmpClaims[key]);
+      }
+    }
+
     setClaims(claims);
   }, [items]);
 
@@ -96,19 +131,19 @@ const ClaimList = (props) => {
     <styled.Component>
       <styled.List>
         {Object.keys(claims).map((key) => {
-          console.log(key);
           const claim = claims[key];
           return (
-          <styled.ListItem>
-            <h2>{ claim.name }</h2>
+          <styled.ListItem key={ claim.id }>
+            <styled.AskerName>
+              for <a href={`/users/${claim.id}/giftlist`}>{ claim.name }</a>:
+            </styled.AskerName>
             <styled.List>
-              {claim.gifts.map((item, index) => (
+              {claim.gifts.map((item) => (
                 <styled.ListItem key={ item.id }>
-                  <GiftItem
+                  <ClaimListItem
+                    index={ item.originalId }
                     unClaimHandler = { unClaimHandler }
-                    index={ index }
-                    currentUser={ currentUser }
-                    claimer={ currentUser }
+                    gotHandler = { gotHandler }
                     {...item}
                     />
               </styled.ListItem>

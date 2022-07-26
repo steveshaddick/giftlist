@@ -1,4 +1,5 @@
 class Api::V1::UsersController < Api::V1::BaseController
+  include FormatterConcern
 
   def claimlist
     if user_signed_in? && current_user[:id] == params[:id].to_i
@@ -9,8 +10,9 @@ class Api::V1::UsersController < Api::V1::BaseController
           id: gift[:id],
           title: gift[:title],
           description: gift[:description],
-          priceLow: gift.price_low,
-          priceHigh: gift.price_high,
+          priceLow: format_money(gift.price_low),
+          priceHigh: format_money(gift.price_high),
+          isGot: gift[:claimer_got],
           asker: {
             id: gift.asker.id,
             name: gift.asker.name,

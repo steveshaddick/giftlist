@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2022_07_22_153443) do
+ActiveRecord::Schema[7.0].define(version: 2022_07_26_143128) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -32,6 +32,7 @@ ActiveRecord::Schema[7.0].define(version: 2022_07_22_153443) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.boolean "received", default: false
+    t.boolean "claimer_got", null: false
     t.index ["asker_id"], name: "index_gifts_on_asker_id"
     t.index ["claimer_id"], name: "index_gifts_on_claimer_id"
   end

@@ -13,6 +13,7 @@ const commonOptions = {
     extensions: ['.css', '.ts', '.tsx'],
     alias: {
       components: resolve(__dirname, `${appPath}/bundles/components/`),
+      images: resolve(__dirname, `${appPath}/bundles/images/`),
       pages: resolve(__dirname, `${appPath}/bundles/pages/`),
       utilities: resolve(__dirname, `${appPath}/bundles/utilities/`),
     },

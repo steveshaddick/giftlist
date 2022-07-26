@@ -47,7 +47,24 @@ export async function getClaimList(data) {
     headers,
   });
 
-  const jsonRepsponse = await response.json();
+  const jsonResponse = await response.json();
 
-  return jsonRepsponse;
+  return jsonResponse;
+}
+
+export async function setGiftGot(data) {
+  const { gift } = data;
+  const { id: giftId } = gift;
+
+  let requestData = {
+    claimer_got: gift.isGot,
+  }
+
+  const response = await fetch(`/api/v1/gifts/${giftId}`, {
+    headers,
+    method: 'PATCH',
+    body: JSON.stringify(requestData),
+  });
+
+  return response;
 }

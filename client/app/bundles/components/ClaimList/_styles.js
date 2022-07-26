@@ -4,6 +4,10 @@ export const Component = styled.div`
   width: 100%;
 `;
 
+export const AskerName = styled.h2`
+  font-size: 1rem;
+`;
+
 export const List = styled.ul`
   list-style: none;
   padding: 0;
