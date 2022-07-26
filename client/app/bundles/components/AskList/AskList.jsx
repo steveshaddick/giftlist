@@ -1,15 +1,15 @@
-import React, { useState, useEffect, useContext, useRef } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import PropTypes from 'prop-types';
 import Modal from 'react-modal';
 
 import { store } from 'utilities/store.js';
-import { 
+import {
   unClaimGift as apiUnClaimGift,
   setGiftGot as apiSetGiftGot,
-  getClaimList as apiGetClaimList,
+  getAskingList as apiGetAskingList
 } from 'utilities/api';
 
-import ClaimListItem from 'components/ClaimListItem/ClaimListItem';
+import AskListItem from 'components/AskListItem/AskListItem';
 import ConfirmActionModal from 'components/ConfirmActionModal/ConfirmActionModal';
 
 import * as styled from './_styles';
@@ -29,20 +29,20 @@ const customStyles = {
 
 Modal.setAppElement('#AppContainer');
 
-const ClaimList = (props) => {
+const AskList = (props) => {
   const globalState = useContext(store);
   const { currentUser } = globalState.state;
 
+  const { items } = props;
   const [isModalOpen, setModalOpen] = React.useState(false);
   const [selectedItem, setSelectedItem] = React.useState(null);
   const [giftAction, setGiftAction] = React.useState(null);
-  let items = useRef([]);
   const [claims, setClaims] = React.useState({});
   const [isApi, setIsApi] = React.useState(false);
 
   const unClaimHandler = (e) => {
     const parent = e.currentTarget.closest('[data-item-index]');
-    const item = items.current[parent.dataset.itemIndex];
+    const item = items[parent.dataset.itemIndex];
     setSelectedItem(item);
     setGiftAction('unclaim');
     openModal();
@@ -50,8 +50,7 @@ const ClaimList = (props) => {
 
   const gotHandler = (e) => {
     const parent = e.currentTarget.closest('[data-item-index]');
-    const item = items.current[parent.dataset.itemIndex];
-    console.log(items);
+    const item = items[parent.dataset.itemIndex];
 
     item.isGot = !item.isGot;
 
@@ -98,71 +97,17 @@ const ClaimList = (props) => {
   }
 
   useEffect(() => {
-    apiGetClaimList({
-      currentUser,
+    apiGetAskingList({
+      currentUser
+    }).then(response => {
+      console.log(response);
     })
-      .then(data => {
-        // This really needs to be refactored
-        let tmpClaims = {};
-        for (let i=0; i<data.length; i++) {
-          const item = data[i];
-          if (!tmpClaims[item.asker.id]) {
-            tmpClaims[item.asker.id] = {
-              id: item.asker.id,
-              allGot: true,
-              name: item.asker.name,
-              gifts: [],
-            }
-          }
-          item.originalId = i;
-
-          if (item.isGot) {
-            tmpClaims[item.asker.id].gifts.push(item);
-          } else {
-            tmpClaims[item.asker.id].gifts.unshift(item);
-            tmpClaims[item.asker.id].allGot = false;
-          }
-        }
-
-        let claims = [];
-        for (let key in tmpClaims) {
-          if (tmpClaims[key].allGot) {
-            claims.push(tmpClaims[key]);
-          } else {
-            claims.unshift(tmpClaims[key]);
-          }
-        }
-    
-        items.current = data;
-        setClaims(claims);
-      });
-  }, []);
+  }, [items]);
 
   return (
     <styled.Component>
       <styled.List>
-        {Object.keys(claims).map((key) => {
-          const claim = claims[key];
-          return (
-          <styled.ListItem key={ claim.id }>
-            <styled.AskerName>
-              for <a href={`/users/${claim.id}/giftlist`}>{ claim.name }</a>:
-            </styled.AskerName>
-            <styled.List>
-              {claim.gifts.map((item) => (
-                <styled.ListItem key={ item.id }>
-                  <ClaimListItem
-                    index={ item.originalId }
-                    unClaimHandler = { unClaimHandler }
-                    gotHandler = { gotHandler }
-                    {...item}
-                    />
-              </styled.ListItem>
-              ))}
-            </styled.List>
-          </styled.ListItem>
-          );  
-        })}
+        List!
       </styled.List>
       <Modal
         isOpen={isModalOpen}
@@ -182,8 +127,9 @@ const ClaimList = (props) => {
   );
 };
 
-ClaimList.propTypes = {
+AskList.propTypes = {
   name: PropTypes.string,
+  items: PropTypes.array,
 };
 
-export default ClaimList;
+export default AskList;

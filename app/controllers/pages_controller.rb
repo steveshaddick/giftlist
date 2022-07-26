@@ -45,6 +45,16 @@ class PagesController < ApplicationController
   end
 
   def user_profile
+    unless current_user && current_user[:id] == params[:id].to_i
+      redirect_to :root
+      return
+    end
+
+    unless params.has_key?(:tab)
+      redirect_to controller:'pages', action: 'user_profile', id: params[:id], tab: 'asking'
+      return
+    end
+
     assign_props
   end
 

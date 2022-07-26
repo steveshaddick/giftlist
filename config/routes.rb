@@ -12,7 +12,7 @@ Rails.application.routes.draw do
   root to: "pages#home"
 
   get 'users/:id/giftlist', to: 'pages#giftlist'
-  get 'users/:id/', to: 'pages#user_profile'
+  get 'users/:id/profile(/:tab)', to: 'pages#user_profile'
 
   #api
   namespace :api do
@@ -20,6 +20,7 @@ Rails.application.routes.draw do
 
       patch 'gifts/:id', to: 'gifts#update'
       get 'users/:id/claimlist', to: 'users#claimlist'
+      get 'users/:id/asklist', to: 'users#asklist'
 
     end
   end

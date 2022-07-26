@@ -52,6 +52,18 @@ export async function getClaimList(data) {
   return jsonResponse;
 }
 
+export async function getAskingList(data) {
+  const { currentUser } = data;
+
+  const response = await fetch(`/api/v1/users/${currentUser.id}/asklist`, {
+    headers,
+  });
+
+  const jsonResponse = await response.json();
+
+  return jsonResponse;
+}
+
 export async function setGiftGot(data) {
   const { gift } = data;
   const { id: giftId } = gift;

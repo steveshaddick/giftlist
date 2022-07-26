@@ -18,7 +18,7 @@ const MainHeader = () => {
           </li>
 
           <li>
-            <styled.ProfileLink href={`/users/${currentUser.id}`}>
+            <styled.ProfileLink href={`/users/${currentUser.id}/profile`}>
               My Lists
             </styled.ProfileLink>
           </li>

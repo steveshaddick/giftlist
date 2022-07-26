@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { StateProvider } from 'utilities/store.js';
 import { getClaimList as apiGetClaimList } from 'utilities/api';
 
@@ -7,15 +7,16 @@ import MainFooter from 'components/MainFooter/MainFooter';
 import ProfileDetails from 'components/ProfileDetails/ProfileDetails';
 import ProfileTabs from 'components/ProfileTabs/ProfileTabs';
 import ClaimList from 'components/ClaimList/ClaimList';
+import AskList from 'components/AskList/AskList';
 
 import * as styled from './_styles';
 
 const UserProfilePage = (props) => {
-  const { currentUser } = props;
-  const { name } = currentUser;
+  const { currentUser, tab } = props;
+  const { id, name } = currentUser;
 
-  const [selectedTab, setSelectedTab] = useState('claimed');
-  const [items, setItems] = useState([]);
+  const [selectedTab, setSelectedTab] = useState('');
+  let lastTab = useRef('');
 
   const tabClickHandler = (e) => {
     const tab = e.currentTarget.dataset.action;
@@ -23,12 +24,32 @@ const UserProfilePage = (props) => {
   }
 
   useEffect(() => {
-    apiGetClaimList({
-      currentUser,
-    })
-      .then(response => {
-        setItems(response);
-      });
+    const currentPath = window.location.pathname;
+    const pathTab = currentPath.replace(`/users/${id}/profile/`, '');
+
+    window.addEventListener('popstate', () => {
+      const currentPath = window.location.pathname;
+      const pathTab = currentPath.replace(`/users/${id}/profile/`, '');
+      setSelectedTab(pathTab);
+    });
+
+    if (pathTab === '') {
+      setSelectedTab('asking');
+    } else {
+      setSelectedTab(pathTab);
+    }
+    
+  }, []);
+
+  useEffect(() => {
+    const currentPath = window.location.pathname;
+    const pathTab = currentPath.replace(`/users/${id}/profile/`, '');
+  
+    if ((selectedTab !== '') && (pathTab !== selectedTab)) {
+      console.log('push history', selectedTab);
+      window.history.pushState({ tab: selectedTab }, '', `${window.location.origin}/users/${id}/profile/${selectedTab}`);
+    }
+    
   }, [selectedTab]);
 
   return (
@@ -39,8 +60,11 @@ const UserProfilePage = (props) => {
         <styled.PageContainer id="UserProfilePage">
           <ProfileDetails name={ name } />
           <ProfileTabs selectedTab={ selectedTab } tabClickHandler={ tabClickHandler } />
+          { selectedTab == 'asking' &&
+            <AskList />
+          }
           { selectedTab == 'claimed' &&
-            <ClaimList items={ items } />
+            <ClaimList />
           }
         </styled.PageContainer>
         <MainFooter />
