@@ -1,6 +1,21 @@
 class Api::V1::GiftsController < Api::V1::BaseController
   include FormatterConcern
 
+  def create
+    if user_signed_in?
+      # Add asking gift
+      if params[:asker_id] === current_user[:id]
+        Gift.create({
+          asker: current_user,
+          title: params[:title],
+          description: params[:description],
+          price_high: unformat_money(params[:price_high]),
+          price_low: unformat_money(params[:price_low]),
+        })
+      end
+    end
+  end
+
   def update
     if user_signed_in?
       gift = Gift.find(params[:id])
@@ -34,6 +49,16 @@ class Api::V1::GiftsController < Api::V1::BaseController
       if params.has_key?(:claimer_got) && gift[:claimer_id] === current_user[:id]
         gift.update(claimer_got: params[:claimer_got])
         gift.save
+      end
+    end
+  end
+
+  def delete
+    if user_signed_in?
+      gift = Gift.find(params[:id])
+
+      if (gift.asker[:id] === current_user[:id])
+        gift.destroy
       end
     end
   end

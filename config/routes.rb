@@ -18,7 +18,10 @@ Rails.application.routes.draw do
   namespace :api do
     namespace :v1 do
 
+      post 'gifts', to: 'gifts#create'
       patch 'gifts/:id', to: 'gifts#update'
+      delete 'gifts/:id', to: 'gifts#delete'
+
       get 'users/:id/claimlist', to: 'users#claimlist'
       get 'users/:id/asklist', to: 'users#asklist'
 

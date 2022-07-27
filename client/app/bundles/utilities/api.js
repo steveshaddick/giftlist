@@ -100,3 +100,36 @@ export async function updateGift(data) {
 
   return response;
 }
+
+export async function addAskingGift(data) {
+  const { gift, currentUser } = data;
+  const { title, description, priceHigh: price_high, priceLow: price_low } = gift;
+
+  let requestData = {
+    asker_id: currentUser.id,
+    title,
+    description,
+    price_high: parseInt(price_high, 10),
+    price_low: parseInt(price_low, 10),
+  };
+
+  const response = await fetch(`/api/v1/gifts`, {
+    headers,
+    method: 'POST',
+    body: JSON.stringify(requestData),
+  });
+
+  return response;
+}
+
+export async function deleteGift(data) {
+  const { gift } = data;
+  const { id } = gift;
+
+  const response = await fetch(`/api/v1/gifts/${id}`, {
+    headers,
+    method: 'DELETE',
+  });
+
+  return response;
+}

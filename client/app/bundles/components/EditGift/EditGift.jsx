@@ -3,7 +3,10 @@ import PropTypes from 'prop-types';
 import { useForm } from "react-hook-form";
 import ReactQuill from 'react-quill';
 
-import { updateGift as apiUpdateGift } from 'utilities/api';
+import {
+  updateGift as apiUpdateGift,
+  addAskingGift as apiAddAskingGift
+} from 'utilities/api';
 
 import 'react-quill/dist/quill.snow.css';
 import * as styled from './_styles';
@@ -14,9 +17,17 @@ const modules = {
   ],
 };
 
+function submitButtonValue(isNew) {
+  if (isNew) {
+    return "Add";
+  } else {
+    return "Save";
+  }
+}
 
 const EditGift = (props) => {
   const {
+    isNew,
     id,
     title,
     priceLow,
@@ -24,6 +35,7 @@ const EditGift = (props) => {
     description,
     cancelHandler,
     saveHandler,
+    currentUser,
   } = props;
 
   const { register, formState: { errors }, setValue, handleSubmit } = useForm({
@@ -37,7 +49,10 @@ const EditGift = (props) => {
   });
 
   const onSubmit = (data) => {
-    apiUpdateGift({
+    const submitCall = isNew ? apiAddAskingGift : apiUpdateGift;
+
+    submitCall({
+      currentUser,
       gift: data,
     })
       .then(response => {
@@ -53,13 +68,18 @@ const EditGift = (props) => {
 
   const [ descriptionText, setDescriptionText ] = useState(description);
 
-
-
   return (
     <styled.Component>
-      <styled.Title>
-        Editing gift
-      </styled.Title>
+      { isNew &&
+        <styled.Title>
+          Add to list
+        </styled.Title>
+      }
+      { !isNew &&
+        <styled.Title>
+          Editing gift
+        </styled.Title>
+      }
       <styled.EditGiftForm onSubmit={handleSubmit(onSubmit)}>
 
         <input type="hidden" {...register("id")} />
@@ -85,7 +105,7 @@ const EditGift = (props) => {
           <styled.Input type="text" {...register("priceHigh")} />
         </styled.FieldContainer>
 
-        <input type="submit" />
+        <input type="submit" value={ submitButtonValue(isNew) } />
         <button onClick={ cancelHandler }>Cancel</button>
       </styled.EditGiftForm>
     </styled.Component>

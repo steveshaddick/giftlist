@@ -8,6 +8,7 @@ import ProfileDetails from 'components/ProfileDetails/ProfileDetails';
 import ProfileTabs from 'components/ProfileTabs/ProfileTabs';
 import ClaimList from 'components/ClaimList/ClaimList';
 import AskList from 'components/AskList/AskList';
+import EditGift from 'components/EditGift/EditGift';
 
 import * as styled from './_styles';
 
@@ -16,11 +17,26 @@ const UserProfilePage = (props) => {
   const { id, name } = currentUser;
 
   const [selectedTab, setSelectedTab] = useState('');
+  const [isNewGift, setIsNewGift] = useState(false);
   let lastTab = useRef('');
 
   const tabClickHandler = (e) => {
     const tab = e.currentTarget.dataset.action;
+    setIsNewGift(false);
     setSelectedTab(tab);
+  }
+
+  const newGiftHandler = () => {
+    setIsNewGift(true);
+  }
+
+  const cancelNewGiftHandler = () => {
+    setIsNewGift(false);
+  }
+
+  const saveNewGiftHandler = () => {
+    // TODO refactor this as a state reducer, probably
+    window.location.reload();
   }
 
   useEffect(() => {
@@ -59,7 +75,20 @@ const UserProfilePage = (props) => {
         <MainHeader />
         <styled.PageContainer id="UserProfilePage">
           <ProfileDetails name={ name } />
-          <ProfileTabs selectedTab={ selectedTab } tabClickHandler={ tabClickHandler } />
+          <ProfileTabs
+            isNewGift={ isNewGift }
+            selectedTab={ selectedTab }
+            tabClickHandler={ tabClickHandler }
+            newGiftHandler={ newGiftHandler }
+            />
+          { isNewGift && 
+            <EditGift
+              isNew={ true }
+              currentUser={ currentUser }
+              cancelHandler={ cancelNewGiftHandler }
+              saveHandler={ saveNewGiftHandler }
+            />
+          }
           { selectedTab == 'asking' &&
             <AskList />
           }

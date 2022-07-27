@@ -4,13 +4,13 @@ import Modal from 'react-modal';
 
 import { store } from 'utilities/store.js';
 import {
-  unClaimGift as apiUnClaimGift,
-  setGiftGot as apiSetGiftGot,
-  getAskingList as apiGetAskingList
+  getAskingList as apiGetAskingList,
+  deleteGift as apiDeleteGift,
 } from 'utilities/api';
 
 import AskListItem from 'components/AskListItem/AskListItem';
 import EditGift from 'components/EditGift/EditGift';
+import ConfirmActionModal from 'components/ConfirmActionModal/ConfirmActionModal';
 
 import * as styled from './_styles';
 
@@ -34,7 +34,8 @@ const AskList = (props) => {
   const { currentUser } = globalState.state;
 
   const [isModalOpen, setModalOpen] = React.useState(false);
-  const [selectedItem, setSelectedItem] = React.useState(null);
+  const [editingItem, setEditingItem] = React.useState(null);
+  const [deletingItem, setDeletingItem] = React.useState(null);
   const [giftAction, setGiftAction] = React.useState(null);
   const [items, setItems] = React.useState({});
   const [isApi, setIsApi] = React.useState(false);
@@ -42,24 +43,41 @@ const AskList = (props) => {
   const editItemHandler = (e) => {
     const parent = e.currentTarget.closest('[data-item-index]');
     const item = items[parent.dataset.itemIndex];
-    console.log(item);
-    setSelectedItem(item);
+    console.log('editing', item);
+    setEditingItem(item);
+    openModal();
+  }
+
+  const deleteHandler = (e) => {
+    const parent = e.currentTarget.closest('[data-item-index]');
+    const item = items[parent.dataset.itemIndex];
+    console.log('deleting', item);
+    setDeletingItem(item);
     openModal();
   }
 
   function confirmMessage() {
-    switch (giftAction) {
-      case 'unclaim':
-        return (
-          <p>Unclaim <span className="gift-title">{ selectedItem.title }</span>?</p>
-        );
-    }
+    return (
+      <p>Delete <span className="gift-title">{ deletingItem.title }</span>?</p>
+    );
+  }
+
+  const confirmDeleteHandler = () => {
+    apiDeleteGift({
+      gift: deletingItem,
+    }).then(response => {
+      const newItems = items.filter(item => item.id !== deletingItem.id);
+      setItems(newItems);
+      closeModal();
+    });
   }
 
   function openModal() {
     setModalOpen(true);
   }
   function closeModal() {
+    setEditingItem(null);
+    setDeletingItem(null);
     setModalOpen(false);
   }
 
@@ -79,6 +97,7 @@ const AskList = (props) => {
             <AskListItem
               index={ index }
               editHandler={ editItemHandler }
+              deleteHandler={ deleteHandler }
               {...item}
               />
           </styled.ListItem>
@@ -90,7 +109,7 @@ const AskList = (props) => {
         style={customStyles}
         contentLabel="Confirm Gift"
       >
-        { selectedItem && 
+        { editingItem && 
           <EditGift
             saveHandler={(newItem) => {
               const newItems = items.map((item) => {
@@ -105,10 +124,16 @@ const AskList = (props) => {
               closeModal();
             }}
             cancelhandler={() => {
-              setSelectedItem(null);
               closeModal();
             }}
-            {...selectedItem}
+            {...editingItem}
+            />
+        }
+        { deletingItem &&
+          <ConfirmActionModal
+            message={ confirmMessage() }
+            yesHandler={ confirmDeleteHandler }
+            cancelHandler={ closeModal } 
             />
         }
       </Modal>
