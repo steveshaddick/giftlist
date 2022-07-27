@@ -1,8 +1,20 @@
 class Api::V1::GiftsController < Api::V1::BaseController
+  include FormatterConcern
 
   def update
     if user_signed_in?
       gift = Gift.find(params[:id])
+
+      # Update gift values
+      if params.has_key?(:title) && gift[:asker_id] === current_user[:id]
+        gift.update(
+          title: params[:title],
+          description: params[:description],
+          price_high: unformat_money(params[:price_high]),
+          price_low: unformat_money(params[:price_low]),
+        )
+        gift.save
+      end
 
       # Update the claimer
       if params.has_key?(:claimer_id)

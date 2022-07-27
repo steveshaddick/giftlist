@@ -61,7 +61,7 @@ const ClaimListItem = (props) => {
 
       {isExpanded && 
         <styled.Description>
-          { description }
+          <div dangerouslySetInnerHTML={{__html: description}} />
           <div>
             <styled.ActionButton data-item-index={ index } onClick={ unClaimHandler }>Cancel</styled.ActionButton>
           </div>

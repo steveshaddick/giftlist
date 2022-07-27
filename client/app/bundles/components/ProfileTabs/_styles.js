@@ -3,6 +3,9 @@ import styled from 'styled-components';
 export const Component = styled.div`
   display: flex;
   border-bottom: 2px solid #ccc;
+  position: sticky;
+  top: 0;
+  background: white;
 `;
 
 export const TabButton = styled.button`

@@ -10,7 +10,7 @@ import {
 } from 'utilities/api';
 
 import AskListItem from 'components/AskListItem/AskListItem';
-import ConfirmActionModal from 'components/ConfirmActionModal/ConfirmActionModal';
+import EditGift from 'components/EditGift/EditGift';
 
 import * as styled from './_styles';
 
@@ -33,51 +33,18 @@ const AskList = (props) => {
   const globalState = useContext(store);
   const { currentUser } = globalState.state;
 
-  const { items } = props;
   const [isModalOpen, setModalOpen] = React.useState(false);
   const [selectedItem, setSelectedItem] = React.useState(null);
   const [giftAction, setGiftAction] = React.useState(null);
-  const [claims, setClaims] = React.useState({});
+  const [items, setItems] = React.useState({});
   const [isApi, setIsApi] = React.useState(false);
 
-  const unClaimHandler = (e) => {
+  const editItemHandler = (e) => {
     const parent = e.currentTarget.closest('[data-item-index]');
     const item = items[parent.dataset.itemIndex];
+    console.log(item);
     setSelectedItem(item);
-    setGiftAction('unclaim');
     openModal();
-  }
-
-  const gotHandler = (e) => {
-    const parent = e.currentTarget.closest('[data-item-index]');
-    const item = items[parent.dataset.itemIndex];
-
-    item.isGot = !item.isGot;
-
-    setIsApi(true);
-    apiSetGiftGot({
-      gift: item,
-    }).then(response => {
-      setIsApi(false);
-    });
-  }
-
-  const confirmActionHandler = () => {
-    switch (giftAction) {
-      case 'unclaim':
-        apiUnClaimGift({
-          gift: selectedItem,
-        })
-          .then(response => {
-            // ugh
-            location.reload();
-            setSelectedItem(null);
-            setGiftAction(null);
-          });
-        break;
-    }
-    
-    setModalOpen(false);
   }
 
   function confirmMessage() {
@@ -100,14 +67,22 @@ const AskList = (props) => {
     apiGetAskingList({
       currentUser
     }).then(response => {
-      console.log(response);
+      setItems(response);
     })
-  }, [items]);
+  }, []);
 
   return (
     <styled.Component>
       <styled.List>
-        List!
+        {items.length && items.map((item, index) => (
+          <styled.ListItem key={ item.id }>
+            <AskListItem
+              index={ index }
+              editHandler={ editItemHandler }
+              {...item}
+              />
+          </styled.ListItem>
+        ))}
       </styled.List>
       <Modal
         isOpen={isModalOpen}
@@ -116,10 +91,24 @@ const AskList = (props) => {
         contentLabel="Confirm Gift"
       >
         { selectedItem && 
-          <ConfirmActionModal
-            message={ confirmMessage() }
-            yesHandler={ confirmActionHandler }
-            cancelHandler={ closeModal } 
+          <EditGift
+            saveHandler={(newItem) => {
+              const newItems = items.map((item) => {
+                if (item.id === newItem.id) {
+                  return newItem;
+                } else {
+                  return item;
+                }
+              });
+              console.log(newItems);
+              setItems(newItems);
+              closeModal();
+            }}
+            cancelhandler={() => {
+              setSelectedItem(null);
+              closeModal();
+            }}
+            {...selectedItem}
             />
         }
       </Modal>

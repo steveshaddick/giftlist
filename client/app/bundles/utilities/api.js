@@ -80,3 +80,23 @@ export async function setGiftGot(data) {
 
   return response;
 }
+
+export async function updateGift(data) {
+  const { gift } = data;
+  const { id, title, description, priceHigh: price_high, priceLow: price_low } = gift;
+
+  let requestData = {
+    title,
+    description,
+    price_high: parseInt(price_high, 10),
+    price_low: parseInt(price_low, 10),
+  };
+
+  const response = await fetch(`/api/v1/gifts/${id}`, {
+    headers,
+    method: 'PATCH',
+    body: JSON.stringify(requestData),
+  });
+
+  return response;
+}

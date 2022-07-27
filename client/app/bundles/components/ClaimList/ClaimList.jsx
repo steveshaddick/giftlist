@@ -51,7 +51,6 @@ const ClaimList = (props) => {
   const gotHandler = (e) => {
     const parent = e.currentTarget.closest('[data-item-index]');
     const item = items.current[parent.dataset.itemIndex];
-    console.log(items);
 
     item.isGot = !item.isGot;
 

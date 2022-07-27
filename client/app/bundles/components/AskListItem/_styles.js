@@ -6,6 +6,7 @@ export const SummaryRow = styled.div`
 
 export const ActionRow = styled.div`
   display: flex;
+  justify-content: space-between;
 `;
 
 export const CheckboxContainer = styled.div`
@@ -72,6 +73,16 @@ export const ActionButton = styled.button`
   }
 `;
 
+export const DeleteButton = styled(ActionButton)`
+  color: red;
+  border-color: red;
+`;
+
+export const EditButton = styled(ActionButton)`
+  color: blue;
+  border-color: blue;
+`;
+
 export const ClaimedRow = styled.div`
   display: flex;
   justify-content: space-between;
@@ -92,18 +103,4 @@ export const Component = styled.article`
   width: 100%;
   border-bottom: 1px solid #ddd;
   padding-bottom: 1rem;
-
-  ${props => {
-    if (props.isGot) {
-      return `
-        ${Title} {
-          color: #999;
-          text-decoration: line-through;
-        }
-        ${PriceContainer} {
-          display: none;
-        }
-      `;
-    }
-  }};
 `;

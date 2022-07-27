@@ -43,9 +43,7 @@ const GiftItem = (props) => {
       </styled.SummaryRow>
 
       {isExpanded && 
-        <styled.Description>
-          { description }
-        </styled.Description>
+        <styled.Description dangerouslySetInnerHTML={{__html: description}} />
       }
     
     {isClaimed &&

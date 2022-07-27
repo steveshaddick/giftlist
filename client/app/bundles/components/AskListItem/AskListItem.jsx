@@ -3,8 +3,6 @@ import PropTypes from 'prop-types';
 
 import * as styled from './_styles';
 
-import { IconContext } from "react-icons";
-import { MdCheckBoxOutlineBlank, MdOutlineCheckBox } from 'react-icons/md';
 
 const AskListItem = (props) => {
   const {
@@ -13,31 +11,13 @@ const AskListItem = (props) => {
     priceLow,
     priceHigh,
     description,
-    isGot,
-    gotHandler,
-    claimHandler,
-    unClaimHandler,
+    deleteHandler,
+    editHandler,
    } = props;
 
-   const [ isExpanded, setIsExpanded ] = useState(false);
-
   return (
-    <styled.Component data-item-index={ index } isGot={ isGot }>
+    <styled.Component data-item-index={ index }>
       <styled.SummaryRow>
-        <styled.CheckboxContainer>
-          <IconContext.Provider value={{ size: "25px" }}>
-            {!isGot && 
-              <styled.CheckboxButton onClick={ gotHandler }>
-                <MdCheckBoxOutlineBlank />
-              </styled.CheckboxButton>
-            }
-            {isGot && 
-              <styled.CheckboxButton onClick={ gotHandler }>
-                <MdOutlineCheckBox />
-              </styled.CheckboxButton>
-            }
-          </IconContext.Provider>
-        </styled.CheckboxContainer>
         
         <styled.TitleContainer className="title-container">
           <styled.Title role="button" onClick={()=> {
@@ -59,14 +39,13 @@ const AskListItem = (props) => {
         
       </styled.SummaryRow>
 
-      {isExpanded && 
-        <styled.Description>
-          { description }
-          <div>
-            <styled.ActionButton data-item-index={ index } onClick={ unClaimHandler }>Cancel</styled.ActionButton>
-          </div>
-        </styled.Description>
-      }
+      <styled.Description dangerouslySetInnerHTML={{__html: description}} />
+      
+      <styled.ActionRow>
+        <styled.EditButton onClick={ editHandler }>Edit</styled.EditButton>
+        <styled.DeleteButton onClick={ deleteHandler }>Delete</styled.DeleteButton>
+      </styled.ActionRow>
+
 
     </styled.Component>
   );
