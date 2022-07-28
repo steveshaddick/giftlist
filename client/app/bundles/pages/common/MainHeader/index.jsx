@@ -1,11 +1,10 @@
 import React, { useContext } from 'react';
-import { store } from 'utilities/store.js';
+import { getCurrentUser } from 'utilities/CurrentUserContext';
 
 import * as styled from './_styles';
 
 const MainHeader = () => {
-  const globalState = useContext(store);
-  const { currentUser } = globalState.state;
+  const currentUser = getCurrentUser();
 
   return (
     <header>

@@ -25,6 +25,7 @@
     "react-modal": "^3.15.1",
     "react-on-rails": "13.0.2",
     "react-quill": "beta",
+    "react-scroll": "^1.8.7",
     "shakapacker": "6.5.0",
     "style-loader": "^3.3.1",
     "styled-components": "^5.3.5",

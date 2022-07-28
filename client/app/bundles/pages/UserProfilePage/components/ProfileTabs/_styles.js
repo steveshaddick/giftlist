@@ -7,6 +7,7 @@ export const TabButton = styled.button`
   padding: 0.5rem;
   cursor: pointer;
   font-weight: bold;
+  border-radius: 0;
 
   ${props => {
     if (props.selected) {
@@ -24,13 +25,6 @@ export const TabButton = styled.button`
 export const TabsContainer = styled.nav`
   display: flex;
   border-bottom: 2px solid #ccc;
-`;
-
-export const ButtonsContainer = styled.div`
-  padding: 1rem 0;
-`;
-
-export const NewGiftButton = styled.button`
 `;
 
 export const Component = styled.div`

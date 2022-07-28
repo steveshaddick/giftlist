@@ -5,13 +5,21 @@ class Api::V1::GiftsController < Api::V1::BaseController
     if user_signed_in?
       # Add asking gift
       if params[:asker_id] === current_user[:id]
-        Gift.create({
+        gift = Gift.create({
           asker: current_user,
           title: params[:title],
           description: params[:description],
           price_high: unformat_money(params[:price_high]),
           price_low: unformat_money(params[:price_low]),
         })
+
+        render json: {
+          id: gift[:id],
+          title: gift[:title],
+          description: gift[:description],
+          priceHigh: format_money(gift[:price_high]),
+          priceLow: format_money(gift[:price_low]),
+        }
       end
     end
   end
@@ -60,6 +68,8 @@ class Api::V1::GiftsController < Api::V1::BaseController
       if (gift.asker[:id] === current_user[:id])
         gift.destroy
       end
+
+      render json: {}
     end
   end
 end

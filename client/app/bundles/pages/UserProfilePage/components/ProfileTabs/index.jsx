@@ -5,10 +5,8 @@ import * as styled from './_styles';
 
 const ProfileTabs = (props) => {
   const {
-    isNewGift,
     selectedTab,
     tabClickHandler,
-    newGiftHandler,
    } = props;
 
   return (
@@ -29,10 +27,6 @@ const ProfileTabs = (props) => {
           Claimed List
         </styled.TabButton>
       </styled.TabsContainer>
-
-      <styled.ButtonsContainer>
-        <styled.NewGiftButton disabled={ isNewGift } onClick={ newGiftHandler }>Add new gift</styled.NewGiftButton>
-      </styled.ButtonsContainer>
     </styled.Component>
   );
 };

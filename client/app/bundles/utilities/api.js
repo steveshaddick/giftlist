@@ -1,10 +1,46 @@
 import { useContext } from 'react';
 
-const token = document.querySelector('[name=csrf-token]').content;
+const apiDomain = '/api/v1';
+
+const csrfToken = document.querySelector('[name=csrf-token]').content;
 const headers = {
   'Content-Type': 'application/json',
-  'X-CSRF-TOKEN': token,
+  'X-CSRF-TOKEN': csrfToken,
 };
+
+let currentUser = null;
+
+let inFlight = {};
+
+async function callApi(path, data=null, options={}) {
+  const defaultOptions = {
+  }
+  const defaultHeaders =  {
+    'Content-Type': 'application/json',
+    'X-CSRF-TOKEN': csrfToken,
+  }
+
+  let requestOptions = {
+    ...defaultOptions,
+    ...options,
+  }
+  requestOptions.headers = options.headers ? {
+    ...defaultHeaders,
+    ...options.headers,
+  } : defaultHeaders;
+
+  if (data) {
+    requestOptions.body = JSON.stringify(data)
+  }
+
+  const response = await fetch(`${apiDomain}/${path}`, requestOptions);
+
+  return await response.json();
+}
+
+export async function setApiCurrentUser(userData) {
+  currentUser = userData;
+}
 
 export async function claimGift(data) {
   const { currentUser, gift} = data;
@@ -52,18 +88,6 @@ export async function getClaimList(data) {
   return jsonResponse;
 }
 
-export async function getAskingList(data) {
-  const { currentUser } = data;
-
-  const response = await fetch(`/api/v1/users/${currentUser.id}/asklist`, {
-    headers,
-  });
-
-  const jsonResponse = await response.json();
-
-  return jsonResponse;
-}
-
 export async function setGiftGot(data) {
   const { gift } = data;
   const { id: giftId } = gift;
@@ -92,17 +116,17 @@ export async function updateGift(data) {
     price_low: parseInt(price_low, 10),
   };
 
-  const response = await fetch(`/api/v1/gifts/${id}`, {
-    headers,
+  return callApi(`gifts/${id}`, requestData, {
     method: 'PATCH',
-    body: JSON.stringify(requestData),
   });
+}
 
-  return response;
+export async function getAskingList(data) {
+  return callApi(`users/${currentUser.id}/asklist`);
 }
 
 export async function addAskingGift(data) {
-  const { gift, currentUser } = data;
+  const { gift } = data;
   const { title, description, priceHigh: price_high, priceLow: price_low } = gift;
 
   let requestData = {
@@ -113,23 +137,16 @@ export async function addAskingGift(data) {
     price_low: parseInt(price_low, 10),
   };
 
-  const response = await fetch(`/api/v1/gifts`, {
-    headers,
+  return callApi(`gifts`, requestData, {
     method: 'POST',
-    body: JSON.stringify(requestData),
   });
-
-  return response;
 }
 
 export async function deleteGift(data) {
   const { gift } = data;
   const { id } = gift;
 
-  const response = await fetch(`/api/v1/gifts/${id}`, {
-    headers,
+  return callApi(`gifts/${id}`, null, {
     method: 'DELETE',
   });
-
-  return response;
 }

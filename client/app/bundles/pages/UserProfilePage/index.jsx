@@ -1,16 +1,18 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { StateProvider } from 'utilities/store.js';
+import { CurrentUserProvider } from 'utilities/CurrentUserContext';
 import { getClaimList as apiGetClaimList } from 'utilities/api';
 
-import MainHeader from 'components/MainHeader/MainHeader';
-import MainFooter from 'components/MainFooter/MainFooter';
-import ProfileDetails from 'components/ProfileDetails/ProfileDetails';
-import ProfileTabs from 'components/ProfileTabs/ProfileTabs';
-import ClaimList from 'components/ClaimList/ClaimList';
-import AskList from 'components/AskList/AskList';
+import MainHeader from 'pages/common/MainHeader';
+import MainFooter from 'pages/common/MainFooter';
+
+import ProfileDetails from './components/ProfileDetails';
+import ProfileTabs from './components/ProfileTabs';
+import ClaimList from './components/ClaimList';
+import AskList from './components/AskList';
 import EditGift from 'components/EditGift/EditGift';
 
-import * as styled from './_styles';
+import { GlobalStyle } from 'common/_styles/global';
+import * as layout from 'common/_styles/layout';
 
 const UserProfilePage = (props) => {
   const { currentUser, tab } = props;
@@ -70,10 +72,10 @@ const UserProfilePage = (props) => {
 
   return (
     <>
-      <styled.GlobalStyle />
-      <StateProvider currentUser={currentUser} >
+      <GlobalStyle />
+      <CurrentUserProvider currentUser={currentUser} >
         <MainHeader />
-        <styled.PageContainer id="UserProfilePage">
+        <layout.PageContainer id="UserProfilePage">
           <ProfileDetails name={ name } />
           <ProfileTabs
             isNewGift={ isNewGift }
@@ -95,9 +97,9 @@ const UserProfilePage = (props) => {
           { selectedTab == 'claimed' &&
             <ClaimList />
           }
-        </styled.PageContainer>
+        </layout.PageContainer>
         <MainFooter />
-      </StateProvider>
+      </CurrentUserProvider>
     </>
   );
 };

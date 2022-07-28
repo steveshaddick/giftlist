@@ -9,7 +9,7 @@ import {
   getClaimList as apiGetClaimList,
 } from 'utilities/api';
 
-import ClaimListItem from 'components/ClaimListItem/ClaimListItem';
+import ClaimListItem from '../ClaimListItem';
 import ConfirmActionModal from 'components/ConfirmActionModal/ConfirmActionModal';
 
 import * as styled from './_styles';
