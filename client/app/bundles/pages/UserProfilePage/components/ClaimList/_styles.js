@@ -3,6 +3,12 @@ import styled from 'styled-components';
 export const AddButton = styled.button`
 `;
 
+export const AskerNameContainer = styled.div`
+  background: #f6f6f6;
+  padding: 0.15rem 0;
+  margin-top: 2rem;
+`;
+
 export const AskerName = styled.h2`
   font-size: 1rem;
   font-weight: normal;

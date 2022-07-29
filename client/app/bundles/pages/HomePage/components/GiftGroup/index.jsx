@@ -1,8 +1,7 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
 
-import GiftItem from 'components/GiftItem/GiftItem';
-
+import * as layout from 'common/_styles/layout';
 import * as styled from './_styles';
 
 const GiftGroup = (props) => {
@@ -13,15 +12,15 @@ const GiftGroup = (props) => {
     <styled.Component>
       <styled.List>
         {members.map((member) => {
-          if (member.id !== currentUser.id) {
-            return (
-              <li>
+          return (
+            <li key={ member.id }>
+              <layout.GridRow>
                 <styled.MemberListLink href={`/users/${member.id}/giftlist`}>
                   { member.name }
                 </styled.MemberListLink>
-              </li>
-            )
-          }
+              </layout.GridRow>
+            </li>
+          )
         })}
       </styled.List>
     </styled.Component>

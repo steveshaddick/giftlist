@@ -132,11 +132,13 @@ const ClaimList = (props) => {
           const claim = claims[key];
           return (
           <styled.ListItem key={ claim.id }>
-            <layout.GridRow>
-              <styled.AskerName>
-                for <a href={`/users/${claim.id}/giftlist`}>{ claim.name }</a>:
-              </styled.AskerName>
-            </layout.GridRow>
+            <styled.AskerNameContainer>
+              <layout.GridRow>
+                <styled.AskerName>
+                  for <a href={`/users/${claim.id}/giftlist`}>{ claim.name }</a>:
+                </styled.AskerName>
+              </layout.GridRow>
+            </styled.AskerNameContainer>
 
             <styled.List>
               {claim.gifts.map((item) => (
