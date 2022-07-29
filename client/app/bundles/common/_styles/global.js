@@ -10,15 +10,17 @@ export const GlobalStyle = createGlobalStyle`
 
   body {
     --standard-font: 'Assistant', sans-serif;
+    --font-color: #333;
 
     --error-red: #d04949;
     --green: #569340;
     --dark-green: #4a6c32;
     --yellow: #e8de55;
+    --blue: #22639b;
 
     background-color: white;
     font-family: var(--standard-font);
-    color: #333;
+    color: var(--font-color);
   }
 
   h1, h2, h3, h4, h5, h6 {

@@ -9,22 +9,30 @@ export const TabButton = styled.button`
   font-weight: bold;
   border-radius: 0;
 
+  &:hover, &:active {
+    background: #eee;
+  }
+
   ${props => {
     if (props.selected) {
       return `
-        background: #ccc;
+        background: #e1e1e1;
+        cursor: default;
+
+        &:not([disabled]){
+          &:hover, &:active {
+            background: #e1e1e1;
+            color: var(--font-color);
+          }
+        }
       `;
     }
   }}
-
-  &:hover {
-    background: #eee;
-  }
 `;
 
 export const TabsContainer = styled.nav`
   display: flex;
-  border-bottom: 2px solid #ccc;
+  border-bottom: 2px solid #b9ae94;
 `;
 
 export const Component = styled.div`

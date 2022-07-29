@@ -1,12 +1,17 @@
 import styled from 'styled-components';
+import { breakpoints } from 'common/_styles/breakpoints';
 
 export const SummaryRow = styled.div`
-  display: flex;
+  @media ${breakpoints.tabletPortraitAndUp} {
+    display: flex;
+    justify-content: space-between;
+  }
 `;
 
 export const ActionRow = styled.div`
   display: flex;
   justify-content: space-between;
+  padding: 1rem 0;
 `;
 
 export const CheckboxContainer = styled.div`
@@ -27,7 +32,7 @@ export const TitleContainer = styled.div`
 `;
 
 export const Title = styled.h1`
-  font-size: 1.25rem;
+  font-size: 1.5rem;
   margin-top: 0;
   font-family: var(--standard-font);
   margin-bottom: 0.25rem;
@@ -53,29 +58,28 @@ export const Price = styled.span`
   }
 `;
 
-export const ActionButton = styled.button`
-  background: none;
-  cursor: pointer;
-  color: #999;
-  border: 1px solid #ccc;
-  border-radius: 5px;
-  padding: 5px 10px;
-  margin-top: 1rem;
+export const DeleteButton = styled.button`
+  color: var(--error-red);
+  border-color: #ddbfbf;
+  padding: 0.3rem 1.5rem;
 
-  &:hover, &:active {
-    background: #aaa;
-    color: white;
+  &:not([disabled]) {
+      &:hover, &:active {
+      background: #b74a4a;
+    }
   }
 `;
 
-export const DeleteButton = styled(ActionButton)`
-  color: red;
-  border-color: red;
-`;
+export const EditButton = styled.button`
+  color: var(--blue);
+  border-color: #c8d6e1;
+  padding: 0.3rem 1.5rem;
 
-export const EditButton = styled(ActionButton)`
-  color: blue;
-  border-color: blue;
+  &:not([disabled]) {
+      &:hover, &:active {
+      background: #5d859d;
+    }
+  }
 `;
 
 export const ClaimedRow = styled.div`
@@ -83,7 +87,7 @@ export const ClaimedRow = styled.div`
   justify-content: space-between;
   align-items: baseline;
 
-  ${ActionButton} {
+  button {
     color: #9b4343;
 
     &:hover {
@@ -97,7 +101,7 @@ export const ClaimedRow = styled.div`
 export const Component = styled.article`
   width: 100%;
   border-bottom: 1px solid #ddd;
-  padding-bottom: 1rem;
+  padding: 1.5rem 0;
 
-  background: ${props => props.isEditing ? "#fffbf1" : 'transparent'}
+  background: ${props => props.isEditing ? "#f6f6f6" : 'transparent'}
 `;

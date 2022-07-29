@@ -33,6 +33,11 @@ const EditGift = (props) => {
   const { id, title, description, priceHigh, priceLow } = gift || {};
   
   const fieldId = id ? id : 'new';
+  const isNew = typeof gift !== 'object';
+
+  const [ isPriceRange, setIsPriceRange ] = useState(priceLow !== priceHigh);
+  const [ isSaving, setIsSaving ] = useState(false);
+
   const fieldName = (name) => {
     return `${name}_${fieldId}`;
   }
@@ -43,6 +48,7 @@ const EditGift = (props) => {
     obj[fieldName('description')] = description || '';
     obj[fieldName('priceLow')] = priceLow || '';
     obj[fieldName('priceHigh')] = priceHigh || '';
+    obj[fieldName('isPriceRange')] = priceHigh || '';
 
     return obj;
   }
@@ -79,11 +85,6 @@ const EditGift = (props) => {
     setValue(fieldName('description'), data);
   };
 
-  const isNew = typeof gift !== 'object';
-
-  const [ isPriceRange, setIsPriceRange ] = useState(priceLow !== priceHigh);
-  const [ isSaving, setIsSaving ] = useState(false);
-
   const onPriceBlur = (e) => {
     const [ priceLowVal, priceHighVal ] = getValues([fieldName('priceLow'), fieldName('priceHigh')]);
     const priceLow = parseInt(priceLowVal);
@@ -105,12 +106,13 @@ const EditGift = (props) => {
   }
 
   useEffect(() => {
+    const [priceLow, priceHigh] = getValues([fieldName('priceLow'), fieldName('priceHigh')]);
     if (isPriceRange) {
-      if (getValues(fieldName('priceHigh')) == '') {
-        setValue(fieldName('priceHigh'), parseInt(getValues(fieldName('priceLow'))) + 10);
+      if ((priceHigh == '') || (priceLow == priceHigh)) {
+        setValue(fieldName('priceHigh'), parseInt(priceLow * 1.1));
       }
     } else {
-      setValue(fieldName('priceHigh'), getValues(fieldName('priceLow')));
+      setValue(fieldName('priceHigh'), priceLow);
     }
   }, [isPriceRange]);
   
@@ -166,7 +168,7 @@ const EditGift = (props) => {
             </styled.PriceInputContainer>
             
             <styled.PriceRangeContainer>
-              <input id={ fieldName('isPriceRange') } type="checkbox" value={ isPriceRange } onChange={() => {
+              <input name={ fieldName('isPriceRange') } type="checkbox" checked ={ isPriceRange } onChange={() => {
                 setIsPriceRange(!isPriceRange);
               }} />
               <styled.Label htmlFor={ fieldName('isPriceRange') }>Range</styled.Label>

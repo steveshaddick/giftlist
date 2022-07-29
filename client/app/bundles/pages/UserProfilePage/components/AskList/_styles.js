@@ -12,13 +12,12 @@ export const BottomContainer = styled.div`
 `;
 
 export const ListItem = styled.li`
-  margin: 1rem 0;
 `;
 
 export const List = styled.ul`
   list-style: none;
   padding: 0;
-  margin-top: 30px;
+  margin-top: 0;
 `;
 
 export const Component = styled.div`

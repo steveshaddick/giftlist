@@ -41,21 +41,19 @@ const AskListItem = (props) => {
         { !isEditing &&
           <>
             <styled.SummaryRow>
-              <styled.TitleContainer className="title-container">
-                <styled.Title>
-                  { title }
-                </styled.Title>
-                <styled.PriceContainer>
-                  { priceLow === priceHigh &&
-                    <styled.Price>{ priceLow }</styled.Price>
-                  }
-                  { priceLow !== priceHigh &&
-                    <>
-                      <styled.Price>{ priceLow }</styled.Price> - <styled.Price>{ priceHigh }</styled.Price>
-                    </>
-                  }
-                </styled.PriceContainer>
-              </styled.TitleContainer>
+              <styled.Title>
+                { title }
+              </styled.Title>
+              <styled.PriceContainer>
+                { priceLow === priceHigh &&
+                  <styled.Price>{ priceLow }</styled.Price>
+                }
+                { priceLow !== priceHigh &&
+                  <>
+                    <styled.Price>{ priceLow }</styled.Price> - <styled.Price>{ priceHigh }</styled.Price>
+                  </>
+                }
+              </styled.PriceContainer>
               
             </styled.SummaryRow>
 

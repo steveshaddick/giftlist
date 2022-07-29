@@ -127,7 +127,7 @@ export const TitleContainer = styled.div`
 
 export const Component = styled.section`
   width: 100%;
-  background: #fffbf1;
+  background: #f6f6f6;
 
   .quill {
     background: white;
