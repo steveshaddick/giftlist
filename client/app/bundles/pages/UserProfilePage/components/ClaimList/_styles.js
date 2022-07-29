@@ -1,11 +1,11 @@
 import styled from 'styled-components';
 
-export const Component = styled.div`
-  width: 100%;
+export const AddButton = styled.button`
 `;
 
 export const AskerName = styled.h2`
   font-size: 1rem;
+  font-weight: normal;
 
   a {
     color: inherit;
@@ -47,4 +47,16 @@ export const Heading = styled.h1`
     bottom: -32px;
     background-image: linear-gradient(rgba(255, 255, 255, 1), rgba(255, 255, 255, 0));
   }
+`;
+
+export const TopContainer = styled.div`
+  padding: 2rem 0;
+`;
+
+export const BottomContainer = styled.div`
+  padding: 2rem 0;
+`;
+
+export const Component = styled.div`
+  width: 100%;
 `;

@@ -3,11 +3,14 @@ import PropTypes from 'prop-types';
 
 import { useForm } from "react-hook-form";
 import ReactQuill from 'react-quill';
-import { MdAutorenew } from 'react-icons/md';
+import { getCurrentUser } from 'utilities/CurrentUserContext';
+import * as api from 'utilities/api';
 
 import 'react-quill/dist/quill.snow.css';
 import * as layout from 'common/_styles/layout';
 import * as styled from './_styles';
+
+import { MdAutorenew } from 'react-icons/md';
 
 const modules = {
   toolbar: [
@@ -29,14 +32,17 @@ const EditGift = (props) => {
     cancelHandler,
     saveHandler,
     apiSave,
+    isPrivate,
   } = props;
   const { id, title, description, priceHigh, priceLow } = gift || {};
   
   const fieldId = id ? id : 'new';
   const isNew = typeof gift !== 'object';
+  const currentUser = getCurrentUser();
 
   const [ isPriceRange, setIsPriceRange ] = useState(priceLow !== priceHigh);
   const [ isSaving, setIsSaving ] = useState(false);
+  const [ groupMembers, setGroupMembers ] = useState([]);
 
   const fieldName = (name) => {
     return `${name}_${fieldId}`;
@@ -49,6 +55,7 @@ const EditGift = (props) => {
     obj[fieldName('priceLow')] = priceLow || '';
     obj[fieldName('priceHigh')] = priceHigh || '';
     obj[fieldName('isPriceRange')] = priceHigh || '';
+    obj[fieldName('askerId')] = isPrivate ? '' : currentUser.id;
 
     return obj;
   }
@@ -62,13 +69,15 @@ const EditGift = (props) => {
       return;
     }
 
+    const apiCall = isNew ? api.addGift : api.updateGift;
+
     let giftData = {};
     for (let uniqueKey in formData) {
       const [ key ] = uniqueKey.split('_');
       giftData[key] = formData[uniqueKey];
     }
 
-    apiSave({
+    apiCall({
       gift: giftData,
     })
       .then(response => {
@@ -115,14 +124,34 @@ const EditGift = (props) => {
       setValue(fieldName('priceHigh'), priceLow);
     }
   }, [isPriceRange]);
+
+  useEffect(() => {
+    if (isPrivate) {
+      api
+        .getGroups()
+        .then((data) => {
+          let allMembers = [];
+          for (let i=0; i<data.length; i++) {
+            const members = data[i].members.filter(member => member.id !== currentUser.id);
+            allMembers = allMembers.concat(members);
+          }
+          setGroupMembers(allMembers);
+        });
+    }
+  }, [isPrivate]);
   
   return (
     <styled.Component>
       <layout.GridRow>
         <styled.TitleContainer>
-          { isNew &&
+          { isNew && !isPrivate &&
             <styled.Title>
               Add to list
+            </styled.Title>
+          }
+          { isNew && isPrivate &&
+            <styled.Title>
+              Add private gift
             </styled.Title>
           }
           { !isNew &&
@@ -134,9 +163,34 @@ const EditGift = (props) => {
           <button onClick={ cancelHandler }>Cancel</button>
         </styled.TitleContainer>
 
+        { isPrivate &&
+          <p>You are adding a private gift, the person will not see this on their asking list.</p>
+        }
+
         <styled.EditGiftForm id={ fieldName('EditGiftForm') } onSubmit={handleSubmit(onSubmit)}>
 
           <input type="hidden" {...register(fieldName('id'))} />
+          
+          { !isPrivate &&
+            <input type="hidden" {...register(fieldName('askerId'))} />
+          }
+          { isPrivate &&
+            <styled.FieldContainer>
+              <styled.Label>Person</styled.Label>
+              <select {...register(fieldName('askerId'), { required: true })}>
+                <option value=""> -- select -- </option>
+                { groupMembers.map((member) => {
+                  const {id, name } = member;
+                  return (
+                    <option key={ id } value={ id }>{ name }</option>
+                  )
+                })}
+              </select>
+              { errors[fieldName('askerId')]?.type === 'required' &&
+                <styled.Error>Choose who it's for</styled.Error>
+              }
+            </styled.FieldContainer>
+          }
 
           <styled.FieldContainer>
             <styled.Label htmlFor={ fieldName('title') }>Title</styled.Label>

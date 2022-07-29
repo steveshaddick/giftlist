@@ -1,12 +1,13 @@
 import React, { useState, useEffect, useRef } from 'react';
 import PropTypes from 'prop-types';
-import Modal from 'react-modal';
 
 import * as api from 'utilities/api';
 
-import ClaimListItem from '../ClaimListItem';
-import LockedOverlay from 'common/components/LockedOverlay';
 import ConfirmationModal from 'common/modals/ConfirmationModal';
+import LockedOverlay from 'common/components/LockedOverlay';
+import EditGift from 'common/components/EditGift';
+
+import ClaimListItem from '../ClaimListItem';
 
 import * as layout from 'common/_styles/layout';
 import * as styled from './_styles';
@@ -46,15 +47,24 @@ function sortClaims(items) {
 }
 
 const ClaimList = (props) => {
+  function scrollToEdit() {
+    editingElement.current.scrollIntoView();
+  }
 
   const [isLocked, setIsLocked] = React.useState(false);
   const [removingItem, setRemovingItem] = React.useState(null);
-  const [selectedItem, setSelectedItem] = React.useState(null);
-  const [giftAction, setGiftAction] = React.useState(null);
   const [claims, setClaims] = React.useState({});
-  const [isApi, setIsApi] = React.useState(false);
+  const [isAdding, setIsAdding] = React.useState(false);
+
+  const editingElement = useRef(null);
 
   let items = useRef([]);
+
+  const addNewGiftHandler = (giftData) => {
+    items.current.push(giftData);
+    setClaims(sortClaims(items.current));
+    setIsAdding(false);
+  }
 
   const gotHandler = (e) => {
     const parent = e.currentTarget.closest('[data-item-index]');
@@ -105,6 +115,18 @@ const ClaimList = (props) => {
 
   return (
     <styled.Component>
+      <layout.GridRow>
+        <styled.TopContainer ref={ editingElement }>
+          { isAdding &&
+            <EditGift
+              isPrivate={ true }
+              saveHandler={ addNewGiftHandler }
+              cancelHandler={ () => { setIsAdding(false); } }
+              />
+          }
+        </styled.TopContainer>
+      </layout.GridRow>
+
       <styled.List>
         {Object.keys(claims).map((key) => {
           const claim = claims[key];
@@ -132,6 +154,18 @@ const ClaimList = (props) => {
           );  
         })}
       </styled.List>
+      
+      <layout.GridRow>
+        <styled.BottomContainer>
+          <styled.AddButton onClick={() => {
+            if (isAdding) {
+              scrollToEdit();
+            } else {
+              setIsAdding(true);
+            }
+          }}>Add to list</styled.AddButton>
+        </styled.BottomContainer>
+      </layout.GridRow>
 
       { removingItem &&
         <ConfirmationModal

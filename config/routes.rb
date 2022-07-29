@@ -24,6 +24,7 @@ Rails.application.routes.draw do
 
       get 'users/:id/claimlist', to: 'users#claimlist'
       get 'users/:id/asklist', to: 'users#asklist'
+      get 'users/:id/groups', to: 'users#groups'
 
     end
   end

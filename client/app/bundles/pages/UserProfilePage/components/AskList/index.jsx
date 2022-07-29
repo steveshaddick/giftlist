@@ -101,7 +101,6 @@ const AskList = (props) => {
           
           { isAdding &&
             <EditGift
-              apiSave={ api.addAskingGift }
               saveHandler={ addNewGiftHandler }
               cancelHandler={ () => { setIsAdding(false); } }
               />

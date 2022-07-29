@@ -59,6 +59,10 @@ export async function claimGift(data) {
   return response;
 }
 
+export async function getGroups() {
+  return callApi(`users/${currentUser.id}/groups`);
+}
+
 export async function unClaimGift(data) {
   const { gift} = data;
   const { id: giftId } = gift;
@@ -72,7 +76,7 @@ export async function unClaimGift(data) {
   });
 }
 
-export async function getClaimedList(data) {
+export async function getClaimedList() {
   return callApi(`users/${currentUser.id}/claimlist`);
 }
 
@@ -90,16 +94,16 @@ export async function setGiftGot(data) {
   });
 }
 
-export async function getAskingList(data) {
+export async function getAskingList() {
   return callApi(`users/${currentUser.id}/asklist`);
 }
 
-export async function addAskingGift(data) {
+export async function addGift(data) {
   const { gift } = data;
-  const { title, description, priceHigh, priceLow } = gift;
+  const { askerId, title, description, priceHigh, priceLow } = gift;
 
   let requestData = {
-    asker_id: currentUser.id,
+    askerId,
     title,
     description,
     priceHigh: parseInt(priceHigh, 10),

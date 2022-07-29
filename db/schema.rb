@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2022_07_27_202023) do
+ActiveRecord::Schema[7.0].define(version: 2022_07_29_171650) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -33,8 +33,10 @@ ActiveRecord::Schema[7.0].define(version: 2022_07_27_202023) do
     t.datetime "updated_at", null: false
     t.boolean "received", default: false
     t.boolean "claimer_got", default: false, null: false
+    t.bigint "owner_id", null: false
     t.index ["asker_id"], name: "index_gifts_on_asker_id"
     t.index ["claimer_id"], name: "index_gifts_on_claimer_id"
+    t.index ["owner_id"], name: "index_gifts_on_owner_id"
   end
 
   create_table "memberships", force: :cascade do |t|
@@ -61,6 +63,7 @@ ActiveRecord::Schema[7.0].define(version: 2022_07_27_202023) do
 
   add_foreign_key "gifts", "users", column: "asker_id"
   add_foreign_key "gifts", "users", column: "claimer_id"
+  add_foreign_key "gifts", "users", column: "owner_id"
   add_foreign_key "memberships", "gift_groups"
   add_foreign_key "memberships", "users"
 end

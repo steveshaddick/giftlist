@@ -4,17 +4,25 @@ class Api::V1::GiftsController < Api::V1::BaseController
   def create
     if user_signed_in?
       # Add asking gift
-      if params[:asker_id] === current_user[:id]
-        gift = Gift.create({
-          asker: current_user,
-          title: params[:title],
-          description: params[:description],
-          price_high: unformat_money(params[:priceHigh]),
-          price_low: unformat_money(params[:priceLow]),
-        })
-
-        render json: gift_json(gift)
+      if params[:askerId] === current_user[:id]
+        asker = current_user
+        claimer = nil
+      else
+        asker = User.find(params[:askerId])
+        claimer = current_user
       end
+
+      gift = Gift.create({
+        asker: asker,
+        owner: current_user,
+        claimer: claimer,
+        title: params[:title],
+        description: params[:description],
+        price_high: unformat_money(params[:priceHigh]),
+        price_low: unformat_money(params[:priceLow]),
+      })
+
+      render json: gift_json(gift)
     end
   end
 
@@ -23,7 +31,7 @@ class Api::V1::GiftsController < Api::V1::BaseController
       gift = Gift.find(params[:id])
 
       # Update gift values
-      if params.has_key?(:title) && gift[:asker_id] === current_user[:id]
+      if params.has_key?(:title) && gift[:owner_id] === current_user[:id]
         gift.update(
           title: params[:title],
           description: params[:description],
@@ -61,7 +69,7 @@ class Api::V1::GiftsController < Api::V1::BaseController
     if user_signed_in?
       gift = Gift.find(params[:id])
 
-      if (gift.asker[:id] === current_user[:id])
+      if (gift.owner[:id] === current_user[:id])
         gift.destroy
       end
 
@@ -78,6 +86,10 @@ class Api::V1::GiftsController < Api::V1::BaseController
       description: gift[:description],
       priceHigh: format_money(gift[:price_high]),
       priceLow: format_money(gift[:price_low]),
+      asker: {
+        id: gift.asker[:id],
+        name: gift.asker[:name],
+      }
     }
   end
 end

@@ -11,7 +11,7 @@ class User < ApplicationRecord
   has_many :gift_groups, through: :memberships
 
   def active_giftlist
-    giftlist.where(received: false)
+    giftlist.where(owner_id: self.id).where(received: false)
   end
 
   def claimlist

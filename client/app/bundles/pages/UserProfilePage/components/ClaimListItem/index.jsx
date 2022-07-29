@@ -16,7 +16,6 @@ const ClaimListItem = (props) => {
     description,
     isGot,
     gotHandler,
-    claimHandler,
     unClaimHandler,
    } = props;
 

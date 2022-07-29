@@ -12,10 +12,22 @@ User.all.each do |user|
       price_low: price_low,
       price_high: price_high,
       asker: user,
+      owner: user,
     }
 
     if rand() > 0.8
-      create_data[:claimer] = User.find(rand(1..User.count))
+      group = user.gift_groups[0]
+      group_members = group.users
+
+      claimer_id = nil
+      while claimer_id.nil?
+        claimer_id = rand(1..group_members.count)
+        if claimer_id == user[:id]
+          claimer_id = nil
+        end
+      end
+
+      create_data[:claimer] = User.find(claimer_id)
     end
 
     Gift.create!(create_data)
