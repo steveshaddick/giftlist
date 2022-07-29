@@ -34,8 +34,8 @@ class Api::V1::GiftsController < Api::V1::BaseController
       end
 
       # Update the claimer
-      if params.has_key?(:claimer_id)
-        new_claimer_id = params[:claimer_id]
+      if params.has_key?(:claimerId)
+        new_claimer_id = params[:claimerId]
         if gift[:claimer_id].nil? && new_claimer_id === current_user[:id]
           gift.update(claimer_id: current_user[:id])
           gift.save
@@ -48,8 +48,8 @@ class Api::V1::GiftsController < Api::V1::BaseController
       end
 
       # Update gift got
-      if params.has_key?(:claimer_got) && gift[:claimer_id] === current_user[:id]
-        gift.update(claimer_got: params[:claimer_got])
+      if params.has_key?(:claimerGot) && gift[:claimer_id] === current_user[:id]
+        gift.update(claimer_got: params[:claimerGot])
         gift.save
       end
 

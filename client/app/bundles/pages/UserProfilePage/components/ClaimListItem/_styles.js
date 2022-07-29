@@ -4,10 +4,6 @@ export const SummaryRow = styled.div`
   display: flex;
 `;
 
-export const ActionRow = styled.div`
-  display: flex;
-`;
-
 export const CheckboxContainer = styled.div`
   padding-right: 25px;
 `;
@@ -18,6 +14,10 @@ export const CheckboxButton = styled.button`
   border: none;
   cursor: pointer;
   margin: 0;
+
+  svg {
+    display: block;
+  }
 `;
 
 export const TitleContainer = styled.div`
@@ -29,7 +29,7 @@ export const Title = styled.h1`
   font-size: 1.25rem;
   cursor: pointer;
   margin-top: 0;
-  font-family: 'Assistant', sans-serif;
+  font-family: var(--standard-font);
   margin-bottom: 0.25rem;
 
   &:hover, &:active {
@@ -38,7 +38,7 @@ export const Title = styled.h1`
 `;
 
 export const Description = styled.div`
-  margin: 1rem 0 1rem 0.5rem;
+  margin: 1rem 0;
   font-size: 1.15rem;
 `;
 
@@ -57,18 +57,19 @@ export const Price = styled.span`
   }
 `;
 
-export const ActionButton = styled.button`
-  background: none;
-  cursor: pointer;
-  color: #999;
-  border: 1px solid #ccc;
-  border-radius: 5px;
-  padding: 5px 10px;
-  margin-top: 1rem;
+export const ActionRow = styled.div`
+  padding: 1rem 0;
+  display: flex;
+  justify-content: flex-end;
+`;
+
+export const UnclaimButton = styled.button`
+  color: var(--error-red);
+  border-color: #ddbfbf;
+  padding: 0.3rem 1.5rem;
 
   &:hover, &:active {
-    background: #aaa;
-    color: white;
+    background: #b74a4a;
   }
 `;
 
@@ -76,16 +77,6 @@ export const ClaimedRow = styled.div`
   display: flex;
   justify-content: space-between;
   align-items: baseline;
-
-  ${ActionButton} {
-    color: #9b4343;
-
-    &:hover {
-      border: 1px solid #9b4343;
-      background: #9b4343;
-      color: #fff;
-    }
-  }
 `;
 
 export const Component = styled.article`

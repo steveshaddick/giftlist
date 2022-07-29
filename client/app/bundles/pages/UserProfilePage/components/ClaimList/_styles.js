@@ -6,6 +6,15 @@ export const Component = styled.div`
 
 export const AskerName = styled.h2`
   font-size: 1rem;
+
+  a {
+    color: inherit;
+    text-decoration-color: #999;
+
+    &:hover, &:active {
+      color: #999;
+    }
+  }
 `;
 
 export const List = styled.ul`

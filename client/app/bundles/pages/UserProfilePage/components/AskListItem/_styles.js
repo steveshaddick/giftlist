@@ -63,10 +63,8 @@ export const DeleteButton = styled.button`
   border-color: #ddbfbf;
   padding: 0.3rem 1.5rem;
 
-  &:not([disabled]) {
-      &:hover, &:active {
-      background: #b74a4a;
-    }
+  &:hover, &:active {
+    background: #b74a4a;
   }
 `;
 
@@ -75,10 +73,8 @@ export const EditButton = styled.button`
   border-color: #c8d6e1;
   padding: 0.3rem 1.5rem;
 
-  &:not([disabled]) {
-      &:hover, &:active {
-      background: #5d859d;
-    }
+  &:hover, &:active {
+    background: #5d859d;
   }
 `;
 

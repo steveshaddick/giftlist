@@ -11,6 +11,7 @@ export const TabButton = styled.button`
 
   &:hover, &:active {
     background: #eee;
+    color: inherit;
   }
 
   ${props => {
@@ -19,11 +20,9 @@ export const TabButton = styled.button`
         background: #e1e1e1;
         cursor: default;
 
-        &:not([disabled]){
-          &:hover, &:active {
-            background: #e1e1e1;
-            color: var(--font-color);
-          }
+        &:hover, &:active {
+          background: #e1e1e1;
+          color: var(--font-color);
         }
       `;
     }

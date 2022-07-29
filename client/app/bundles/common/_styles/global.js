@@ -36,11 +36,9 @@ export const GlobalStyle = createGlobalStyle`
     border-radius: 5px;
     padding: 0.5rem 1rem;
 
-    &:not([disabled]) {
-      &:hover, &:active {
-        background: #aaa;
-        color: white;
-      }
+    &:hover, &:active {
+      background: #aaa;
+      color: white;
     }
 
     &:disabled {
@@ -49,6 +47,11 @@ export const GlobalStyle = createGlobalStyle`
       opacity: 0.5;
       background: #eee;
       color: #454545;
+
+      &:hover, &:active {
+        background: #eee;
+        color: #454545;
+      }
     }
   }
 `;

@@ -64,45 +64,30 @@ export async function unClaimGift(data) {
   const { id: giftId } = gift;
 
   let requestData = {
-    claimer_id: null,
+    claimerId: null,
   }
 
-  const response = await fetch(`/api/v1/gifts/${giftId}`, {
-    headers,
+  return callApi(`gifts/${giftId}`, requestData, {
     method: 'PATCH',
-    body: JSON.stringify(requestData),
   });
-
-  return response;
 }
 
-export async function getClaimList(data) {
-  const { currentUser } = data;
-
-  const response = await fetch(`/api/v1/users/${currentUser.id}/claimlist`, {
-    headers,
-  });
-
-  const jsonResponse = await response.json();
-
-  return jsonResponse;
+export async function getClaimedList(data) {
+  return callApi(`users/${currentUser.id}/claimlist`);
 }
 
 export async function setGiftGot(data) {
   const { gift } = data;
-  const { id: giftId } = gift;
+  const { isGot, id: giftId } = gift;
 
   let requestData = {
-    claimer_got: gift.isGot,
+    claimerGot: gift.isGot,
+
   }
 
-  const response = await fetch(`/api/v1/gifts/${giftId}`, {
-    headers,
+  return callApi(`gifts/${giftId}`, requestData, {
     method: 'PATCH',
-    body: JSON.stringify(requestData),
   });
-
-  return response;
 }
 
 export async function getAskingList(data) {

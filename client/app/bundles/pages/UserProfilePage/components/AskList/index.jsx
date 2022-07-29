@@ -26,6 +26,12 @@ const AskList = (props) => {
 
   const editingElement = useRef(null);
 
+  const addNewGiftHandler = (giftData) => {
+    items.push(giftData);
+    setItems(items);
+    setIsAdding(false);
+  }
+
   const editItemHandler = (newItem) => {
     const newItems = items.map(item => {
         return (item.id === newItem.id) ? newItem : item;
@@ -38,12 +44,6 @@ const AskList = (props) => {
     const parent = e.currentTarget.closest('[data-item-index]');
     const item = items[parent.dataset.itemIndex];
     setDeletingItem(item);
-  }
-
-  const addNewGiftHandler = (giftData) => {
-    items.push(giftData);
-    setItems(items);
-    setIsAdding(false);
   }
 
   const confirmDeleteHandler = () => {

@@ -1,52 +1,60 @@
-import React, { useState, useEffect, useContext, useRef } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import PropTypes from 'prop-types';
 import Modal from 'react-modal';
 
-import { store } from 'utilities/store.js';
-import { 
-  unClaimGift as apiUnClaimGift,
-  setGiftGot as apiSetGiftGot,
-  getClaimList as apiGetClaimList,
-} from 'utilities/api';
+import * as api from 'utilities/api';
 
 import ClaimListItem from '../ClaimListItem';
-import ConfirmActionModal from 'components/ConfirmActionModal/ConfirmActionModal';
+import LockedOverlay from 'common/components/LockedOverlay';
+import ConfirmationModal from 'common/modals/ConfirmationModal';
 
+import * as layout from 'common/_styles/layout';
 import * as styled from './_styles';
 
-const customStyles = {
-  content: {
-    top: '45%',
-    left: '50%',
-    right: 'auto',
-    bottom: 'auto',
-    transform: 'translate(-50%, -50%)',
-    width: 'calc(100vw - 30px)',
-    maxWidth: '400px',
-    boxShadow: '0px 0px 5px #ddd',
-  },
-};
+function sortClaims(items) {
+  let tmpClaims = {};
+  for (let i=0; i<items.length; i++) {
+    const item = items[i];
+    if (!tmpClaims[item.asker.id]) {
+      tmpClaims[item.asker.id] = {
+        id: item.asker.id,
+        allGot: true,
+        name: item.asker.name,
+        gifts: [],
+      }
+    }
+    item.originalIndex = i;
 
-Modal.setAppElement('#AppContainer');
+    if (item.isGot) {
+      tmpClaims[item.asker.id].gifts.push(item);
+    } else {
+      tmpClaims[item.asker.id].gifts.unshift(item);
+      tmpClaims[item.asker.id].allGot = false;
+    }
+  }
+
+  let claims = [];
+  for (let key in tmpClaims) {
+    if (tmpClaims[key].allGot) {
+      claims.push(tmpClaims[key]);
+    } else {
+      claims.unshift(tmpClaims[key]);
+    }
+  }
+
+  return claims;
+}
 
 const ClaimList = (props) => {
-  const globalState = useContext(store);
-  const { currentUser } = globalState.state;
 
-  const [isModalOpen, setModalOpen] = React.useState(false);
+  const [isLocked, setIsLocked] = React.useState(false);
+  const [removingItem, setRemovingItem] = React.useState(null);
   const [selectedItem, setSelectedItem] = React.useState(null);
   const [giftAction, setGiftAction] = React.useState(null);
-  let items = useRef([]);
   const [claims, setClaims] = React.useState({});
   const [isApi, setIsApi] = React.useState(false);
 
-  const unClaimHandler = (e) => {
-    const parent = e.currentTarget.closest('[data-item-index]');
-    const item = items.current[parent.dataset.itemIndex];
-    setSelectedItem(item);
-    setGiftAction('unclaim');
-    openModal();
-  }
+  let items = useRef([]);
 
   const gotHandler = (e) => {
     const parent = e.currentTarget.closest('[data-item-index]');
@@ -54,86 +62,44 @@ const ClaimList = (props) => {
 
     item.isGot = !item.isGot;
 
-    setIsApi(true);
-    apiSetGiftGot({
+    api.setGiftGot({
       gift: item,
     }).then(response => {
-      setIsApi(false);
+      setClaims(sortClaims(items.current));
     });
   }
 
-  const confirmActionHandler = () => {
-    switch (giftAction) {
-      case 'unclaim':
-        apiUnClaimGift({
-          gift: selectedItem,
-        })
-          .then(response => {
-            // ugh
-            location.reload();
-            setSelectedItem(null);
-            setGiftAction(null);
-          });
-        break;
-    }
-    
-    setModalOpen(false);
+  const unClaimHandler = (e) => {
+    const parent = e.currentTarget.closest('[data-item-index]');
+    const item = items.current[parent.dataset.itemIndex];
+    setRemovingItem(item);
   }
 
-  function confirmMessage() {
-    switch (giftAction) {
-      case 'unclaim':
-        return (
-          <p>Unclaim <span className="gift-title">{ selectedItem.title }</span>?</p>
-        );
+  const confirmRemoveHandler = () => {
+    if (isLocked) {
+      return;
     }
+    setIsLocked(true);
+
+    api.unClaimGift({
+      gift: removingItem,
+    }).then(response => {
+      const newItems = items.current.filter(item => item.id !== removingItem.id);
+      setRemovingItem(null);
+      setIsLocked(false);
+      setClaims(sortClaims(items.current));
+    });
   }
 
-  function openModal() {
-    setModalOpen(true);
-  }
-  function closeModal() {
-    setModalOpen(false);
+  const cancelRemoveHandler = () => {
+    setRemovingItem(null);
   }
 
   useEffect(() => {
-    apiGetClaimList({
-      currentUser,
-    })
+    api.getClaimedList()
       .then(data => {
-        // This really needs to be refactored
-        let tmpClaims = {};
-        for (let i=0; i<data.length; i++) {
-          const item = data[i];
-          if (!tmpClaims[item.asker.id]) {
-            tmpClaims[item.asker.id] = {
-              id: item.asker.id,
-              allGot: true,
-              name: item.asker.name,
-              gifts: [],
-            }
-          }
-          item.originalId = i;
-
-          if (item.isGot) {
-            tmpClaims[item.asker.id].gifts.push(item);
-          } else {
-            tmpClaims[item.asker.id].gifts.unshift(item);
-            tmpClaims[item.asker.id].allGot = false;
-          }
-        }
-
-        let claims = [];
-        for (let key in tmpClaims) {
-          if (tmpClaims[key].allGot) {
-            claims.push(tmpClaims[key]);
-          } else {
-            claims.unshift(tmpClaims[key]);
-          }
-        }
-    
         items.current = data;
-        setClaims(claims);
+        setClaims(sortClaims(data));
       });
   }, []);
 
@@ -144,14 +110,17 @@ const ClaimList = (props) => {
           const claim = claims[key];
           return (
           <styled.ListItem key={ claim.id }>
-            <styled.AskerName>
-              for <a href={`/users/${claim.id}/giftlist`}>{ claim.name }</a>:
-            </styled.AskerName>
+            <layout.GridRow>
+              <styled.AskerName>
+                for <a href={`/users/${claim.id}/giftlist`}>{ claim.name }</a>:
+              </styled.AskerName>
+            </layout.GridRow>
+
             <styled.List>
               {claim.gifts.map((item) => (
                 <styled.ListItem key={ item.id }>
                   <ClaimListItem
-                    index={ item.originalId }
+                    index={ item.originalIndex }
                     unClaimHandler = { unClaimHandler }
                     gotHandler = { gotHandler }
                     {...item}
@@ -163,20 +132,19 @@ const ClaimList = (props) => {
           );  
         })}
       </styled.List>
-      <Modal
-        isOpen={isModalOpen}
-        onRequestClose={closeModal}
-        style={customStyles}
-        contentLabel="Confirm Gift"
-      >
-        { selectedItem && 
-          <ConfirmActionModal
-            message={ confirmMessage() }
-            yesHandler={ confirmActionHandler }
-            cancelHandler={ closeModal } 
-            />
-        }
-      </Modal>
+
+      { removingItem &&
+        <ConfirmationModal
+          yesHandler={ confirmRemoveHandler }
+          cancelHandler={ cancelRemoveHandler } 
+        >
+          <p>Unclaim <span className="gift-title">{ removingItem.title }</span>?</p>
+        </ConfirmationModal>
+      }
+
+      { isLocked &&
+        <LockedOverlay />
+      }
     </styled.Component>
   );
 };
