@@ -29,6 +29,7 @@ class Api::V1::GiftsController < Api::V1::BaseController
   def update
     if user_signed_in?
       gift = Gift.find(params[:id])
+      include_claimer = false
 
       # Update gift values
       if params.has_key?(:title) && gift[:owner_id] === current_user[:id]
@@ -44,6 +45,8 @@ class Api::V1::GiftsController < Api::V1::BaseController
       # Update the claimer
       if params.has_key?(:claimerId)
         new_claimer_id = params[:claimerId]
+        include_claimer = true
+
         if gift[:claimer_id].nil? && new_claimer_id === current_user[:id]
           gift.update(claimer_id: current_user[:id])
           gift.save
@@ -61,7 +64,7 @@ class Api::V1::GiftsController < Api::V1::BaseController
         gift.save
       end
 
-      render json: gift_json(gift)
+      render json: gift_json(gift, include_claimer: include_claimer)
     end
   end
 
@@ -79,8 +82,8 @@ class Api::V1::GiftsController < Api::V1::BaseController
 
   private
 
-  def gift_json(gift)
-    {
+  def gift_json(gift, include_claimer: false)
+    gift_data = {
       id: gift[:id],
       title: gift[:title],
       description: gift[:description],
@@ -89,7 +92,24 @@ class Api::V1::GiftsController < Api::V1::BaseController
       asker: {
         id: gift.asker[:id],
         name: gift.asker[:name],
-      }
+      },
+      owner: {
+        id: gift.owner[:id],
+        name: gift.owner[:name],
+      },
     }
+
+    if include_claimer
+      if (gift.claimer) 
+        gift_data[:claimer] = {
+          id: gift.claimer[:id],
+          name: gift.claimer[:name],
+        }
+      else
+        gift_data[:claimer] = nil
+      end
+    end
+
+    gift_data
   end
 end

@@ -8,34 +8,18 @@ export const SummaryRow = styled.div`
   }
 `;
 
-export const ActionRow = styled.div`
-  display: flex;
-  justify-content: space-between;
-  padding: 1rem 0;
-`;
-
-export const CheckboxContainer = styled.div`
-  padding-right: 25px;
-`;
-
-export const CheckboxButton = styled.button`
-  background: none;
-  padding: 0;
-  border: none;
-  cursor: pointer;
-  margin: 0;
-`;
-
-export const TitleContainer = styled.div`
-  flex-grow: 1;
-  min-width: 200px;
-`;
-
 export const Title = styled.h1`
-  font-size: 1.5rem;
+  width: 75%;
+  min-width: 200px;
+  font-size: 1.25rem;
+  cursor: pointer;
   margin-top: 0;
   font-family: var(--standard-font);
   margin-bottom: 0.25rem;
+
+  &:hover, &:active {
+    text-decoration: underline;
+  }
 `;
 
 export const Description = styled.div`
@@ -58,24 +42,12 @@ export const Price = styled.span`
   }
 `;
 
-export const DeleteButton = styled.button`
-  color: var(--error-red);
-  border-color: #ddbfbf;
-  padding: 0.3rem 1.5rem;
-
-  &:hover, &:active {
-    background: #b74a4a;
-  }
+export const ActionRow = styled.div`
+  display: flex;
+  margin: 1rem 0;
 `;
 
-export const EditButton = styled.button`
-  color: var(--blue);
-  border-color: #c8d6e1;
-  padding: 0.3rem 1.5rem;
-
-  &:hover, &:active {
-    background: #5d859d;
-  }
+export const ActionButton = styled.button`
 `;
 
 export const ClaimedRow = styled.div`
@@ -83,7 +55,7 @@ export const ClaimedRow = styled.div`
   justify-content: space-between;
   align-items: baseline;
 
-  button {
+  ${ActionButton} {
     color: #9b4343;
 
     &:hover {
@@ -97,7 +69,22 @@ export const ClaimedRow = styled.div`
 export const Component = styled.article`
   width: 100%;
   border-bottom: 1px solid #ddd;
-  padding: 1.5rem 0;
+  padding: 1rem 0;
 
-  background: ${props => props.isEditing ? "#f6f6f6" : 'transparent'}
+  ${props => {
+    if (props.isClaimed) {
+      if (props.currentUserClaimed) {
+        return `
+          background: #eaf0ec;
+          padding: 1rem;
+          color: #12620f;
+          border: none;
+        `;
+      } else {
+        return `
+          opacity: 0.5;
+        `;
+      }
+    }
+  }}
 `;

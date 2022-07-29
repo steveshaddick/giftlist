@@ -1,4 +1,4 @@
-import React, { useContext } from 'react';
+import React from 'react';
 import { getCurrentUser } from 'utilities/CurrentUserContext';
 
 import * as styled from './_styles';

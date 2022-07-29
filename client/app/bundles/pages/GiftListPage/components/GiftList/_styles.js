@@ -1,9 +1,5 @@
 import styled from 'styled-components';
 
-export const Component = styled.div`
-  width: 100%;
-`;
-
 export const List = styled.ul`
   list-style: none;
   padding: 0;
@@ -15,12 +11,14 @@ export const ListItem = styled.li`
 `;
 
 export const Heading = styled.h1`
-  margin: 0;
+  padding: 1rem 0;
   color: #999;
   font-size: 1.25rem;
   font-weight: 400;
   border-bottom: 2px solid #ddd;
-  padding: 10px 0;
+`;
+
+export const HeadingContainer = styled.div`
   position: sticky;
   top: 0;
   background: white;
@@ -31,7 +29,11 @@ export const Heading = styled.h1`
     position: absolute;
     width: 100%;
     height: 30px;
-    bottom: -32px;
+    bottom: -30px;
     background-image: linear-gradient(rgba(255, 255, 255, 1), rgba(255, 255, 255, 0));
   }
+`;
+
+export const Component = styled.div`
+  width: 100%;
 `;

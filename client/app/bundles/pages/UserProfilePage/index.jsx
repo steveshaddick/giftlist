@@ -1,6 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { CurrentUserProvider } from 'utilities/CurrentUserContext';
-import { getClaimList as apiGetClaimList } from 'utilities/api';
 
 import MainHeader from 'pages/common/MainHeader';
 import MainFooter from 'pages/common/MainFooter';

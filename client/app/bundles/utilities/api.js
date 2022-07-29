@@ -43,27 +43,19 @@ export async function setApiCurrentUser(userData) {
 }
 
 export async function claimGift(data) {
-  const { currentUser, gift} = data;
+  const { gift} = data;
   const { id: giftId } = gift;
 
   let requestData = {
-    claimer_id: currentUser.id,
+    claimerId: currentUser.id,
   }
 
-  const response = await fetch(`/api/v1/gifts/${giftId}`, {
-    headers,
+  return callApi(`gifts/${giftId}`, requestData, {
     method: 'PATCH',
-    body: JSON.stringify(requestData),
   });
-
-  return response;
 }
 
-export async function getGroups() {
-  return callApi(`users/${currentUser.id}/groups`);
-}
-
-export async function unClaimGift(data) {
+export async function unclaimGift(data) {
   const { gift} = data;
   const { id: giftId } = gift;
 
@@ -74,6 +66,10 @@ export async function unClaimGift(data) {
   return callApi(`gifts/${giftId}`, requestData, {
     method: 'PATCH',
   });
+}
+
+export async function getGroups() {
+  return callApi(`users/${currentUser.id}/groups`);
 }
 
 export async function getClaimedList() {

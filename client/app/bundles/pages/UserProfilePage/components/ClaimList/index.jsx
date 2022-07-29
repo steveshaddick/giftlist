@@ -91,7 +91,7 @@ const ClaimList = (props) => {
     }
     setIsLocked(true);
 
-    api.unClaimGift({
+    api.unclaimGift({
       gift: removingItem,
     }).then(response => {
       const newItems = items.current.filter(item => item.id !== removingItem.id);
