@@ -9,7 +9,6 @@ import ProfileDetails from './components/ProfileDetails';
 import ProfileTabs from './components/ProfileTabs';
 import ClaimList from './components/ClaimList';
 import AskList from './components/AskList';
-import EditGift from 'components/EditGift/EditGift';
 
 import { GlobalStyle } from 'common/_styles/global';
 import * as layout from 'common/_styles/layout';
@@ -83,14 +82,6 @@ const UserProfilePage = (props) => {
             tabClickHandler={ tabClickHandler }
             newGiftHandler={ newGiftHandler }
             />
-          { isNewGift && 
-            <EditGift
-              isNew={ true }
-              currentUser={ currentUser }
-              cancelHandler={ cancelNewGiftHandler }
-              saveHandler={ saveNewGiftHandler }
-            />
-          }
           { selectedTab == 'asking' &&
             <AskList />
           }

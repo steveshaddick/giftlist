@@ -28,14 +28,9 @@ export const TitleContainer = styled.div`
 
 export const Title = styled.h1`
   font-size: 1.25rem;
-  cursor: pointer;
   margin-top: 0;
-  font-family: 'Assistant', sans-serif;
+  font-family: var(--standard-font);
   margin-bottom: 0.25rem;
-
-  &:hover, &:active {
-    text-decoration: underline;
-  }
 `;
 
 export const Description = styled.div`
@@ -103,4 +98,6 @@ export const Component = styled.article`
   width: 100%;
   border-bottom: 1px solid #ddd;
   padding-bottom: 1rem;
+
+  background: ${props => props.isEditing ? "#fffbf1" : 'transparent'}
 `;

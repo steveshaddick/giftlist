@@ -127,6 +127,16 @@ export const TitleContainer = styled.div`
 
 export const Component = styled.section`
   width: 100%;
+  background: #fffbf1;
+
+  .quill {
+    background: white;
+  }
+
+  .ql-container {
+    font-family: var(--standard-font);
+    font-size: 1rem;
+  }
 
   .ql-editor {
     height: 10rem;

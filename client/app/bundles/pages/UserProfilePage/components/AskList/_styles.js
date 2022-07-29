@@ -12,7 +12,7 @@ export const BottomContainer = styled.div`
 `;
 
 export const ListItem = styled.li`
-  margin-bottom: 1rem;
+  margin: 1rem 0;
 `;
 
 export const List = styled.ul`
@@ -22,5 +22,5 @@ export const List = styled.ul`
 `;
 
 export const Component = styled.div`
-  width: 100%;
+  position: relative;
 `;

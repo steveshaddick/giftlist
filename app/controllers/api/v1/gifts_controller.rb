@@ -9,17 +9,11 @@ class Api::V1::GiftsController < Api::V1::BaseController
           asker: current_user,
           title: params[:title],
           description: params[:description],
-          price_high: unformat_money(params[:price_high]),
-          price_low: unformat_money(params[:price_low]),
+          price_high: unformat_money(params[:priceHigh]),
+          price_low: unformat_money(params[:priceLow]),
         })
 
-        render json: {
-          id: gift[:id],
-          title: gift[:title],
-          description: gift[:description],
-          priceHigh: format_money(gift[:price_high]),
-          priceLow: format_money(gift[:price_low]),
-        }
+        render json: gift_json(gift)
       end
     end
   end
@@ -33,8 +27,8 @@ class Api::V1::GiftsController < Api::V1::BaseController
         gift.update(
           title: params[:title],
           description: params[:description],
-          price_high: unformat_money(params[:price_high]),
-          price_low: unformat_money(params[:price_low]),
+          price_high: unformat_money(params[:priceHigh]),
+          price_low: unformat_money(params[:priceLow]),
         )
         gift.save
       end
@@ -58,6 +52,8 @@ class Api::V1::GiftsController < Api::V1::BaseController
         gift.update(claimer_got: params[:claimer_got])
         gift.save
       end
+
+      render json: gift_json(gift)
     end
   end
 
@@ -71,5 +67,17 @@ class Api::V1::GiftsController < Api::V1::BaseController
 
       render json: {}
     end
+  end
+
+  private
+
+  def gift_json(gift)
+    {
+      id: gift[:id],
+      title: gift[:title],
+      description: gift[:description],
+      priceHigh: format_money(gift[:price_high]),
+      priceLow: format_money(gift[:price_low]),
+    }
   end
 end

@@ -3,17 +3,22 @@ import { createGlobalStyle } from 'styled-components';
 export const GlobalStyle = createGlobalStyle`
   html {
     scroll-behavior: smooth;
+    
+    scroll-padding-top: 50px;
+    overflow: auto;
   }
 
   body {
-    background-color: white;
-    font-family: 'Assistant', sans-serif;
-    color: #333;
+    --standard-font: 'Assistant', sans-serif;
 
     --error-red: #d04949;
     --green: #569340;
     --dark-green: #4a6c32;
     --yellow: #e8de55;
+
+    background-color: white;
+    font-family: var(--standard-font);
+    color: #333;
   }
 
   h1, h2, h3, h4, h5, h6 {

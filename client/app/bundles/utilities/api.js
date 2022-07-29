@@ -105,40 +105,40 @@ export async function setGiftGot(data) {
   return response;
 }
 
-export async function updateGift(data) {
-  const { gift } = data;
-  const { id, title, description, priceHigh: price_high, priceLow: price_low } = gift;
-
-  let requestData = {
-    title,
-    description,
-    price_high: parseInt(price_high, 10),
-    price_low: parseInt(price_low, 10),
-  };
-
-  return callApi(`gifts/${id}`, requestData, {
-    method: 'PATCH',
-  });
-}
-
 export async function getAskingList(data) {
   return callApi(`users/${currentUser.id}/asklist`);
 }
 
 export async function addAskingGift(data) {
   const { gift } = data;
-  const { title, description, priceHigh: price_high, priceLow: price_low } = gift;
+  const { title, description, priceHigh, priceLow } = gift;
 
   let requestData = {
     asker_id: currentUser.id,
     title,
     description,
-    price_high: parseInt(price_high, 10),
-    price_low: parseInt(price_low, 10),
+    priceHigh: parseInt(priceHigh, 10),
+    priceLow: parseInt(priceLow, 10),
   };
 
   return callApi(`gifts`, requestData, {
     method: 'POST',
+  });
+}
+
+export async function updateGift(data) {
+  const { gift } = data;
+  const { id, title, description, priceHigh, priceLow } = gift;
+
+  let requestData = {
+    title,
+    description,
+    priceHigh: parseInt(priceHigh, 10),
+    priceLow: parseInt(priceLow, 10),
+  };
+
+  return callApi(`gifts/${id}`, requestData, {
+    method: 'PATCH',
   });
 }
 

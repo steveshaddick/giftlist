@@ -1,6 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
+import * as layout from 'common/_styles/layout';
 import * as styled from './_styles';
 
 const ProfileDetails = (props) => {
@@ -10,7 +11,9 @@ const ProfileDetails = (props) => {
 
   return (
     <styled.Component>
-      <p>{ name }</p>
+      <layout.GridRow>
+        <p>{ name }</p>
+      </layout.GridRow>
     </styled.Component>
   );
 };
