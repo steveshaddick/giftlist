@@ -2,13 +2,12 @@ Rails.application.routes.draw do
   resources :memberships
   resources :gift_groups
   resources :gifts
-  devise_for :users
-  # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
 
-  # Defines the root path route ("/")
-  # root "articles#index"
+  devise_for :users, :controllers => {:registrations => "registrations"}
 
   root to: "pages#home"
+
+  get '/signed_out', to: 'pages#signed_out'
 
   get 'users/:id/giftlist', to: 'pages#giftlist'
   get 'users/:id/profile(/:tab)', to: 'pages#user_profile'

@@ -38,6 +38,16 @@ async function callApi(path, data=null, options={}) {
   return await response.json();
 }
 
+
+export async function signout() {
+  return await fetch(`/users/sign_out`, {
+    headers: {
+      'X-CSRF-TOKEN': csrfToken,
+    },
+    method: 'DELETE',
+  });
+}
+
 export async function setApiCurrentUser(userData) {
   currentUser = userData;
 }

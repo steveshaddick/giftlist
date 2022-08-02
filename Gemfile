@@ -17,6 +17,12 @@ gem "puma", "~> 5.0"
 # Build JSON APIs with ease [https://github.com/rails/jbuilder]
 gem "jbuilder"
 
+# Hotwire's SPA-like page accelerator [https://turbo.hotwired.dev]
+gem "turbo-rails"
+
+# Hotwire's modest JavaScript framework [https://stimulus.hotwired.dev]
+gem "stimulus-rails"
+
 # Use Redis adapter to run Action Cable in production
 # gem "redis", "~> 4.0"
 
@@ -33,7 +39,7 @@ gem "tzinfo-data", platforms: %i[ mingw mswin x64_mingw jruby ]
 gem "bootsnap", require: false
 
 # Use Sass to process CSS
-# gem "sassc-rails"
+gem "sassc-rails"
 
 # Use Active Storage variants [https://guides.rubyonrails.org/active_storage_overview.html#transforming-images]
 # gem "image_processing", "~> 1.2"
@@ -65,8 +71,9 @@ gem 'devise', '~> 4'
 gem "shakapacker", "= 6.5"
 gem "faker", "~> 2.21"
 gem "react_on_rails", "~> 13.0.2"
-gem "mini_racer", platforms: :ruby
 gem "jsonapi-serializer", "~> 2.2"
 
 gem "pg", "~> 1.4"
 gem "mini_racer", platforms: :ruby
+
+gem "importmap-rails", "~> 1.1"

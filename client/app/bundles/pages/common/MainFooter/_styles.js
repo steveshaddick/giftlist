@@ -1,5 +1,23 @@
 import styled from 'styled-components';
 
+export const FooterNavList = styled.ul`
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+`;
+
+export const FooterNav = styled.nav`
+    a {
+        color: inherit;
+        text-decoration: none;
+
+        &:hover, &:active {
+            text-decoration: underline;
+        }
+    }
+`;
+
 export const FooterBlock = styled.div`
     width: 100%;
     max-width: 1000px;

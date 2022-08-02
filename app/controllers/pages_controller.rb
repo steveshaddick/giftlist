@@ -3,9 +3,9 @@
 class PagesController < ApplicationController
   include FormatterConcern
 
-  before_action :authenticate_user!
+  before_action :authenticate_user!, except: [:signed_out]
 
-  layout "client_application"
+  layout "client_application", except: [:signed_out]
 
   def home
     gift_groups = current_user.gift_groups.map do |gift_group|
@@ -22,6 +22,10 @@ class PagesController < ApplicationController
     assign_props({
       gift_groups: gift_groups
     })
+  end
+
+  def signed_out
+    render "devise/sessions/sign_out"
   end
 
   def giftlist

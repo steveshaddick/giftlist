@@ -100,10 +100,14 @@ GEM
     execjs (2.8.1)
     faker (2.21.0)
       i18n (>= 1.8.11, < 2)
+    ffi (1.15.5)
     globalid (1.0.0)
       activesupport (>= 5.0)
     i18n (1.12.0)
       concurrent-ruby (~> 1.0)
+    importmap-rails (1.1.5)
+      actionpack (>= 6.0.0)
+      railties (>= 6.0.0)
     io-console (0.5.11)
     irb (1.4.1)
       reline (>= 0.3.0)
@@ -196,6 +200,14 @@ GEM
       railties (>= 5.0)
     rexml (3.2.5)
     rubyzip (2.3.2)
+    sassc (2.4.0)
+      ffi (~> 1.9)
+    sassc-rails (2.1.2)
+      railties (>= 4.0.0)
+      sassc (>= 2.0)
+      sprockets (> 3.0)
+      sprockets-rails
+      tilt
     selenium-webdriver (4.3.0)
       childprocess (>= 0.5, < 5.0)
       rexml (~> 3.2, >= 3.2.5)
@@ -214,9 +226,16 @@ GEM
       actionpack (>= 5.2)
       activesupport (>= 5.2)
       sprockets (>= 3.0.0)
+    stimulus-rails (1.1.0)
+      railties (>= 6.0.0)
     strscan (3.0.3)
     thor (1.2.1)
+    tilt (2.0.11)
     timeout (0.3.0)
+    turbo-rails (1.1.1)
+      actionpack (>= 6.0.0)
+      activejob (>= 6.0.0)
+      railties (>= 6.0.0)
     tzinfo (2.0.5)
       concurrent-ruby (~> 1.0)
     warden (1.2.9)
@@ -247,6 +266,7 @@ DEPENDENCIES
   debug
   devise (~> 4)
   faker (~> 2.21)
+  importmap-rails (~> 1.1)
   jbuilder
   jsonapi-serializer (~> 2.2)
   mini_racer
@@ -254,9 +274,12 @@ DEPENDENCIES
   puma (~> 5.0)
   rails (~> 7.0.3, >= 7.0.3.1)
   react_on_rails (~> 13.0.2)
+  sassc-rails
   selenium-webdriver
   shakapacker (= 6.5)
   sprockets-rails
+  stimulus-rails
+  turbo-rails
   tzinfo-data
   web-console
   webdrivers
