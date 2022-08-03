@@ -5,6 +5,7 @@ export const FooterNavList = styled.ul`
     margin: 0;
     padding: 0;
     display: flex;
+    justify-content: space-between;
 `;
 
 export const FooterNav = styled.nav`
@@ -22,6 +23,6 @@ export const FooterBlock = styled.div`
     width: 100%;
     max-width: 1000px;
     padding: 20px 30px;
-    margin: 0 auto;
+    margin: 2rem auto 0;
     border-top: 2px solid #B1ACA3;
 `;

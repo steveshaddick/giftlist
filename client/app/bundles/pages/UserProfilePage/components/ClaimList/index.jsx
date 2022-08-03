@@ -115,17 +115,17 @@ const ClaimList = (props) => {
 
   return (
     <styled.Component>
-      <layout.GridRow>
-        <styled.TopContainer ref={ editingElement }>
-          { isAdding &&
-            <EditGift
-              isPrivate={ true }
-              saveHandler={ addNewGiftHandler }
-              cancelHandler={ () => { setIsAdding(false); } }
-              />
-          }
-        </styled.TopContainer>
-      </layout.GridRow>
+      { isAdding &&
+        <layout.GridRow>
+          <styled.TopContainer ref={ editingElement }>
+              <EditGift
+                isPrivate={ true }
+                saveHandler={ addNewGiftHandler }
+                cancelHandler={ () => { setIsAdding(false); } }
+                />
+          </styled.TopContainer>
+        </layout.GridRow>
+      }
 
       <styled.List>
         {Object.keys(claims).map((key) => {

@@ -21,6 +21,9 @@ const MainFooter = () => {
           <styled.FooterNav>
             <styled.FooterNavList>
               <li><a href="/users/sign_out" onClick={ signoutClickHandler }>Sign Out</a></li>
+              <li>
+                <a href="https://github.com/steveshaddick/giftlist/issues" target="_blank" rel="noopener noreferrer">Suggest improvement</a>
+              </li>
             </styled.FooterNavList>
           </styled.FooterNav>
         </styled.FooterBlock>

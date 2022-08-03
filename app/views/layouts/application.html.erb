@@ -17,7 +17,7 @@
   <body>
     <%= render "layouts/header" %>
     <% unless flash.empty? %>
-      <div class="notice-container">
+      <div class="notice-container page-container">
         <div class="grid-row">
           <p class="notice"><%= notice %></p>
           <p class="alert"><%= alert %></p>
@@ -26,6 +26,8 @@
     <% end %>
 
     <%= yield %>
+
+    <%= render "layouts/footer" %>
 
   </body>
 </html>
