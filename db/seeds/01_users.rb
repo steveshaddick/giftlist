@@ -13,6 +13,7 @@ default_users.each.with_index(1) do |new_user, index|
         user = User.new({
             email: new_user[:email],
             name: new_user[:name],
+            referring_email: "test@test.com",
             password: "password",
             password_confirmation: "password",
         })
@@ -24,6 +25,7 @@ end
     user = User.new({
         name: Faker::Name.unique.name,
         email: Faker::Internet.unique.email,
+        referring_email: "test@test.com",
         password: "password",
         password_confirmation: "password",
     })
