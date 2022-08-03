@@ -57,8 +57,8 @@ const ClaimList = (props) => {
   const [isAdding, setIsAdding] = React.useState(false);
 
   const editingElement = useRef(null);
-
   let items = useRef([]);
+  const hasItems = Object.keys(claims).length > 0;
 
   const addNewGiftHandler = (giftData) => {
     items.current.push(giftData);
@@ -97,7 +97,7 @@ const ClaimList = (props) => {
       const newItems = items.current.filter(item => item.id !== removingItem.id);
       setRemovingItem(null);
       setIsLocked(false);
-      setClaims(sortClaims(items.current));
+      setClaims(sortClaims(newItems));
     });
   }
 
@@ -126,36 +126,41 @@ const ClaimList = (props) => {
           </styled.TopContainer>
         </layout.GridRow>
       }
+      { hasItems ?
+        <styled.List>
+          {Object.keys(claims).map((key) => {
+            const claim = claims[key];
+            return (
+            <styled.ListItem key={ claim.id }>
+              <styled.AskerNameContainer>
+                <layout.GridRow>
+                  <styled.AskerName>
+                    for <a href={`/users/${claim.id}/giftlist`}>{ claim.name }</a>:
+                  </styled.AskerName>
+                </layout.GridRow>
+              </styled.AskerNameContainer>
 
-      <styled.List>
-        {Object.keys(claims).map((key) => {
-          const claim = claims[key];
-          return (
-          <styled.ListItem key={ claim.id }>
-            <styled.AskerNameContainer>
-              <layout.GridRow>
-                <styled.AskerName>
-                  for <a href={`/users/${claim.id}/giftlist`}>{ claim.name }</a>:
-                </styled.AskerName>
-              </layout.GridRow>
-            </styled.AskerNameContainer>
-
-            <styled.List>
-              {claim.gifts.map((item) => (
-                <styled.ListItem key={ item.id }>
-                  <ClaimListItem
-                    index={ item.originalIndex }
-                    unClaimHandler = { unClaimHandler }
-                    gotHandler = { gotHandler }
-                    {...item}
-                    />
-              </styled.ListItem>
-              ))}
-            </styled.List>
-          </styled.ListItem>
-          );  
-        })}
-      </styled.List>
+              <styled.List>
+                {claim.gifts.map((item) => (
+                  <styled.ListItem key={ item.id }>
+                    <ClaimListItem
+                      index={ item.originalIndex }
+                      unClaimHandler = { unClaimHandler }
+                      gotHandler = { gotHandler }
+                      {...item}
+                      />
+                </styled.ListItem>
+                ))}
+              </styled.List>
+            </styled.ListItem>
+            );  
+          })}
+        </styled.List>
+        :
+        <styled.EmptyList>
+          You haven't claimed any gifts yet.
+        </styled.EmptyList>
+      }
       
       <layout.GridRow>
         <styled.BottomContainer>

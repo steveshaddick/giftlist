@@ -99,18 +99,23 @@ const EditGift = (props) => {
     const priceLow = parseInt(priceLowVal);
     const priceHigh = parseInt(priceHighVal);
 
-    switch (e.target.name) {
-      case `priceLow_${fieldId}`:
-        if (priceLow > priceHigh) {
-          setValue(fieldName('priceHigh'), priceLow);
-        }
-        break;
+    if (isPriceRange) {
+      switch (e.target.name) {
+        case `priceLow_${fieldId}`:
+          if (priceLow > priceHigh) {
+            setValue(fieldName('priceHigh'), priceLow);
+          }
+          break;
 
-      case `priceHigh_${fieldId}`:
-        if (priceLow > priceHigh) {
-          setValue(fieldName('priceLow'), priceHigh);
-        }
-        break;
+        case `priceHigh_${fieldId}`:
+          if (priceLow > priceHigh) {
+            setValue(fieldName('priceLow'), priceHigh);
+          }
+          break;
+      }
+
+    } else {
+      setValue(fieldName('priceHigh'), priceLow);
     }
   }
 

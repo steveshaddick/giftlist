@@ -106,19 +106,26 @@ const AskList = (props) => {
           }
         </styled.TopContainer>
       </layout.GridRow>
-      
-      <styled.List>
-        {items.length && items.map((item, index) => (
-          <styled.ListItem key={ item.id } data-item-id={ item.id }>
-            <AskListItem
-              index={ index }
-              gift={ item }
-              editHandler={ editItemHandler }
-              deleteHandler={ deleteHandler }
-              />
-          </styled.ListItem>
-        ))}
-      </styled.List>
+
+      { !items.length &&
+        <styled.EmptyList>
+          You haven't added any gifts yet.
+        </styled.EmptyList>
+      }
+      { items.length > 0 && 
+        <styled.List>
+          { items.map((item, index) => (
+            <styled.ListItem key={ item.id } data-item-id={ item.id }>
+              <AskListItem
+                index={ index }
+                gift={ item }
+                editHandler={ editItemHandler }
+                deleteHandler={ deleteHandler }
+                />
+            </styled.ListItem>
+          ))}
+        </styled.List>
+      }
       
       <layout.GridRow>
         <styled.BottomContainer>

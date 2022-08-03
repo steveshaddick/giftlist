@@ -2,6 +2,7 @@ import React, { useState, useEffect, useContext } from 'react';
 import PropTypes from 'prop-types';
 
 import * as api from 'utilities/api';
+import { getCurrentUser } from 'utilities/CurrentUserContext';
 
 import ConfirmationModal from 'common/modals/ConfirmationModal';
 import GiftItem from '../GiftItem';
@@ -10,7 +11,11 @@ import * as layout from 'common/_styles/layout';
 import * as styled from './_styles';
 
 const GiftList = (props) => {
-  const { name, items: initialItems } = props;
+  const { user, items: initialItems } = props;
+  const { id: userId, name: userName } = user;
+  const currentUser = getCurrentUser();
+
+  const isCurrentUserList = userId === currentUser.id;
 
   const [claimItem, setClaimItem] = React.useState(null);
   const [unclaimItem, setUnclaimItem] = React.useState(null);
@@ -70,21 +75,27 @@ const GiftList = (props) => {
     <styled.Component>
       <styled.HeadingContainer>
         <layout.GridRow>
-          <styled.Heading>{ name }'s List</styled.Heading>
+          <styled.Heading>{ userName }'s List</styled.Heading>
         </layout.GridRow>
       </styled.HeadingContainer>
 
       <styled.List>
-        {items.map((item, index) => (
-          <styled.ListItem key={ item.id }>
-            <GiftItem
-              claimHandler={ claimHandler }
-              unClaimHandler = { unClaimHandler }
-              index={ index }
-              gift={ item }
-              />
-          </styled.ListItem>
-        ))}
+        {items.map((item, index) => {
+          const { claimer } = item;
+          const currentUserClaimed = claimer && claimer.id === currentUser.id;
+          return (
+            <styled.ListItem key={ item.id }>
+              <GiftItem
+                index={ index }
+                gift={ item }
+                enableClaimed={ !isCurrentUserList }
+                currentUserClaimed={ currentUserClaimed }
+                claimHandler={ claimHandler }
+                unClaimHandler = { unClaimHandler }
+                />
+            </styled.ListItem>
+          );
+        })}
       </styled.List>
       
       { claimItem &&
@@ -92,7 +103,7 @@ const GiftList = (props) => {
           yesHandler={ confirmClaimHandler }
           cancelHandler={ cancelClaimHandler } 
         >
-          <p>You want to get <span className="gift-title">{ claimItem.title }</span> for { name }?</p>
+          <p>You want to get <span className="gift-title">{ claimItem.title }</span> for { userName }?</p>
         </ConfirmationModal>
       }
       

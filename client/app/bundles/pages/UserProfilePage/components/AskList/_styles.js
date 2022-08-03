@@ -1,5 +1,10 @@
 import styled from 'styled-components';
 
+export const EmptyList = styled.div`
+  text-align: center;
+  padding: 5rem 0;
+`;
+
 export const AddButton = styled.button`
 `;
 

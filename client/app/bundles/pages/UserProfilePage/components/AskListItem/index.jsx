@@ -44,17 +44,18 @@ const AskListItem = (props) => {
               <styled.Title>
                 { title }
               </styled.Title>
-              <styled.PriceContainer>
-                { priceLow === priceHigh &&
-                  <styled.Price>{ priceLow }</styled.Price>
-                }
-                { priceLow !== priceHigh &&
-                  <>
-                    <styled.Price>{ priceLow }</styled.Price> - <styled.Price>{ priceHigh }</styled.Price>
-                  </>
-                }
-              </styled.PriceContainer>
-              
+              { (priceLow > 0 || priceHigh > 0) &&
+                <styled.PriceContainer>
+                  { priceLow === priceHigh &&
+                    <styled.Price>{ priceLow }</styled.Price>
+                  }
+                  { priceLow !== priceHigh &&
+                    <>
+                      <styled.Price>{ priceLow }</styled.Price> - <styled.Price>{ priceHigh }</styled.Price>
+                    </>
+                  }
+                </styled.PriceContainer>
+              }
             </styled.SummaryRow>
 
             <styled.Description dangerouslySetInnerHTML={{__html: description}} />

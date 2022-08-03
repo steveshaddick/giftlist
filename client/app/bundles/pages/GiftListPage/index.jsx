@@ -10,7 +10,6 @@ import * as layout from 'common/_styles/layout';
 
 const GiftListPage = (props) => {
   const { currentUser, user, gifts } = props;
-  const { name } = user;
 
   return (
     <>
@@ -18,7 +17,7 @@ const GiftListPage = (props) => {
       <CurrentUserProvider currentUser={currentUser} >
         <MainHeader />
         <layout.PageContainer id="GiftListPage">
-          <GiftList name={ name } items={ gifts } />
+          <GiftList user={ user } items={ gifts } />
         </layout.PageContainer>
         <MainFooter />
       </CurrentUserProvider>

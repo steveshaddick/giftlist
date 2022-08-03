@@ -62,7 +62,6 @@ const UserProfilePage = (props) => {
     const pathTab = currentPath.replace(`/users/${id}/profile/`, '');
   
     if ((selectedTab !== '') && (pathTab !== selectedTab)) {
-      console.log('push history', selectedTab);
       window.history.pushState({ tab: selectedTab }, '', `${window.location.origin}/users/${id}/profile/${selectedTab}`);
     }
     

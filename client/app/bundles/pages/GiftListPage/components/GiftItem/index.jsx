@@ -9,14 +9,14 @@ const GiftItem = (props) => {
   const {
     index,
     gift,
+    enableClaimed = true,
+    currentUserClaimed,
     claimHandler,
     unClaimHandler,
    } = props;
    const { title, description, priceHigh, priceLow, claimer } = gift;
-   const currentUser = getCurrentUser();
 
    const isClaimed = claimer !== null;
-   const currentUserClaimed = claimer && claimer.id === currentUser.id;
 
    const [ isExpanded, setIsExpanded ] = useState(false);
 
@@ -29,19 +29,20 @@ const GiftItem = (props) => {
           }}>
             { title }
           </styled.Title>
-          
-          <styled.PriceContainer>
-            { priceLow === priceHigh &&
-              <styled.PriceContainer>
-                <styled.Price>{ priceLow }</styled.Price>
-              </styled.PriceContainer>
-            }
-            { priceLow !== priceHigh &&
-              <styled.PriceContainer>
-                <styled.Price>{ priceLow }</styled.Price> - <styled.Price>{ priceHigh }</styled.Price>
-              </styled.PriceContainer>
-            }
-          </styled.PriceContainer>
+          { (priceLow > 0 || priceHigh > 0) &&
+            <styled.PriceContainer>
+              { priceLow === priceHigh &&
+                <styled.PriceContainer>
+                  <styled.Price>{ priceLow }</styled.Price>
+                </styled.PriceContainer>
+              }
+              { priceLow !== priceHigh &&
+                <styled.PriceContainer>
+                  <styled.Price>{ priceLow }</styled.Price> - <styled.Price>{ priceHigh }</styled.Price>
+                </styled.PriceContainer>
+              }
+            </styled.PriceContainer>
+          }
         </styled.SummaryRow>
 
         { isExpanded && 
@@ -62,7 +63,7 @@ const GiftItem = (props) => {
           </styled.ClaimedRow>
         }
 
-        { !isClaimed &&
+        { (enableClaimed && !isClaimed) &&
           <styled.ActionRow>
             <styled.ActionButton data-item-index={ index } onClick={ claimHandler }>I'll get it</styled.ActionButton>
           </styled.ActionRow>
