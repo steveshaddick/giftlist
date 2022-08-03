@@ -1,24 +1,11 @@
-# README
+# GiftLists
 
-This README would normally document whatever steps are necessary to get the
-application up and running.
+Create a gift list and share with a group of people to help coordinate who gets what for whom.
 
-Things you may want to cover:
+## Development
 
-* Ruby version
+- run `yarn start`
 
-* System dependencies
+## Deployment
 
-* Configuration
-
-* Database creation
-
-* Database initialization
-
-* How to run the test suite
-
-* Services (job queues, cache servers, search engines, etc.)
-
-* Deployment instructions
-
-* ...
+- run `git push heroku main`
