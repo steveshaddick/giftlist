@@ -10,14 +10,16 @@ jobs:
       postgres:
         image: postgres
         env:
-          POSTGRES_USER: giftlist
-          POSTGRES_DB: giftlist_test
+          POSTGRES_USER: postgres
+          POSTGRES_DB: postgres
           POSTGRES_PASSWORD: ""
         ports:
           - 5432:5432
 
     env:
       RAILS_ENV: test
+      PGHOST: localhost
+      PGUSER: postgres
 
     steps:
       - name: Checkout code
