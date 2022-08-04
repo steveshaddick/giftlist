@@ -5,7 +5,7 @@ class Api::V1::UsersController < Api::V1::BaseController
     if user_signed_in? && current_user[:id] == params[:id].to_i
       claimlist = []
 
-      current_user.claimlist.each do |gift|
+      current_user.active_claimlist.each do |gift|
         claimlist.push({
           id: gift[:id],
           title: gift[:title],

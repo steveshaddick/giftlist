@@ -7,7 +7,7 @@ class User < ApplicationRecord
   before_create :validate_referring_email
   after_create :add_default_membership
 
-  has_many :giftlist, class_name: 'Gift', foreign_key: 'asker_id'
+  has_many :giftlist, class_name: 'Gift', foreign_key: 'owner_id'
   has_many :gifts_claimed, class_name: 'Gift', foreign_key: 'claimer_id'
   
   has_many :memberships
@@ -17,10 +17,10 @@ class User < ApplicationRecord
   validates :referring_email, presence: true
 
   def active_giftlist
-    giftlist.where(owner_id: self.id).where(received: false)
+    giftlist.where(received: false)
   end
 
-  def claimlist
+  def active_claimlist
     gifts_claimed.where(received: false)
   end
 

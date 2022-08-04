@@ -1,17 +1,61 @@
 # Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
 
-one:
-  title: MyString
-  description: MyText
-  price_low: 1
-  price_high: 1
-  asker: one
-  claimer: one
+# Generic gift
+gift1:
+  title: Gift 1
+  description: Description for gift 1
+  price_low: 10
+  price_high: 20
+  owner: user1
+  asker: user1
 
-two:
-  title: MyString
-  description: MyText
-  price_low: 1
-  price_high: 1
-  asker: two
-  claimer: two
+# Same price low as high
+gift2:
+  title: Gift 2
+  description: Description for gift 2
+  price_low: 10
+  price_high: 10
+  owner: user2
+  asker: user2
+
+# Asked by user3, claimed by user1
+gift3:
+  title: Gift 3
+  description: Description for gift 3
+  price_low: 0
+  price_high: 0
+  owner: user3
+  asker: user3
+  claimer: user1
+
+# Private gift for user1, added by user4
+gift4:
+  title: Gift 4
+  description: Description for gift 4
+  price_low: 10
+  price_high: 20
+  owner: user4
+  asker: user1
+  claimer: user4
+
+# Received gift for user1 claimed by user2
+gift5:
+  title: Gift 5
+  description: Description for gift 5
+  price_low: 20
+  price_high: 20
+  owner: user1
+  asker: user1
+  claimer: user2
+  received: true
+
+# Gift for user1, claimed and got by user2
+gift5:
+  title: Gift 5
+  description: Description for gift 5
+  price_low: 20
+  price_high: 20
+  owner: user1
+  asker: user1
+  claimer: user2
+  claimer_got: true
