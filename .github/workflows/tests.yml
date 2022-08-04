@@ -9,8 +9,8 @@ jobs:
       postgres:
         image: postgres:12.7
         env:
-          POSTGRES_USER: myapp
-          POSTGRES_DB: myapp_test
+          POSTGRES_USER: giftlist
+          POSTGRES_DB: giftlist_test
           POSTGRES_PASSWORD: ""
         ports: ["5432:5432"]
 
@@ -26,8 +26,8 @@ jobs:
       - name: Setup test database
         env:
           RAILS_ENV: test
-          PGHOST: postgres
-          PGUSER: myapp
+          PGHOST: localhost
+          PGUSER: giftlist
         run: |
           bin/rails db:setup
 
