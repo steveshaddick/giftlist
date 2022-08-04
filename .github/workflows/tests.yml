@@ -11,7 +11,7 @@ jobs:
         image: postgres
         env:
           POSTGRES_USER: postgres
-          POSTGRES_DB: postgres
+          POSTGRES_DB: giftlist_test
           POSTGRES_PASSWORD: ""
         ports:
           - 5432:5432
