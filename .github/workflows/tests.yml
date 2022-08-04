@@ -5,14 +5,19 @@ jobs:
   tests:
     name: Rails Tests
     runs-on: ubuntu-latest
+
     services:
       postgres:
-        image: postgres:12.7
+        image: postgres
         env:
           POSTGRES_USER: giftlist
           POSTGRES_DB: giftlist_test
           POSTGRES_PASSWORD: ""
-        ports: ["5432:5432"]
+        ports:
+          - 5432:5432
+
+    env:
+      RAILS_ENV: test
 
     steps:
       - name: Checkout code
@@ -24,12 +29,8 @@ jobs:
           bundler-cache: true
 
       - name: Setup test database
-        env:
-          RAILS_ENV: test
-          PGHOST: localhost
-          PGUSER: giftlist
         run: |
-          bin/rails db:setup
+          bin/rails db:prepare
 
       - name: Run tests
         run: bin/rails test
