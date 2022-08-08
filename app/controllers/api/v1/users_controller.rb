@@ -37,7 +37,7 @@ class Api::V1::UsersController < Api::V1::BaseController
       })
     end
 
-    render json: asklist
+    return_data(asklist)
   end
 
   def groups
@@ -51,7 +51,7 @@ class Api::V1::UsersController < Api::V1::BaseController
         members: [],
       }
       
-      group.users.each do |user|
+      group.members.each do |user|
         group_item[:members].push({
           id: user[:id],
           name: user[:name],
@@ -61,6 +61,6 @@ class Api::V1::UsersController < Api::V1::BaseController
       groups.push(group_item)
     end
 
-    render json: groups
+    return_data(groups)
   end
 end

@@ -3,7 +3,7 @@ require 'faker'
 default_groups = [
   {
     title: "Shaddick Family",
-    users: [
+    members: [
       1,
       2,
       3,
@@ -15,7 +15,7 @@ default_groups = [
   },
   {
     title: "Other Group",
-    users: [
+    members: [
       8,
       9,
       10,
@@ -31,7 +31,7 @@ default_groups.each do |new_group|
   })
   gift_group.save
 
-  new_group[:users].each do |user_id|
+  new_group[:members].each do |user_id|
     membership = Membership.new({
       user: User.find(user_id),
       gift_group: gift_group,

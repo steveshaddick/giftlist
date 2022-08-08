@@ -2,7 +2,6 @@ require "test_helper"
 
 module Api::V1
   class UsersControllerTest < ActionDispatch::IntegrationTest
-    include Devise::Test::IntegrationHelpers
 
     test "unauthenticated endpoints will return unauthorized status" do
       user = users(:user1)
@@ -21,7 +20,6 @@ module Api::V1
     end
 
     test "wrong user (unauthorized) endpoints will return unauthorized status" do
-      authenticated_user = users(:user1)
       request_user = users(:user2)
       endpoints = [
         'claimlist',
@@ -29,7 +27,7 @@ module Api::V1
         'groups',
       ]
 
-      sign_in authenticated_user
+      authenticated_user = sign_in_user(:user1)
 
       endpoints.each do |endpoint|
         path = "/api/v1/users/#{request_user.id}/#{endpoint}"
@@ -40,16 +38,44 @@ module Api::V1
     end
 
     test "#claimlist returns expected list" do
-      user = users(:user1)
-      sign_in users(:user1)
+      authenticated_user = sign_in_user(:user1)
+      expected_gift = gifts(:gift3)
       
-      get "/api/v1/users/#{user.id}/claimlist"
-      json_response = JSON.parse(response.body)
+      get "/api/v1/users/#{authenticated_user.id}/claimlist"
+      json_response = JSON.parse(response.body, :symbolize_names => true)
+      gifts = json_response[:data]
 
       assert_response 200
-      assert_equal "", json_response
+      assert_equal 1, gifts.count
+      assert_equal expected_gift[:id], gifts[0][:id]
     end
 
+    test "#asklist returns expected list" do
+      authenticated_user = sign_in_user(:user1)
+      expected_gift = gifts(:gift1)
+      
+      get "/api/v1/users/#{authenticated_user.id}/asklist"
+      json_response = JSON.parse(response.body, :symbolize_names => true)
+      gifts = json_response[:data]
+
+      assert_response 200
+      assert_equal 2, gifts.count
+      assert_equal expected_gift[:id], gifts[0][:id]
+    end
+
+    test "#groups returns expected list" do
+      authenticated_user = sign_in_user(:user1)
+      expected_group = gift_groups(:group1)
+      
+      get "/api/v1/users/#{authenticated_user.id}/groups"
+      json_response = JSON.parse(response.body, :symbolize_names => true)
+      groups = json_response[:data]
+
+      assert_response 200
+      assert_equal 1, groups.count
+      assert_equal expected_group[:id], groups[0][:id]
+      assert_equal expected_group.members[1][:id], groups[0][:members][1][:id]
+    end
 
   end
 end

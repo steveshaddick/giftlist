@@ -42,7 +42,7 @@ class User < ApplicationRecord
       referring_user = User.find_by(email: self.referring_email)
       default_group = referring_user.gift_groups[0]
 
-      default_group.add_user(self.id)
+      default_group.add_member(self.id)
     end
   end
 end
