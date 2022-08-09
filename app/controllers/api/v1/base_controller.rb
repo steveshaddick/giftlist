@@ -2,7 +2,11 @@ class Api::V1::BaseController < ActionController::API
   include ActionController::Cookies
   include ActionController::RequestForgeryProtection
 
+  class NotAuthorized < StandardError; end
+
   protect_from_forgery with: :exception
+
+  rescue_from NotAuthorized, with: :return_unauthorized
 
   def ensure_current_user
     unless user_signed_in? && current_user[:id] == params[:id].to_i

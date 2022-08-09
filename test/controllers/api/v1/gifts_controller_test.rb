@@ -27,6 +27,10 @@ module Api::V1
       end
     end
 
+    #
+    # CREATE
+    #
+
     test "#create will create an asking gift when asker is authenticated user" do
       authenticated_user = sign_in_user(:user1)
       new_gift_json = create_new_gift(authenticated_user)
@@ -52,6 +56,10 @@ module Api::V1
       assert_equal new_gift_json[:title], new_gift_db[:title]
       assert new_gift_db.private?
     end
+
+    #
+    # DELETE
+    #
 
     test "#delete will not delete gift if not owned by authenticated user" do
       authenticated_user = sign_in_user(:user1)
@@ -81,6 +89,109 @@ module Api::V1
       assert_response 200
       assert_equal original_count - 1, authenticated_user.giftlist.count
     end
+
+    #
+    # UPDATE
+    #
+
+    test "#update will update gift when title is supplied" do
+      authenticated_user = sign_in_user(:user1)
+      gift = authenticated_user.giftlist[0]
+      original_description = gift[:description]
+
+      update_data = {
+        title: "New Title",
+      }
+
+      response = send_api_and_parse_response("/api/v1/gifts/#{gift.id}", method: :patch, data: update_data)
+      response_data = response[:data]
+
+      assert_response 200
+      assert_equal "New Title", response_data[:title]
+      assert_equal original_description, response_data[:description], "Gift updated description when only title was supplied"
+    end
+
+    test "#update will update all gift values when keys are supplied" do
+      authenticated_user = sign_in_user(:user1)
+      gift = authenticated_user.giftlist[0]
+
+      update_data = {
+        title: "New Title",
+        description: "New description",
+        priceHigh: 99.99,
+        priceLow: 9.99,
+      }
+
+      response = send_api_and_parse_response("/api/v1/gifts/#{gift.id}", method: :patch, data: update_data)
+      response_data = response[:data]
+
+      assert_response 200
+      assert_equal update_data[:title], response_data[:title]
+      assert_equal update_data[:description], response_data[:description]
+      assert_equal update_data[:priceHigh], response_data[:priceHigh]
+      assert_equal update_data[:priceLow], response_data[:priceLow]
+    end
+
+    test "#update will claim gift for current user if unclaimed" do
+      authenticated_user = sign_in_user(:user1)
+      gift = users(:user2).giftlist[0]
+
+      update_data = {
+        claimerId: authenticated_user[:id],
+      }
+
+      response = send_api_and_parse_response("/api/v1/gifts/#{gift.id}", method: :patch, data: update_data)
+      response_data = response[:data]
+
+      assert_response 200
+      assert_equal authenticated_user[:id], response_data[:claimer][:id]
+    end
+
+    test "#update will unclaim gift for current user if claimed" do
+      authenticated_user = sign_in_user(:user1)
+      gift = gifts(:gift3)
+
+      update_data = {
+        claimerId: nil,
+      }
+
+      response = send_api_and_parse_response("/api/v1/gifts/#{gift.id}", method: :patch, data: update_data)
+      response_data = response[:data]
+
+      assert_response 200
+      assert_nil response_data[:claimer]
+    end
+
+    test "#update returns unauthorized if already claimed by another user" do
+      authenticated_user = sign_in_user(:user1)
+      gift = gifts(:gift4)
+
+      update_data = {
+        claimerId: authenticated_user[:id],
+      }
+
+      response = send_api_and_parse_response("/api/v1/gifts/#{gift.id}", method: :patch, data: update_data)
+      response_data = response[:data]
+
+      assert_response 401
+    end
+
+    test "#update returns unauthorized if trying to claim for another user" do
+      authenticated_user = sign_in_user(:user1)
+      other_user = users(:user2)
+      gift = gifts(:gift2)
+
+      update_data = {
+        claimerId: other_user[:id],
+      }
+
+      response = send_api_and_parse_response("/api/v1/gifts/#{gift.id}", method: :patch, data: update_data)
+      response_data = response[:data]
+
+      assert_response 401
+    end
+
+    ## need gift got testing ....
 
     private
 

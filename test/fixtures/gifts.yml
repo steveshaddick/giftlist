@@ -4,8 +4,8 @@
 gift1:
   title: Gift 1
   description: Description for gift 1
-  price_low: 10
-  price_high: 20
+  price_low: 1000
+  price_high: 2000
   owner: user1
   asker: user1
 
@@ -13,8 +13,8 @@ gift1:
 gift2:
   title: Gift 2
   description: Description for gift 2
-  price_low: 10
-  price_high: 10
+  price_low: 1000
+  price_high: 1000
   owner: user2
   asker: user2
 
@@ -32,8 +32,8 @@ gift3:
 gift4:
   title: Gift 4
   description: Description for gift 4
-  price_low: 10
-  price_high: 20
+  price_low: 1000
+  price_high: 2000
   owner: user4
   asker: user1
   claimer: user4
@@ -42,8 +42,8 @@ gift4:
 gift5:
   title: Gift 5
   description: Description for gift 5
-  price_low: 20
-  price_high: 20
+  price_low: 2000
+  price_high: 2000
   owner: user1
   asker: user1
   claimer: user2
@@ -53,8 +53,8 @@ gift5:
 gift5:
   title: Gift 5
   description: Description for gift 5
-  price_low: 20
-  price_high: 20
+  price_low: 2000
+  price_high: 2000
   owner: user1
   asker: user1
   claimer: user2
