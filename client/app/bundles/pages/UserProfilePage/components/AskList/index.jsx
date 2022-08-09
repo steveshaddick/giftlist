@@ -69,7 +69,10 @@ const AskList = (props) => {
     api
       .getAskingList()
       .then(response => {
-        setItems(response);
+        const { success, data } = response;
+        if (success) {
+          setItems(data);
+        }
       });
   }, []);
 

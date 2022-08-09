@@ -10,7 +10,6 @@ const MainFooter = () => {
     e.preventDefault();
 
     api.signout().then(response => {
-      console.log("DONE", response);
       window.location = "/";
     });
   }
