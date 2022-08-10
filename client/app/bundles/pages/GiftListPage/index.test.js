@@ -1,13 +1,20 @@
 import { render, screen } from '@testing-library/react';
+import { mockUser } from 'test/__mocks__/users';
+import { mockGiftList } from 'test/__mocks__/giftLists';
 
 import GiftListPage from '.';
 
-test('renders the GiftListPage', () => {
+test('renders a public GiftListPage', () => {
+  const currentUser = mockUser(1);
+  const giftlist = mockGiftList(1);
 
-  render(<GiftListPage />);
+  render(<GiftListPage
+    currentUser={ currentUser }
+    user={ mockUser(3) }
+    gifts={ giftlist }
+    />);
   
-  expect(screen.getByRole("heading")).toHaveTextContent(/Doggy Directory/);
-  expect(screen.getByRole("combobox")).toHaveDisplayValue("Select a breed");
-  expect(screen.getByRole("button", { name: "Search" })).toBeDisabled();
-  expect(screen.getByRole("img")).toBeInTheDocument();
+  expect(screen.getByText(/Gift Lists/i)).toBeTruthy();
+  expect(screen.getByText(/Sign out/i)).toBeTruthy();
+  expect(screen.getByText(/User 3's List/i)).toBeTruthy();
 });

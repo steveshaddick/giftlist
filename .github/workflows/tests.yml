@@ -2,7 +2,7 @@ name: Tests
 on: [push]
 
 jobs:
-  tests:
+  rails-tests:
     name: Rails Tests
     runs-on: ubuntu-latest
 
@@ -42,3 +42,14 @@ jobs:
 
       - name: Run tests
         run: bin/rails test
+
+  jest-tests:
+    name: Jest Tests
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v1
+      - name: Run Tests
+        run: |
+          yarn install 
+          yarn test
