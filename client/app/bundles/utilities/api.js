@@ -2,7 +2,7 @@ import { useContext } from 'react';
 
 const apiDomain = '/api/v1';
 
-const csrfToken = document.querySelector('[name=csrf-token]').content;
+const csrfToken = document.querySelector('[name=csrf-token]')?.content;
 const headers = {
   'Content-Type': 'application/json',
   'X-CSRF-TOKEN': csrfToken,
