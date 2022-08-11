@@ -18,7 +18,6 @@ const UserProfilePage = (props) => {
 
   const [selectedTab, setSelectedTab] = useState('');
   const [isNewGift, setIsNewGift] = useState(false);
-  let lastTab = useRef('');
 
   const tabClickHandler = (e) => {
     const tab = e.currentTarget.dataset.action;
@@ -28,15 +27,6 @@ const UserProfilePage = (props) => {
 
   const newGiftHandler = () => {
     setIsNewGift(true);
-  }
-
-  const cancelNewGiftHandler = () => {
-    setIsNewGift(false);
-  }
-
-  const saveNewGiftHandler = () => {
-    // TODO refactor this as a state reducer, probably
-    window.location.reload();
   }
 
   useEffect(() => {

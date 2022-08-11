@@ -8,6 +8,15 @@ const config = {
   setupFilesAfterEnv: [
     `${appPath}/test/setup-env.js`
   ],
+  transformIgnorePatterns: [
+    "/node_modules/.+(js|jsx)$"
+  ],
+  transform: {
+    "^.+\\.(js|jsx|mjs)$": "<rootDir>/node_modules/babel-jest",
+    "^.+\\.css$": "jest-transform-css",
+    "^.+\\.svg$": "jest-transform-file",
+    "^(?!.*\\.(js|jsx|mjs|css|json|svg)$)": "<rootDir>/config/jest/fileTransform.js"
+  },
   moduleNameMapper: {
     '^common/(.*)': `${appPath}/bundles/common/$1`,
     '^components/(.*)': `${appPath}/bundles/components/$1`,
