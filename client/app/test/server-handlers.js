@@ -12,8 +12,8 @@ export const handlers = [
     let responseData = null;
     let newGift = mockGift(giftId);
 
-    if (claimerId) {
-      newGift.claimer = mockUser(claimerId);
+    if (typeof claimerId !== 'undefined') {
+      newGift.claimer = (claimerId) ? mockUser(claimerId) : null;
       responseData = newGift;
     }
 
