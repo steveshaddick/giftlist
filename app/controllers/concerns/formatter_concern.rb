@@ -1,7 +1,7 @@
 module FormatterConcern
   def format_money(value)
     value = value || 0
-    value/100
+    value.to_f/100
   end
 
 

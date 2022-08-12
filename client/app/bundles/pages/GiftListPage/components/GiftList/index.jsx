@@ -30,14 +30,17 @@ const GiftList = (props) => {
       gift: claimItem,
     })
       .then(response => {
-        const newItems = items.map(item => {
-          if (item.id !== response.id) {
-            return item;
-          } else {
-            return response;
-          }
-        })
-        setItems(newItems);
+        const { success, data: gift } = response;
+        if (success) {
+          const newItems = items.map(item => {
+            if (item.id !== gift.id) {
+              return item;
+            } else {
+              return gift;
+            }
+          })
+          setItems(newItems);
+        }
         setClaimItem(null);
       });
   }
@@ -55,14 +58,17 @@ const GiftList = (props) => {
       gift: unclaimItem,
     })
       .then(response => {
-        const newItems = items.map(item => {
-          if (item.id !== response.id) {
-            return item;
-          } else {
-            return response;
-          }
-        })
-        setItems(newItems);
+        const { success, data: gift } = response;
+        if (success) {
+          const newItems = items.map(item => {
+            if (item.id !== gift.id) {
+              return item;
+            } else {
+              return gift;
+            }
+          })
+          setItems(newItems);
+        }
         setUnclaimItem(null);
       });
   }

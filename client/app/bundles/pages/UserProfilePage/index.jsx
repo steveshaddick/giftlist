@@ -18,7 +18,6 @@ const UserProfilePage = (props) => {
 
   const [selectedTab, setSelectedTab] = useState('');
   const [isNewGift, setIsNewGift] = useState(false);
-  let lastTab = useRef('');
 
   const tabClickHandler = (e) => {
     const tab = e.currentTarget.dataset.action;
@@ -28,15 +27,6 @@ const UserProfilePage = (props) => {
 
   const newGiftHandler = () => {
     setIsNewGift(true);
-  }
-
-  const cancelNewGiftHandler = () => {
-    setIsNewGift(false);
-  }
-
-  const saveNewGiftHandler = () => {
-    // TODO refactor this as a state reducer, probably
-    window.location.reload();
   }
 
   useEffect(() => {
@@ -50,7 +40,7 @@ const UserProfilePage = (props) => {
     });
 
     if (pathTab === '') {
-      setSelectedTab('asking');
+      setSelectedTab('asklist');
     } else {
       setSelectedTab(pathTab);
     }
@@ -80,12 +70,14 @@ const UserProfilePage = (props) => {
             tabClickHandler={ tabClickHandler }
             newGiftHandler={ newGiftHandler }
             />
-          { selectedTab == 'asking' &&
-            <AskList />
-          }
-          { selectedTab == 'claimed' &&
-            <ClaimList />
-          }
+          <main>
+            { selectedTab == 'asklist' &&
+              <AskList />
+            }
+            { selectedTab == 'claimlist' &&
+              <ClaimList />
+            }
+          </main>
         </layout.PageContainer>
         <MainFooter />
       </CurrentUserProvider>

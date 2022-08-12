@@ -81,9 +81,10 @@ const EditGift = (props) => {
       gift: giftData,
     })
       .then(response => {
+        const { success, data } = response;
         setIsSaving(false);
-        if (saveHandler) {
-          saveHandler(response);
+        if (success && saveHandler) {
+          saveHandler(data);
         }
       });
 

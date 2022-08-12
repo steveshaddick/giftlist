@@ -17,7 +17,7 @@ User.all.each do |user|
 
     if rand() > 0.8
       group = user.gift_groups[0]
-      group_members = group.users
+      group_members = group.members
 
       claimer_id = nil
       while claimer_id.nil?

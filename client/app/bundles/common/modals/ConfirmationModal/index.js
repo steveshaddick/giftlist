@@ -17,7 +17,9 @@ const modalStyles = {
   },
 };
 
-Modal.setAppElement('#AppContainer');
+if (document.getElementById('AppContainer')) {
+  Modal.setAppElement('#AppContainer');
+}
 
 const ConfirmationModal = (props) => {
   const {

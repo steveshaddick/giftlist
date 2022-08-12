@@ -11,7 +11,7 @@ class PagesController < ApplicationController
     gift_groups = current_user.gift_groups.map do |gift_group|
       {
         title: gift_group[:title],
-        members: gift_group.users_except(current_user[:id]).map do |user|
+        members: gift_group.members_except(current_user[:id]).map do |user|
           {
             id: user[:id],
             name: user[:name]
@@ -55,7 +55,7 @@ class PagesController < ApplicationController
     end
 
     unless params.has_key?(:tab)
-      redirect_to controller:'pages', action: 'user_profile', id: params[:id], tab: 'asking'
+      redirect_to controller:'pages', action: 'user_profile', id: params[:id], tab: 'asklist'
       return
     end
 

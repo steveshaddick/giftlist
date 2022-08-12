@@ -13,17 +13,19 @@ const ProfileTabs = (props) => {
   return (
     <styled.Component>
       <layout.GridRow>
-        <styled.TabsContainer>
+        <styled.TabsContainer aria-label="List Navigation">
           <styled.TabButton
-            selected={ selectedTab === 'asking' }
-            data-action="asking"
+            selected={ selectedTab === 'asklist' }
+            aria-current={ selectedTab === 'asklist' }
+            data-action="asklist"
             onClick={ tabClickHandler }
           >
             Asking List
           </styled.TabButton>
           <styled.TabButton
-            selected={ selectedTab === 'claimed' }
-            data-action="claimed"
+            selected={ selectedTab === 'claimlist' }
+            aria-current={ selectedTab === 'claimlist' }
+            data-action="claimlist"
             onClick={ tabClickHandler }
           >
             Claimed List

@@ -107,9 +107,12 @@ const ClaimList = (props) => {
 
   useEffect(() => {
     api.getClaimedList()
-      .then(data => {
-        items.current = data;
-        setClaims(sortClaims(data));
+      .then(response => {
+        const { success, data } = response;
+        if (success){
+          items.current = data;
+          setClaims(sortClaims(data));
+        }
       });
   }, []);
 
