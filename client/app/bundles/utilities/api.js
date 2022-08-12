@@ -1,6 +1,5 @@
-import { useContext } from 'react';
-
-const apiDomain = '/api/v1';
+const apiHost = ((typeof process !== 'undefined') && (process?.env?.NODE_ENV === 'test')) ? 'http://localhost' : '';
+const apiBase = `${apiHost}/api/v1`;
 
 const csrfToken = document.querySelector('[name=csrf-token]')?.content;
 const headers = {
@@ -33,7 +32,7 @@ async function callApi(path, data=null, options={}) {
     requestOptions.body = JSON.stringify(data)
   }
 
-  const response = await fetch(`${apiDomain}/${path}`, requestOptions);
+  const response = await fetch(`${apiBase}/${path}`, requestOptions);
 
   return await response.json();
 }

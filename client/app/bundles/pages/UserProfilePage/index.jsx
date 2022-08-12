@@ -40,7 +40,7 @@ const UserProfilePage = (props) => {
     });
 
     if (pathTab === '') {
-      setSelectedTab('asking');
+      setSelectedTab('asklist');
     } else {
       setSelectedTab(pathTab);
     }
@@ -70,12 +70,14 @@ const UserProfilePage = (props) => {
             tabClickHandler={ tabClickHandler }
             newGiftHandler={ newGiftHandler }
             />
-          { selectedTab == 'asking' &&
-            <AskList />
-          }
-          { selectedTab == 'claimed' &&
-            <ClaimList />
-          }
+          <main>
+            { selectedTab == 'asklist' &&
+              <AskList />
+            }
+            { selectedTab == 'claimlist' &&
+              <ClaimList />
+            }
+          </main>
         </layout.PageContainer>
         <MainFooter />
       </CurrentUserProvider>

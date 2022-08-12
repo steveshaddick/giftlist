@@ -55,7 +55,7 @@ class PagesController < ApplicationController
     end
 
     unless params.has_key?(:tab)
-      redirect_to controller:'pages', action: 'user_profile', id: params[:id], tab: 'asking'
+      redirect_to controller:'pages', action: 'user_profile', id: params[:id], tab: 'asklist'
       return
     end
 
