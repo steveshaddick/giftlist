@@ -1,25 +1,38 @@
-import React, { useState, useEffect, useContext } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import PropTypes from 'prop-types';
 
 import * as api from 'utilities/api';
 import { getCurrentUser } from 'utilities/CurrentUserContext';
 
 import ConfirmationModal from 'common/modals/ConfirmationModal';
+import EditGift from 'common/components/EditGift';
 import GiftItem from '../GiftItem';
 
 import * as layout from 'common/_styles/layout';
 import * as styled from './_styles';
 
 const GiftList = (props) => {
+  function scrollToEdit() {
+    editingElement.current.scrollIntoView();
+  }
+
   const { user, items: initialItems } = props;
   const { id: userId, name: userName } = user;
   const currentUser = getCurrentUser();
 
   const isCurrentUserList = userId === currentUser.id;
 
-  const [claimItem, setClaimItem] = React.useState(null);
-  const [unclaimItem, setUnclaimItem] = React.useState(null);
-  const [items, setItems] = React.useState(initialItems);
+  const [isLocked, setIsLocked] = useState(false);
+  const [scrollToItem, setScrollToItem] = useState(null);
+  const [removingItem, setRemovingItem] = useState(null);
+  const [claims, setClaims] = useState({});
+  const [isAdding, setIsAdding] = useState(false);
+
+  const [claimItem, setClaimItem] = useState(null);
+  const [unclaimItem, setUnclaimItem] = useState(null);
+  const [items, setItems] = useState(initialItems);
+
+  const editingElement = useRef(null);
 
   const claimHandler = (e) => {
     setClaimItem(items[e.currentTarget.dataset.itemIndex]);
@@ -77,6 +90,61 @@ const GiftList = (props) => {
     setUnclaimItem(null);
   }
 
+  const addNewGiftHandler = (giftData) => {
+    items.push(giftData);
+    setItems(items);
+    setIsAdding(false);
+  }
+
+  const editItemHandler = (newItem) => {
+    const newItems = items.map(item => {
+        return (item.id === newItem.id) ? newItem : item;
+    });
+    setItems(newItems);
+    setScrollToItem(newItem.id);
+  }
+
+  const deleteHandler = (e) => {
+    const parent = e.currentTarget.closest('[data-item-index]');
+    const item = items[parent.dataset.itemIndex];
+    setDeletingItem(item);
+  }
+
+  const confirmDeleteHandler = () => {
+    if (isLocked) {
+      return;
+    }
+    setIsLocked(true);
+
+    api.deleteGift({
+      gift: deletingItem,
+    }).then(response => {
+      const newItems = items.filter(item => item.id !== deletingItem.id);
+      setDeletingItem(null);
+      setIsLocked(false);
+      setItems(newItems);
+    });
+  }
+
+  const cancelDeleteHandler = () => {
+    setDeletingItem(null);
+  }
+
+  useEffect(() => {
+    if (isAdding) {
+      scrollToEdit();
+    }
+  }, [isAdding]);
+
+  useEffect(() => {
+    if (scrollToItem) {
+      const el = document.querySelector(`[data-item-id="${scrollToItem}"]`);
+      if (el) {
+        el.scrollIntoView();
+      }
+    }
+  }, [scrollToItem]);
+
   return (
     <styled.Component>
       <styled.HeadingContainer>
@@ -84,6 +152,18 @@ const GiftList = (props) => {
           <styled.Heading>{ userName }'s List</styled.Heading>
         </layout.GridRow>
       </styled.HeadingContainer>
+
+      { isAdding &&
+        <layout.GridRow>
+          <styled.TopContainer ref={ editingElement }>
+              <EditGift
+                isGroup={ true }
+                saveHandler={ addNewGiftHandler }
+                cancelHandler={ () => { setIsAdding(false); } }
+                />
+          </styled.TopContainer>
+        </layout.GridRow>
+      }
 
       <styled.List>
         {items.map((item, index) => {
@@ -103,6 +183,18 @@ const GiftList = (props) => {
           );
         })}
       </styled.List>
+
+      { !isAdding &&
+        <layout.GridRow>
+          <styled.AddButton onClick={() => {
+            setIsAdding(true);
+          }}>Add gift</styled.AddButton>
+        </layout.GridRow>
+      }
+
+      { isLocked &&
+        <LockedOverlay />
+      }
       
       { claimItem &&
         <ConfirmationModal

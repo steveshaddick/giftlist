@@ -1,5 +1,8 @@
 import styled from 'styled-components';
 
+export const AddButton = styled.button`
+`;
+
 export const List = styled.ul`
   list-style: none;
   padding: 0;
@@ -8,6 +11,10 @@ export const List = styled.ul`
 
 export const ListItem = styled.li`
   margin-bottom: 1rem;
+`;
+
+export const TopContainer = styled.div`
+  padding: 2rem 0;
 `;
 
 export const Heading = styled.h1`
