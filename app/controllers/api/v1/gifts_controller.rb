@@ -4,19 +4,42 @@ class Api::V1::GiftsController < Api::V1::BaseController
   before_action :ensure_authenticated_user
 
   def create
+    asker = nil
+    claimer = nil
+    owner = nil
+    group_owner = nil
+
     # Add asking gift
     if params[:askerId] === current_user[:id]
       asker = current_user
-      claimer = nil
+      owner = current_user
     else
-      # Add private gift
       asker = User.find(params[:askerId])
-      claimer = current_user
+
+      # Add group gift
+      if params.has_key?(:groupOwnerId)
+        gift_group = GiftGroup.joins(:membership).where("gift_group_id = ? AND user_id = ?", params[:groupOwnerId], current_user[:id])
+        if gift_group.blank?
+          raise NotAuthorized
+        end
+
+        if gift_group.members.exclude?(asker)
+          raise BadRequest
+        end
+
+        group_owner = gift_group
+
+      else
+        # Add private gift
+        claimer = current_user
+        owner = current_user
+      end
     end
 
     gift = Gift.create({
       asker: asker,
-      owner: current_user,
+      owner: owner,
+      group_ownemr: group_owner,
       claimer: claimer,
       title: params[:title],
       description: params[:description],

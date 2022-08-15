@@ -61,7 +61,6 @@ const EditGift = (props) => {
     gift,
     cancelHandler,
     saveHandler,
-    apiSave,
     isPrivate,
     isGroup,
   } = props;
@@ -87,6 +86,7 @@ const EditGift = (props) => {
     obj[fieldName('priceHigh')] = priceHigh || '';
     obj[fieldName('isPriceRange')] = priceHigh || '';
     obj[fieldName('askerId')] = isPrivate ? '' : currentUser.id;
+    obj[fieldName('groupOwnerId')] = isGroup ? currentUser.group.id : '';
 
     return obj;
   }
@@ -194,9 +194,14 @@ const EditGift = (props) => {
 
           <input type="hidden" {...register(fieldName('id'))} />
           
-          { !isPrivate &&
+          { !isPrivate && !isGroup &&
             <input type="hidden" {...register(fieldName('askerId'))} />
           }
+          
+          { !isPrivate && isGroup &&
+            <input type="hidden" {...register(fieldName('groupOwnerId'))} />
+          }
+
           { isPrivate &&
             <styled.FieldContainer>
               <styled.Label>Person</styled.Label>

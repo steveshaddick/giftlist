@@ -65,8 +65,18 @@ class PagesController < ApplicationController
   private
 
   def assign_props(props = {})
+    # So.... this will obviously need to change to handle multiple groups.
+    current_group = current_user.gift_groups[0]
+
     default_props = {
-      current_user: current_user
+      current_user: {
+        id: current_user[:id],
+        name: current_user[:name],
+        group: {
+          id: current_group[:id],
+          title: current_group[:title],
+        }
+      }
     }
 
     @props = default_props.merge(props).deep_transform_keys! { |key| key.to_s.camelize(:lower) }

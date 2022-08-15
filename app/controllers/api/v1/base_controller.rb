@@ -3,10 +3,12 @@ class Api::V1::BaseController < ActionController::API
   include ActionController::RequestForgeryProtection
 
   class NotAuthorized < StandardError; end
+  class BadRequest < StandardError; end
 
   protect_from_forgery with: :exception
 
   rescue_from NotAuthorized, with: :return_unauthorized
+  rescue_from BadRequest, with: :return_bad_request
 
   def ensure_current_user
     unless user_signed_in? && current_user[:id] == params[:id].to_i
@@ -22,6 +24,10 @@ class Api::V1::BaseController < ActionController::API
 
   def return_unauthorized
     render api_response(status: 401, message: "Unauthorized")
+  end
+
+  def return_bad_request(message = "Bad request")
+    render api_response(status: 400, message: message)
   end
 
   def return_data(data)

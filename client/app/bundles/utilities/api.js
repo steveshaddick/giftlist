@@ -33,6 +33,7 @@ async function callApi(path, data=null, options={}) {
   }
 
   const response = await fetch(`${apiBase}/${path}`, requestOptions);
+  console.log(response);
 
   return await response.json();
 }
@@ -105,12 +106,13 @@ export async function getAskingList() {
 
 export async function addGift(data) {
   const { gift } = data;
-  const { askerId, title, description, priceHigh, priceLow } = gift;
+  const { askerId, title, description, priceHigh, priceLow, groupOwnerId } = gift;
 
   let requestData = {
     askerId,
     title,
     description,
+    groupOwnerId,
     priceHigh: parseInt(priceHigh, 10),
     priceLow: parseInt(priceLow, 10),
   };
