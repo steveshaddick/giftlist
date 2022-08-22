@@ -16,20 +16,12 @@ class User < ApplicationRecord
   validates :name, presence: true
   validates :referring_email, presence: true
 
-  def active_giftlist
-    giftlist.where(received: false)
-  end
-
   def personal_giftlist
     Gift.where('asker_id = ? AND owner_id = asker_id AND received = FALSE', id).order(created_at: :desc)
   end
 
   def group_giftlist(group_owner_ids = [])
     Gift.where('asker_id = ? AND (owner_id = asker_id OR group_owner_id IN (?)) AND received = FALSE', id, group_owner_ids).order(created_at: :desc)
-  end
-
-  def active_group_gifts(group_ids)
-    Gift.where('asker_id = ? AND group_owner_id IN (?) AND received = ?', id, group_ids, show_received)
   end
 
   def active_claimlist

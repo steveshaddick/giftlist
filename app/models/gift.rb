@@ -5,7 +5,7 @@ class Gift < ApplicationRecord
   belongs_to :group_owner, class_name: 'GiftGroup', optional: true
 
   def private?
-    self.group_owner.nil && (self.owner != self.asker)
+    self.group_owner.nil? && (self.owner != self.asker)
   end
 
   def group_gift?
