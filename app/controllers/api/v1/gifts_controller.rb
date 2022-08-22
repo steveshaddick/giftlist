@@ -16,7 +16,7 @@ class Api::V1::GiftsController < Api::V1::BaseController
       asker = User.find(params[:askerId])
 
       # Add group gift
-      if params.has_key?(:groupOwnerId)
+      if params.has_key?(:groupOwnerId) && params[:groupOwnerId].present?
         gift_group = GiftGroup.find(params[:groupOwnerId])
         
         if gift_group.members.exclude?(current_user)
@@ -114,6 +114,7 @@ class Api::V1::GiftsController < Api::V1::BaseController
 
   def got
     gift = Gift.find(params[:id])
+    claimer_got = params[:claimerGot]
 
     if gift.claimer_id != current_user.id
       raise NotAuthorized
@@ -128,7 +129,7 @@ class Api::V1::GiftsController < Api::V1::BaseController
 
   def delete
     gift = Gift.find(params[:id])
-    if gift.owner[:id] != current_user.id
+    if !can_edit_gift(gift)
       raise NotAuthorized
     end
 

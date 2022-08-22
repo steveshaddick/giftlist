@@ -167,7 +167,8 @@ const EditGift = (props) => {
     if (isPrivate) {
       api
         .getGroups()
-        .then((data) => {
+        .then((response) => {
+          const { data } = response;
           let allMembers = [];
           for (let i=0; i<data.length; i++) {
             const members = data[i].members.filter(member => member.id !== currentUser.id);

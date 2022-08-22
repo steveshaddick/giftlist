@@ -6,6 +6,7 @@ import { getCurrentUser } from 'utilities/CurrentUserContext';
 
 import ConfirmationModal from 'common/modals/ConfirmationModal';
 import EditGift from 'common/components/EditGift';
+import LockedOverlay from 'common/components/LockedOverlay'
 import GiftItem from '../GiftItem';
 
 import * as layout from 'common/_styles/layout';
@@ -24,8 +25,7 @@ const GiftList = (props) => {
 
   const [isLocked, setIsLocked] = useState(false);
   const [scrollToItem, setScrollToItem] = useState(null);
-  const [removingItem, setRemovingItem] = useState(null);
-  const [claims, setClaims] = useState({});
+  const [deletingItem, setDeletingItem] = useState(null);
   const [isAdding, setIsAdding] = useState(false);
 
   const [claimItem, setClaimItem] = useState(null);
@@ -35,7 +35,9 @@ const GiftList = (props) => {
   const editingElement = useRef(null);
 
   const claimHandler = (e) => {
-    setClaimItem(items[e.currentTarget.dataset.itemIndex]);
+    const parent = e.currentTarget.closest('[data-item-index]');
+    const item = items[parent.dataset.itemIndex];
+    setClaimItem(item);
   }
 
   const confirmClaimHandler = () => {
@@ -63,7 +65,9 @@ const GiftList = (props) => {
   }
 
   const unClaimHandler = (e) => {
-    setUnclaimItem(items[e.currentTarget.dataset.itemIndex]);
+    const parent = e.currentTarget.closest('[data-item-index]');
+    const item = items[parent.dataset.itemIndex];
+    setUnclaimItem(item);
   }
 
   const confirmUnclaimHandler = () => {
@@ -127,10 +131,15 @@ const GiftList = (props) => {
     api.deleteGift({
       gift: deletingItem,
     }).then(response => {
-      const newItems = items.filter(item => item.id !== deletingItem.id);
+      const { success } = response;
       setDeletingItem(null);
       setIsLocked(false);
-      setItems(newItems);
+      if (success) {
+        const newItems = items.filter(item => item.id !== deletingItem.id);
+        setItems(newItems);
+      } else {
+        alert("There was an error, please try again.");
+      }
     });
   }
 
@@ -176,17 +185,14 @@ const GiftList = (props) => {
 
       <styled.List>
         {items.map((item, index) => {
-          const { id: giftId, claimer, groupOwner } = item;
-          const currentUserClaimed = claimer && claimer.id === currentUser.id;
-          const isGroupOwned = groupOwner != null;
+          const { id: giftId } = item;
           return (
             <styled.ListItem key={ giftId }>
               <GiftItem
                 index={ index }
                 gift={ item }
                 enableClaimed={ !isCurrentUserList }
-                currentUserClaimed={ currentUserClaimed }
-                isGroupOwned={ isGroupOwned }
+                currentUser={ currentUser }
                 claimHandler={ claimHandler }
                 unClaimHandler = { unClaimHandler }
                 editHandler={ editItemHandler }
@@ -197,11 +203,11 @@ const GiftList = (props) => {
         })}
       </styled.List>
 
-      { !isAdding &&
+      { !isAdding && !isCurrentUserList &&
         <layout.GridRow>
           <styled.AddButton onClick={() => {
             setIsAdding(true);
-          }}>Add gift</styled.AddButton>
+          }}>Add group gift</styled.AddButton>
         </layout.GridRow>
       }
 
@@ -224,6 +230,15 @@ const GiftList = (props) => {
           cancelHandler={ cancelUnclaimHandler } 
         >
           <p>Unclaim <span className="gift-title">{ unclaimItem.title }</span>?</p>
+        </ConfirmationModal>
+      }
+      
+      { deletingItem &&
+        <ConfirmationModal
+          yesHandler={ confirmDeleteHandler }
+          cancelHandler={ cancelDeleteHandler } 
+        >
+          <p>Delete <span className="gift-title">{ deletingItem.title }</span>?</p>
         </ConfirmationModal>
       }
     </styled.Component>

@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import PropTypes from 'prop-types';
 
 import * as api from 'utilities/api';
@@ -18,11 +18,11 @@ const AskList = (props) => {
     editingElement.current.scrollIntoView();
   }
 
-  const [scrollToItem, setScrollToItem] = React.useState(null);
-  const [isAdding, setIsAdding] = React.useState(false);
-  const [deletingItem, setDeletingItem] = React.useState(null);
-  const [items, setItems] = React.useState({});
-  const [isLocked, setIsLocked] = React.useState(false);
+  const [scrollToItem, setScrollToItem] = useState(null);
+  const [isAdding, setIsAdding] = useState(false);
+  const [deletingItem, setDeletingItem] = useState(null);
+  const [items, setItems] = useState({});
+  const [isLocked, setIsLocked] = useState(false);
 
   const currentUser = getCurrentUser();
   const editingElement = useRef(null);

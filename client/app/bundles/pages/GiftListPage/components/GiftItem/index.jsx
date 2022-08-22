@@ -12,16 +12,18 @@ const GiftItem = (props) => {
     index,
     gift,
     enableClaimed = true,
-    isGroupOwned = false,
-    currentUserClaimed,
+    currentUser,
     claimHandler,
     unClaimHandler,
     editHandler,
     deleteClickHandler,
    } = props;
-   const { id: giftId, title, description, priceHigh, priceLow, claimer, owner } = gift;
+   const { id: giftId, title, description, priceHigh, priceLow, claimer, owner, groupOwner } = gift;
+   const { id: currentUserId } = currentUser;
 
    const isClaimed = claimer !== null;
+   const currentUserClaimed = claimer?.id === currentUserId;
+   const isGroupOwned = groupOwner !== null;
 
    const [ isExpanded, setIsExpanded ] = useState(false);
    const [ isEditing, setIsEditing ] = useState(false);
@@ -45,6 +47,7 @@ const GiftItem = (props) => {
   return (
     <styled.Component
       data-gift-id={ giftId }
+      data-item-index={ index }
       isClaimed={ isClaimed }
       currentUserClaimed={ currentUserClaimed }
       isGroupOwned={ isGroupOwned }
@@ -67,7 +70,12 @@ const GiftItem = (props) => {
               }}>
                 { title }
               </styled.Title>
-              { isGroupOwned &&
+              { isGroupOwned && owner.id == currentUserId &&
+                <styled.GroupOwnedInfo>
+                  (You added this.)
+                </styled.GroupOwnedInfo>
+              }
+              { isGroupOwned && owner.id != currentUserId &&
                 <styled.GroupOwnedInfo>
                   (Added by { owner.name })
                 </styled.GroupOwnedInfo>
@@ -75,12 +83,12 @@ const GiftItem = (props) => {
             </styled.TitleContainer>
             { (priceLow > 0 || priceHigh > 0) &&
               <styled.PriceContainer>
-                { priceLow === priceHigh &&
+                { priceLow === priceHigh
+                  ?
                   <styled.PriceContainer>
                     <styled.Price>{ priceLow }</styled.Price>
                   </styled.PriceContainer>
-                }
-                { priceLow !== priceHigh &&
+                  :
                   <styled.PriceContainer>
                     <styled.Price>{ priceLow }</styled.Price> - <styled.Price>{ priceHigh }</styled.Price>
                   </styled.PriceContainer>
@@ -95,13 +103,13 @@ const GiftItem = (props) => {
         
           { isClaimed &&
             <styled.ClaimedRow>
-              {currentUserClaimed &&
+              { currentUserClaimed
+                ?
                 <>
-                <p>You are getting this.</p>
-                <styled.ActionButton data-item-index={ index } onClick={ unClaimHandler }>Cancel</styled.ActionButton>
+                  <p>You are getting this.</p>
+                  <styled.ActionButton onClick={ unClaimHandler }>Cancel</styled.ActionButton>
                 </>
-              }
-              {!currentUserClaimed &&
+                :
                 <p>{ claimer.name } is getting this.</p>
               }
             </styled.ClaimedRow>
@@ -109,7 +117,7 @@ const GiftItem = (props) => {
 
           { (enableClaimed && !isClaimed) &&
             <styled.ActionRow>
-              <styled.ActionButton data-item-index={ index } onClick={ claimHandler }>I'll get it</styled.ActionButton>
+              <styled.ActionButton onClick={ claimHandler }>I'll get it</styled.ActionButton>
 
             { isGroupOwned &&
               <styled.EditButtonContainer>

@@ -32,13 +32,13 @@ class PagesController < ApplicationController
     user = User.find(params[:id])
     is_current_user_list = (user === current_user)
     if is_current_user_list
-      gifts = user.active_giftlist
+      gifts = user.personal_giftlist
     else
       # This will be better sorted on the front-end, rather than here
-      current_user_claimed = user.active_giftlist.where(claimer_id: current_user.id)
-      other_gifts = user.active_giftlist.where.not(claimer_id: current_user.id).or(user.active_giftlist.where(claimer_id: nil)).order(claimer_id: :desc)
-      group_gifts = user.active_group_gifts(current_user.gift_groups.ids)
-      gifts = current_user_claimed + other_gifts + group_gifts
+      #current_user_claimed = user.group_giftlist.where(claimer_id: current_user.id)
+      #other_gifts = user.active_giftlist.where.not(claimer_id: current_user.id).or(user.active_giftlist.where(claimer_id: nil)).order(claimer_id: :desc)
+      #group_gifts = user.active_group_gifts(current_user.gift_groups.ids)
+      gifts = user.group_giftlist(current_user.gift_groups.ids)
     end
 
     assign_props({
