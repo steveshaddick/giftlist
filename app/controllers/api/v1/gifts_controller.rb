@@ -6,20 +6,20 @@ class Api::V1::GiftsController < Api::V1::BaseController
   def create
     asker = nil
     claimer = nil
-    owner = nil
+    owner = current_user
     group_owner = nil
 
     # Add asking gift
-    if params[:askerId] === current_user[:id]
+    if params[:askerId] === current_user.id
       asker = current_user
-      owner = current_user
     else
       asker = User.find(params[:askerId])
 
       # Add group gift
       if params.has_key?(:groupOwnerId)
-        gift_group = GiftGroup.joins(:membership).where("gift_group_id = ? AND user_id = ?", params[:groupOwnerId], current_user[:id])
-        if gift_group.blank?
+        gift_group = GiftGroup.find(params[:groupOwnerId])
+        
+        if gift_group.members.exclude?(current_user)
           raise NotAuthorized
         end
 
@@ -32,14 +32,13 @@ class Api::V1::GiftsController < Api::V1::BaseController
       else
         # Add private gift
         claimer = current_user
-        owner = current_user
       end
     end
 
-    gift = Gift.create({
+    gift = Gift.create!({
       asker: asker,
       owner: owner,
-      group_ownemr: group_owner,
+      group_owner: group_owner,
       claimer: claimer,
       title: params[:title],
       description: params[:description],
@@ -47,79 +46,23 @@ class Api::V1::GiftsController < Api::V1::BaseController
       price_low: unformat_money(params[:priceLow]),
     })
 
+    if gift.errors.any?
+      raise GeneralServerError
+    end
+
     return_data(gift_json(gift))
   end
 
   def update
     gift = Gift.find(params[:id])
-    include_claimer = false
-
-    # Update gift values if the gift owner is the current user
-    if gift[:owner_id] === current_user[:id]
-      update_gift_values(gift, params)
-  
-    elsif params.has_key?(:claimerId)
-      # Update the claimer
-      update_gift_claimer(gift, params[:claimerId])
-      include_claimer = true
-
-    elsif params.has_key?(:claimerGot)
-      # Update the claimerGot
-      update_gift_got(gift, params[:claimerGot])
-
-    end
-
-    gift.reload
-    return_data(gift_json(gift, include_claimer: include_claimer))
-
-  rescue ActiveRecord::RecordNotFound
-    return_not_found
-  end
-
-  def delete
-    gift = Gift.find(params[:id])
-    if gift.owner[:id] != current_user[:id]
+    
+    if !can_edit_gift(gift)
       raise NotAuthorized
     end
 
-    gift.destroy
+    include_claimer = gift.asker && gift.asker.id != current_user.id
 
-    return_data({})
-
-  rescue ActiveRecord::RecordNotFound
-    return_not_found
-  end
-
-  private
-
-  def update_gift_got(gift, claimer_got)
-    if gift[:claimer_id] != current_user[:id]
-      raise NotAuthorized
-    end
-
-    gift.update(claimer_got: claimer_got)
-    gift.save
-  end
-
-  def update_gift_claimer(gift, new_claimer_id)
-    if gift[:claimer_id].nil? && new_claimer_id === current_user[:id]
-      # if gift doesn't have a claimer, and the current user is trying to claim it
-      gift.update(claimer_id: current_user[:id])
-      gift.save
-
-    elsif new_claimer_id.nil? && gift[:claimer_id] === current_user[:id]
-      # if the claimer is trying to unclaim, and the current user is the claimer
-      gift.update(claimer_id: nil, claimer_got: false)
-      gift.save
-
-    else
-      raise NotAuthorized
-    end
-  end
-
-  def update_gift_values(gift, params)
     update_data = {}
-
     [
       :title,
       :description,
@@ -139,34 +82,104 @@ class Api::V1::GiftsController < Api::V1::BaseController
       gift.update(update_data)
       gift.save
     end
+
+    gift.reload
+    return_data(gift_json(gift, include_claimer: include_claimer))
+
+  rescue ActiveRecord::RecordNotFound
+    return_not_found
+  end
+
+  def claim
+    gift = Gift.find(params[:id])
+    new_claimer_id = params[:claimerId]
+
+    if gift.claimer_id.nil? && new_claimer_id === current_user.id
+      # if gift doesn't have a claimer, and the current user is trying to claim it
+      gift.update(claimer_id: current_user.id)
+      gift.save
+
+    elsif new_claimer_id.nil? && gift.claimer_id === current_user.id
+      # if the claimer is trying to unclaim, and the current user is the claimer
+      gift.update(claimer_id: nil, claimer_got: false)
+      gift.save
+
+    else
+      raise NotAuthorized
+    end
+
+    gift.reload
+    return_data(gift_json(gift, include_claimer: true))
+  end
+
+  def got
+    gift = Gift.find(params[:id])
+
+    if gift.claimer_id != current_user.id
+      raise NotAuthorized
+    end
+
+    gift.update(claimer_got: claimer_got)
+    gift.save
+
+    gift.reload
+    return_data(gift_json(gift, include_claimer: true))
+  end
+
+  def delete
+    gift = Gift.find(params[:id])
+    if gift.owner[:id] != current_user.id
+      raise NotAuthorized
+    end
+
+    gift.destroy
+
+    return_data({})
+
+  rescue ActiveRecord::RecordNotFound
+    return_not_found
+  end
+
+  private
+
+  def can_edit_gift(gift)
+    if gift.owner_id === current_user.id
+      return true
+    elsif gift.group_owner && current_user.gift_groups.exists?(gift.group_owner.id)
+      return true
+    else
+      false
+    end
   end
 
   def gift_json(gift, include_claimer: false)
     gift_data = {
-      id: gift[:id],
-      title: gift[:title],
-      description: gift[:description],
-      priceHigh: format_money(gift[:price_high]),
-      priceLow: format_money(gift[:price_low]),
-      asker: {
-        id: gift.asker[:id],
-        name: gift.asker[:name],
-      },
-      owner: {
-        id: gift.owner[:id],
-        name: gift.owner[:name],
-      },
+      id: gift.id,
+      title: gift.title,
+      description: gift.description,
+      priceHigh: format_money(gift.price_high),
+      priceLow: format_money(gift.price_low),
+      asker: gift.asker ? {
+        id: gift.asker.id,
+        name: gift.asker.name,
+      } : nil,
+      owner: gift.owner ? {
+        id: gift.owner.id,
+        name: gift.owner.name,
+      } :nil,
+      groupOwner: gift.group_owner ? {
+        id: gift.group_owner.id,
+        name: gift.group_owner.title,
+      } :nil,
     }
 
-    if include_claimer
-      if (gift.claimer) 
-        gift_data[:claimer] = {
-          id: gift.claimer[:id],
-          name: gift.claimer[:name],
-        }
-      else
-        gift_data[:claimer] = nil
-      end
+    if include_claimer && gift.claimer
+      gift_data[:claimer] = {
+        id: gift.claimer.id,
+        name: gift.claimer.name,
+      }
+    else
+      gift_data[:claimer] = nil
     end
 
     gift_data

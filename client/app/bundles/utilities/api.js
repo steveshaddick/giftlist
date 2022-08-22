@@ -2,14 +2,22 @@ const apiHost = ((typeof process !== 'undefined') && (process?.env?.NODE_ENV ===
 const apiBase = `${apiHost}/api/v1`;
 
 const csrfToken = document.querySelector('[name=csrf-token]')?.content;
-const headers = {
-  'Content-Type': 'application/json',
-  'X-CSRF-TOKEN': csrfToken,
-};
 
 let currentUser = null;
 
 let inFlight = {};
+
+function generalError() {
+  return new Promise((resolve) => {
+    alert("There was an error, please try again.");
+
+    resolve({
+      success: false,
+      data: null,
+      message: "Unknown json error",
+    });
+  });
+}
 
 async function callApi(path, data=null, options={}) {
   const defaultOptions = {
@@ -33,9 +41,18 @@ async function callApi(path, data=null, options={}) {
   }
 
   const response = await fetch(`${apiBase}/${path}`, requestOptions);
-  console.log(response);
+  if (response.status >= 500) {
+    return generalError();
+  }
 
-  return await response.json();
+  let returnData = null;
+  try {
+    returnData = await response.json()
+  } catch (e) {
+    return generalError();
+  }
+
+  return returnData;
 }
 
 
@@ -60,7 +77,9 @@ export async function claimGift(data) {
     claimerId: currentUser.id,
   }
 
-  return callApi(`gifts/${giftId}`, requestData, {
+  console.log(giftId, currentUser.id, requestData);
+
+  return callApi(`gifts/${giftId}/claim`, requestData, {
     method: 'PATCH',
   });
 }
@@ -73,7 +92,7 @@ export async function unclaimGift(data) {
     claimerId: null,
   }
 
-  return callApi(`gifts/${giftId}`, requestData, {
+  return callApi(`gifts/${giftId}/claim`, requestData, {
     method: 'PATCH',
   });
 }
@@ -91,11 +110,11 @@ export async function setGiftGot(data) {
   const { isGot, id: giftId } = gift;
 
   let requestData = {
-    claimerGot: gift.isGot,
+    claimerGot: isGot,
 
   }
 
-  return callApi(`gifts/${giftId}`, requestData, {
+  return callApi(`gifts/${giftId}/got`, requestData, {
     method: 'PATCH',
   });
 }

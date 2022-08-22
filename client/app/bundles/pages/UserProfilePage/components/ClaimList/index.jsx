@@ -122,6 +122,7 @@ const ClaimList = (props) => {
         <layout.GridRow>
           <styled.TopContainer ref={ editingElement }>
               <EditGift
+                askerId=''
                 isPrivate={ true }
                 saveHandler={ addNewGiftHandler }
                 cancelHandler={ () => { setIsAdding(false); } }

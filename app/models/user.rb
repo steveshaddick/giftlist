@@ -20,6 +20,10 @@ class User < ApplicationRecord
     giftlist.where(received: false)
   end
 
+  def active_group_gifts(group_ids)
+    Gift.where('asker_id = ? AND group_owner_id IN (?) AND received = FALSE', id, group_ids)
+  end
+
   def active_claimlist
     gifts_claimed.where(received: false)
   end

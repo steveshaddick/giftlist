@@ -2,6 +2,7 @@ import React, { useEffect, useRef } from 'react';
 import PropTypes from 'prop-types';
 
 import * as api from 'utilities/api';
+import { getCurrentUser } from 'utilities/CurrentUserContext';
 
 import ConfirmationModal from 'common/modals/ConfirmationModal';
 import EditGift from 'common/components/EditGift';
@@ -23,6 +24,7 @@ const AskList = (props) => {
   const [items, setItems] = React.useState({});
   const [isLocked, setIsLocked] = React.useState(false);
 
+  const currentUser = getCurrentUser();
   const editingElement = useRef(null);
 
   const addNewGiftHandler = (giftData) => {
@@ -103,6 +105,7 @@ const AskList = (props) => {
           
           { isAdding &&
             <EditGift
+              askerId={ currentUser.id }
               saveHandler={ addNewGiftHandler }
               cancelHandler={ () => { setIsAdding(false); } }
               />

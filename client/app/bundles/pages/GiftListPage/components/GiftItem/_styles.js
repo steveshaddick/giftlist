@@ -9,8 +9,6 @@ export const SummaryRow = styled.div`
 `;
 
 export const Title = styled.h1`
-  width: 75%;
-  min-width: 200px;
   font-size: 1.25rem;
   cursor: pointer;
   margin-top: 0;
@@ -20,6 +18,16 @@ export const Title = styled.h1`
   &:hover, &:active {
     text-decoration: underline;
   }
+`;
+
+export const GroupOwnedInfo = styled.p`
+  font-style: italic;
+  color: #999;
+`;
+
+export const TitleContainer = styled.div`
+  width: 75%;
+  min-width: 200px;
 `;
 
 export const Description = styled.div`
@@ -42,9 +50,22 @@ export const Price = styled.span`
   }
 `;
 
+export const EditButtonContainer = styled.div`
+  align-self: flex-end;
+
+  button {
+    margin: 0 0.5rem;
+
+    &:last-child {
+      margin-right: 0;
+    }
+  }
+`;
+
 export const ActionRow = styled.div`
   display: flex;
   margin: 1rem 0;
+  justify-content: space-between;
 `;
 
 export const ActionButton = styled.button`
@@ -85,6 +106,11 @@ export const Component = styled.article`
           opacity: 0.5;
         `;
       }
+    }
+    if (props.isGroupOwned) {
+      return `
+        background-color: #fffbf9;
+      `;
     }
   }}
 `;

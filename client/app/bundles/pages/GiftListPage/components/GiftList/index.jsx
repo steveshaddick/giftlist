@@ -96,6 +96,14 @@ const GiftList = (props) => {
     setIsAdding(false);
   }
 
+  const editClickHandler = (e) => {
+    const newItems = items.map(item => {
+        return (item.id === newItem.id) ? newItem : item;
+    });
+    setItems(newItems);
+    setScrollToItem(newItem.id);
+  }
+
   const editItemHandler = (newItem) => {
     const newItems = items.map(item => {
         return (item.id === newItem.id) ? newItem : item;
@@ -157,6 +165,7 @@ const GiftList = (props) => {
         <layout.GridRow>
           <styled.TopContainer ref={ editingElement }>
               <EditGift
+                askerId={ userId }
                 isGroup={ true }
                 saveHandler={ addNewGiftHandler }
                 cancelHandler={ () => { setIsAdding(false); } }
@@ -167,17 +176,21 @@ const GiftList = (props) => {
 
       <styled.List>
         {items.map((item, index) => {
-          const { claimer } = item;
+          const { id: giftId, claimer, groupOwner } = item;
           const currentUserClaimed = claimer && claimer.id === currentUser.id;
+          const isGroupOwned = groupOwner != null;
           return (
-            <styled.ListItem key={ item.id }>
+            <styled.ListItem key={ giftId }>
               <GiftItem
                 index={ index }
                 gift={ item }
                 enableClaimed={ !isCurrentUserList }
                 currentUserClaimed={ currentUserClaimed }
+                isGroupOwned={ isGroupOwned }
                 claimHandler={ claimHandler }
                 unClaimHandler = { unClaimHandler }
+                editHandler={ editItemHandler }
+                deleteClickHandler={ deleteHandler }
                 />
             </styled.ListItem>
           );
