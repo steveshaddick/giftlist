@@ -16,9 +16,39 @@ const modules = {
   toolbar: [
     ['link', 'bold', 'italic', {'list': 'ordered'}, {'list': 'bullet'}, 'clean'],
   ],
-};
+}
 
-function submitButtonValue(isNew) {
+function titleText(isNew, isPrivate, isGroup) {
+  if (isNew) {
+    if (isPrivate) {
+      return "Add private gift";
+    }
+    if (isGroup) {
+      return "Add group gift";
+    }
+  } else {
+    return "Editing gift";
+  }
+}
+
+function helpMessage(isNew, isPrivate, isGroup) {
+  if (isNew) {
+    if (isPrivate) {
+      return (
+        <p>You are adding a private gift, only you can see this gift.</p>
+      );
+    }
+    if (isGroup) {
+      return (
+        <p>You are adding a group gift, only group members will see it (the person won't see it on their list).</p>
+      );
+    }
+  } else {
+    return null;
+  }
+}
+
+function submitButtonText(isNew) {
   if (isNew) {
     return "Add";
   } else {
@@ -31,8 +61,9 @@ const EditGift = (props) => {
     gift,
     cancelHandler,
     saveHandler,
-    apiSave,
+    askerId,
     isPrivate,
+    isGroup,
   } = props;
   const { id, title, description, priceHigh, priceLow } = gift || {};
   
@@ -55,7 +86,8 @@ const EditGift = (props) => {
     obj[fieldName('priceLow')] = priceLow || '';
     obj[fieldName('priceHigh')] = priceHigh || '';
     obj[fieldName('isPriceRange')] = priceHigh || '';
-    obj[fieldName('askerId')] = isPrivate ? '' : currentUser.id;
+    obj[fieldName('askerId')] = askerId || '';
+    obj[fieldName('groupOwnerId')] = isGroup ? currentUser.group.id : '';
 
     return obj;
   }
@@ -135,7 +167,8 @@ const EditGift = (props) => {
     if (isPrivate) {
       api
         .getGroups()
-        .then((data) => {
+        .then((response) => {
+          const { data } = response;
           let allMembers = [];
           for (let i=0; i<data.length; i++) {
             const members = data[i].members.filter(member => member.id !== currentUser.id);
@@ -150,28 +183,14 @@ const EditGift = (props) => {
     <styled.Component>
       <layout.GridRow>
         <styled.TitleContainer>
-          { isNew && !isPrivate &&
-            <styled.Title>
-              Add to list
-            </styled.Title>
-          }
-          { isNew && isPrivate &&
-            <styled.Title>
-              Add private gift
-            </styled.Title>
-          }
-          { !isNew &&
-            <styled.Title>
-              Editing gift
-            </styled.Title>
-          }
+          <styled.Title>
+            { titleText(isNew, isPrivate, isGroup) }
+          </styled.Title>
 
           <button onClick={ cancelHandler }>Cancel</button>
         </styled.TitleContainer>
 
-        { isPrivate &&
-          <p>You are adding a private gift, the person will not see this on their asking list.</p>
-        }
+        { helpMessage(isNew, isPrivate, isGroup) }
 
         <styled.EditGiftForm id={ fieldName('EditGiftForm') } onSubmit={handleSubmit(onSubmit)}>
 
@@ -180,6 +199,11 @@ const EditGift = (props) => {
           { !isPrivate &&
             <input type="hidden" {...register(fieldName('askerId'))} />
           }
+          
+          { isGroup &&
+            <input type="hidden" {...register(fieldName('groupOwnerId'))} />
+          }
+
           { isPrivate &&
             <styled.FieldContainer>
               <styled.Label>Person</styled.Label>
@@ -237,7 +261,7 @@ const EditGift = (props) => {
           
           <styled.SubmitContainer>
             { !isSaving &&
-              <styled.SubmitButton type="submit" form={ fieldName('EditGiftForm') }>{ submitButtonValue(isNew) }</styled.SubmitButton>
+              <styled.SubmitButton type="submit" form={ fieldName('EditGiftForm') }>{ submitButtonText(isNew) }</styled.SubmitButton>
             }
             { isSaving &&
               <styled.SavingButton disabled={ true }>

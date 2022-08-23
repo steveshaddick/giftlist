@@ -46,7 +46,7 @@ module Api::V1
       gifts = json_response[:data]
 
       assert_response 200
-      assert_equal 1, gifts.count
+      assert_equal 2, gifts.count
       assert_equal expected_gift[:id], gifts[0][:id]
     end
 
@@ -59,7 +59,7 @@ module Api::V1
       gifts = json_response[:data]
 
       assert_response 200
-      assert_equal 2, gifts.count
+      assert_equal 1, gifts.count
       assert_equal expected_gift[:id], gifts[0][:id]
     end
 

@@ -49,13 +49,33 @@ gift5:
   claimer: user2
   received: true
 
-# Gift for user1, claimed and got by user2
-gift5:
-  title: Gift 5
-  description: Description for gift 5
+# Group gift for user 1, added by user2
+gift6:
+  title: Gift 6
+  description: Description for gift 6
   price_low: 2000
   price_high: 2000
-  owner: user1
+  owner: user2
   asker: user1
-  claimer: user2
+  group_owner: group1
+
+# Group gift for user 1, added by user3
+gift7:
+  title: Gift 7
+  description: Description for gift 7
+  price_low: 2000
+  price_high: 2000
+  owner: user3
+  asker: user1
+  group_owner: group1
+
+# Asked by user3, claimed by user1, and got
+gift8:
+  title: Gift 8
+  description: Description for gift 8
+  price_low: 2000
+  price_high: 2000
+  owner: user3
+  asker: user3
+  claimer: user1
   claimer_got: true

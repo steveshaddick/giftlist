@@ -122,6 +122,7 @@ const ClaimList = (props) => {
         <layout.GridRow>
           <styled.TopContainer ref={ editingElement }>
               <EditGift
+                askerId=''
                 isPrivate={ true }
                 saveHandler={ addNewGiftHandler }
                 cancelHandler={ () => { setIsAdding(false); } }
@@ -173,7 +174,7 @@ const ClaimList = (props) => {
             } else {
               setIsAdding(true);
             }
-          }}>Add to list</styled.AddButton>
+          }}>Add private gift</styled.AddButton>
         </styled.BottomContainer>
       </layout.GridRow>
 

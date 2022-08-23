@@ -11,7 +11,7 @@ class PagesController < ApplicationController
     gift_groups = current_user.gift_groups.map do |gift_group|
       {
         title: gift_group[:title],
-        members: gift_group.members_except(current_user[:id]).map do |user|
+        members: gift_group.members_except(current_user.id).map do |user|
           {
             id: user[:id],
             name: user[:name]
@@ -32,11 +32,9 @@ class PagesController < ApplicationController
     user = User.find(params[:id])
     is_current_user_list = (user === current_user)
     if is_current_user_list
-      gifts = user.active_giftlist
+      gifts = user.personal_giftlist
     else
-      current_user_claimed = user.active_giftlist.where(claimer_id: current_user[:id])
-      other_gifts = user.active_giftlist.where.not(claimer_id: current_user[:id]).or(user.active_giftlist.where(claimer_id: nil)).order(claimer_id: :desc)
-      gifts = current_user_claimed + other_gifts
+      gifts = user.group_giftlist(current_user.gift_groups.ids)
     end
 
     assign_props({
@@ -49,7 +47,7 @@ class PagesController < ApplicationController
   end
 
   def user_profile
-    unless current_user && current_user[:id] == params[:id].to_i
+    unless current_user && current_user.id == params[:id].to_i
       redirect_to :root
       return
     end
@@ -65,38 +63,53 @@ class PagesController < ApplicationController
   private
 
   def assign_props(props = {})
+    # So.... this will obviously need to change to handle multiple groups.
+    current_group = current_user.gift_groups[0]
+
     default_props = {
-      current_user: current_user
+      current_user: {
+        id: current_user.id,
+        name: current_user[:name],
+        group: {
+          id: current_group[:id],
+          title: current_group[:title],
+        }
+      }
     }
 
     @props = default_props.merge(props).deep_transform_keys! { |key| key.to_s.camelize(:lower) }
-  end
-
-  def set_current_user
-
-    if user_signed_in?
-      puts current_user.name
-    else
-      puts "none"
-    end
   end
 
   def prepare_giftlist(gifts, is_current_user_list)
     gifts.map do |gift|
       claimer = !is_current_user_list && gift.claimer ?
         {
-          id: gift.claimer[:id],
-          name: gift.claimer[:name],
+          id: gift.claimer.id,
+          name: gift.claimer.name,
         }
      : nil
+     group_owner = !is_current_user_list && gift.group_owner ?
+       {
+         id: gift.group_owner.id,
+         name: gift.group_owner.title,
+       }
+    : nil
+    owner = !is_current_user_list && gift.group_owner ?
+      {
+        id: gift.owner.id,
+        name: gift.owner.name,
+      }
+   : nil
 
       {
-        id: gift[:id],
-        title: gift[:title],
-        description: gift[:description],
-        priceLow: format_money(gift[:price_low]),
-        priceHigh: format_money(gift[:price_high]),
+        id: gift.id,
+        title: gift.title,
+        description: gift.description,
+        priceLow: format_money(gift.price_low),
+        priceHigh: format_money(gift.price_high),
         claimer: claimer,
+        owner: owner,
+        groupOwner: group_owner,
       }
     end
   end

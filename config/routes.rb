@@ -17,6 +17,8 @@ Rails.application.routes.draw do
     namespace :v1 do
 
       post 'gifts', to: 'gifts#create'
+      patch 'gifts/:id/claim', to: 'gifts#claim'
+      patch 'gifts/:id/got', to: 'gifts#got'
       patch 'gifts/:id', to: 'gifts#update'
       delete 'gifts/:id', to: 'gifts#delete'
 

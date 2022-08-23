@@ -28,6 +28,24 @@ user4:
   encrypted_password: <%= Devise::Encryptor.digest(User, 'password') %>
   referring_email: test@test.com
 
+user5:
+  name: User 5
+  email: user5@test.com
+  encrypted_password: <%= Devise::Encryptor.digest(User, 'password') %>
+  referring_email: test@test.com
+
+user6:
+  name: User 6
+  email: user6@test.com
+  encrypted_password: <%= Devise::Encryptor.digest(User, 'password') %>
+  referring_email: test@test.com
+
+user7:
+  name: User 7
+  email: user7@test.com
+  encrypted_password: <%= Devise::Encryptor.digest(User, 'password') %>
+  referring_email: test@test.com
+
 
 #
 # two: {}

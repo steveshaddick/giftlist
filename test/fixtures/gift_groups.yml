@@ -4,10 +4,10 @@ group1:
   title: Gift Group 1
   description: 'Testing gift group #1'
   expiry_date: 2050-01-01 00:00:00
-  members: [user1, user2]
+  members: [user1, user2, user3, user4]
 
 group2:
   title: Gift Group 2
   description: 'Testing gift group #2'
   expiry_date: 2050-01-01 00:00:00
-  members: [user3, user4]
+  members: [user5, user6, user7]

@@ -3,6 +3,7 @@ import { screen, within, waitFor, waitForElementToBeRemoved } from '@testing-lib
 import userEvent from '@testing-library/user-event';
 import { mockUser } from 'test/__mocks__/users';
 import { mockGift } from 'test/__mocks__/gifts';
+import { mockGiftGroup } from 'test/__mocks__/giftGroups';
 import { renderWithCurrentUserProvider } from 'test/helpers';
 
 import GiftItem from '.';
@@ -16,9 +17,11 @@ test('renders public gift item', () => {
       index={ 1 }
       gift={ gift }
       enableClaimed={ true }
-      currentUserClaimed={ false }
+      currentUser={ currentUser }
       claimHandler={ null }
       unClaimHandler = { null }
+      editHandler={ null }
+      deleteClickHandler = { null }
       />
   );
 
@@ -41,9 +44,11 @@ test('shows description when clicked', async () => {
       index={ 1 }
       gift={ gift }
       enableClaimed={ true }
-      currentUserClaimed={ false }
+      currentUser={ currentUser }
       claimHandler={ null }
       unClaimHandler = { null }
+      editHandler={ null }
+      deleteClickHandler = { null }
       />
   );
 
@@ -65,9 +70,11 @@ test('renders gift item claimed by current user', () => {
       index={ 1 }
       gift={ gift }
       enableClaimed={ true }
-      currentUserClaimed={ true }
+      currentUser={ currentUser }
       claimHandler={ null }
       unClaimHandler = { null }
+      editHandler={ null }
+      deleteClickHandler = { null }
       />
   );
 
@@ -93,9 +100,11 @@ test('renders gift item claimed by another user', () => {
       index={ 1 }
       gift={ gift }
       enableClaimed={ true }
-      currentUserClaimed={ false }
+      currentUser={ currentUser }
       claimHandler={ null }
       unClaimHandler = { null }
+      editHandler={ null }
+      deleteClickHandler = { null }
       />
   );
 
@@ -118,9 +127,11 @@ test('does not show claim button for current user\'s own list', () => {
       index={ 1 }
       gift={ gift }
       enableClaimed={ false }
-      currentUserClaimed={ false }
+      currentUser={ currentUser }
       claimHandler={ null }
       unClaimHandler = { null }
+      editHandler={ null }
+      deleteClickHandler = { null }
       />
   );
 
@@ -131,4 +142,37 @@ test('does not show claim button for current user\'s own list', () => {
   expect(screen.queryByText(gift.priceLow)).toBeInTheDocument();
   expect(screen.queryByText(gift.priceHigh)).toBeInTheDocument();
   expect(screen.queryByText("I'll get it")).not.toBeInTheDocument();
+});
+
+/**
+ * Group owned item
+ */
+
+test('renders group owned gift item', () => {
+  const currentUser = mockUser(1);
+  const gift = mockGift(1);
+
+  gift.owner = mockUser(2);
+  gift.groupOwner = mockGiftGroup(1);
+
+  renderWithCurrentUserProvider(currentUser, 
+    <GiftItem
+      index={ 1 }
+      gift={ gift }
+      enableClaimed={ true }
+      currentUser={ currentUser }
+      claimHandler={ null }
+      unClaimHandler = { null }
+      editHandler={ null }
+      deleteClickHandler = { null }
+      />
+  );
+
+  const renderedItem = screen.getByRole('article');
+
+  expect(screen.queryAllByRole('button')[0].innerHTML).toContain(gift.title);
+  expect(screen.queryByText("(Added by User 2)")).toBeInTheDocument();
+  expect(screen.queryAllByRole('button')[1].innerHTML).toContain("I'll get it");
+  expect(screen.queryAllByRole('button')[2].innerHTML).toContain("Edit");
+  expect(screen.queryAllByRole('button')[3].innerHTML).toContain("Delete");
 });

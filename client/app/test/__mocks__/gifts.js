@@ -6,6 +6,8 @@ const mockGifts = {
     priceLow: 10,
     priceHigh: 20,
     claimer: null,
+    owner: null,
+    groupOwner: null,
   },
   2: {
     id: 2,
@@ -14,6 +16,8 @@ const mockGifts = {
     priceLow: 20,
     priceHigh: 30,
     claimer: null,
+    owner: null,
+    groupOwner: null,
   },
   3: {
     id: 3,
@@ -22,6 +26,8 @@ const mockGifts = {
     priceLow: 0,
     priceHigh: 0,
     claimer: null,
+    owner: null,
+    groupOwner: null,
   },
   4: {
     id: 4,
@@ -30,6 +36,8 @@ const mockGifts = {
     priceLow: 10,
     priceHigh: 10,
     claimer: null,
+    owner: null,
+    groupOwner: null,
   },
   5: {
     id: 5,
@@ -38,6 +46,8 @@ const mockGifts = {
     priceLow: 10,
     priceHigh: 20,
     claimer: null,
+    owner: null,
+    groupOwner: null,
   },
   6: {
     id: 6,
@@ -46,6 +56,28 @@ const mockGifts = {
     priceLow: 10,
     priceHigh: 20,
     claimer: null,
+    owner: null,
+    groupOwner: null,
+  },
+  7: {
+    id: 7,
+    title: "Gift 7",
+    description: "Description for gift 7",
+    priceLow: 10,
+    priceHigh: 20,
+    claimer: null,
+    owner: null,
+    groupOwner: null,
+  },
+  8: {
+    id: 8,
+    title: "Gift 8",
+    description: "Description for gift 8",
+    priceLow: 10,
+    priceHigh: 20,
+    claimer: null,
+    owner: null,
+    groupOwner: null,
   }
 }
 

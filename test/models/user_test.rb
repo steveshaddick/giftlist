@@ -53,29 +53,43 @@ class UserTest < ActiveSupport::TestCase
     assert_equal referring_user.gift_groups[0], user.gift_groups[0], "New user doesn't have same gift group as referring user"
   end
 
-  ## User gift testing
-  test "#active_giftlist returns gifts" do
+  # #personal_giftlist
+  test "#personal_giftlist returns gifts" do
     user = users(:user1)
 
-    assert user.active_giftlist.count > 0
+    assert user.personal_giftlist.count > 0
   end
 
-  test "#active_giftlist returns only gifts owned by user" do
+  test "#personal_giftlist returns gifts only added and owned by user" do
     user = users(:user1)
 
-    user.active_giftlist.each do |gift|
-      assert_equal user, gift.owner, "#active_giftlist returned owner #{gift.owner.name} for #{gift.title}"
+    user.personal_giftlist.each do |gift|
+      assert_equal user, gift.owner, "#personal_giftlist returned owner #{gift.owner.name} for #{gift.title}"
     end
   end
 
-  test "#active_giftlist returns only non-received gifts" do
+  # #group_giftlist
+  test "#group_giftlist returns gifts" do
     user = users(:user1)
 
-    user.active_giftlist.each do |gift|
-      assert_not gift.received, "#active_giftlist returned received gift: #{gift.title}"
+    assert user.group_giftlist.count > 0
+  end
+
+  test "#group_giftlist returns gifts added by both user and group members" do
+    user = users(:user1)
+    authenticated_user = users(:user2)
+    group_ids = authenticated_user.gift_groups.ids
+
+    user.group_giftlist(group_ids).each do |gift|
+      if gift.group_owner.present?
+        assert_includes group_ids, gift.group_owner.id, "#personal_giftlist returned group owner #{gift.group_owner.id} for #{gift.title}"
+      else
+        assert_equal user, gift.owner, "#personal_giftlist returned owner #{gift.owner.name} for #{gift.title}"
+      end
     end
   end
 
+  # #active_claimlist
   test "#active_claimlist returns gifts" do
     user = users(:user1)
 
@@ -89,4 +103,6 @@ class UserTest < ActiveSupport::TestCase
       assert_equal user, gift.claimer, "#active_claimlist returned claimer #{gift.owner.name} for #{gift.title}"
     end
   end
+
+
 end

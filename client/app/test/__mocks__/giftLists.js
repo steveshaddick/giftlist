@@ -1,15 +1,25 @@
 import { mockUser } from './users';
 import { mockGift } from './gifts';
+import { mockGiftGroup } from './giftGroups';
 
-export function mockGiftList(authenticatedUser = 1, otherClaimerUser = 2) {
+export function mockGiftList({
+    authenticatedUser = null,
+    otherClaimerUser = null
+  } = {}) {
   let list = [];
 
-  for (let i=1; i<=5; i++) {
+  authenticatedUser = authenticatedUser || mockUser(1);
+  otherClaimerUser = otherClaimerUser || mockUser(2);
+
+  for (let i=1; i<=6; i++) {
     let gift = mockGift(i);
     if (i === 4) {
-      gift.claimer = mockUser(authenticatedUser);
+      gift.claimer = authenticatedUser;
     } else if (i === 5) {
-      gift.claimer = mockUser(otherClaimerUser);
+      gift.claimer = otherClaimerUser;
+    } else if (i === 6) {
+      gift.owner = authenticatedUser;
+      gift.groupOwner = mockGiftGroup(1);
     }
 
     list.push(gift);

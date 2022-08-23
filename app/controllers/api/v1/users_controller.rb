@@ -27,7 +27,7 @@ class Api::V1::UsersController < Api::V1::BaseController
   def asklist
     asklist = []
 
-    current_user.active_giftlist.each do |gift|
+    current_user.personal_giftlist.each do |gift|
       asklist.push({
         id: gift[:id],
         title: gift[:title],
