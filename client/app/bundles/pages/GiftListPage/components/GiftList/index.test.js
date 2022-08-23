@@ -5,11 +5,15 @@ import { mockUser } from 'test/__mocks__/users';
 import { mockGiftList } from 'test/__mocks__/giftLists';
 import { renderWithCurrentUserProvider } from 'test/helpers';
 
+import { sortGiftList } from 'pages/GiftListPage';
+
 import GiftList from '.';
 
 test('renders all GiftList items', () => {
   const currentUser = mockUser(1);
-  const giftlist = mockGiftList(1);
+  const giftlist = sortGiftList(currentUser, mockGiftList({
+    authenticatedUser: currentUser,
+  }));
 
   renderWithCurrentUserProvider(currentUser, 
     <GiftList
@@ -18,7 +22,7 @@ test('renders all GiftList items', () => {
     />
   );
   
-  expect(screen.getAllByRole('listitem')).toHaveLength(5);
+  expect(screen.getAllByRole('listitem')).toHaveLength(6);
 });
 
 /**
@@ -28,7 +32,9 @@ test('renders all GiftList items', () => {
 test('shows proper modal when claiming gift', async () => {
   const visitor = userEvent.setup();
   const currentUser = mockUser(1);
-  const giftlist = mockGiftList(1);
+  const giftlist = sortGiftList(currentUser, mockGiftList({
+    authenticatedUser: currentUser,
+  }));
 
   renderWithCurrentUserProvider(currentUser, 
     <GiftList
@@ -37,7 +43,7 @@ test('shows proper modal when claiming gift', async () => {
     />
   );
   const allGifts = screen.getAllByRole('listitem');
-  const item = allGifts[0];
+  const item = allGifts[1];
 
   expect(screen.queryByRole('dialog')).toBeNull();
 
@@ -45,13 +51,15 @@ test('shows proper modal when claiming gift', async () => {
   const modal = screen.queryByRole('dialog');
 
   expect(modal).toBeInTheDocument();
-  expect(within(modal).queryByText(giftlist[0].title)).toBeInTheDocument();
+  expect(within(modal).queryByText(giftlist[1].title)).toBeInTheDocument();
 });
 
 test('updates gift when claiming', async () => {
   const visitor = userEvent.setup();
   const currentUser = mockUser(1);
-  const giftlist = mockGiftList(1);
+  const giftlist = sortGiftList(currentUser, mockGiftList({
+    authenticatedUser: currentUser,
+  }));
 
   renderWithCurrentUserProvider(currentUser, 
     <GiftList
@@ -60,7 +68,7 @@ test('updates gift when claiming', async () => {
     />
   );
   const allGifts = screen.getAllByRole('listitem');
-  const item = allGifts[0];
+  const item = allGifts[1];
 
   visitor.click(within(item).getByText("I'll get it"));
   await waitFor(() => screen.getByRole('dialog'));
@@ -77,7 +85,9 @@ test('updates gift when claiming', async () => {
 test('does not update gift when cancelling claim', async () => {
   const visitor = userEvent.setup();
   const currentUser = mockUser(1);
-  const giftlist = mockGiftList(1);
+  const giftlist = sortGiftList(currentUser, mockGiftList({
+    authenticatedUser: currentUser,
+  }));
 
   renderWithCurrentUserProvider(currentUser, 
     <GiftList
@@ -86,7 +96,7 @@ test('does not update gift when cancelling claim', async () => {
     />
   );
   const allGifts = screen.getAllByRole('listitem');
-  const item = allGifts[0];
+  const item = allGifts[1];
 
   visitor.click(within(item).getByText("I'll get it"));
   await waitFor(() => screen.getByRole('dialog'));
@@ -107,7 +117,9 @@ test('does not update gift when cancelling claim', async () => {
 test('shows proper modal when unclaiming gift', async () => {
   const visitor = userEvent.setup();
   const currentUser = mockUser(1);
-  const giftlist = mockGiftList(1);
+  const giftlist = sortGiftList(currentUser, mockGiftList({
+    authenticatedUser: currentUser,
+  }));
 
   renderWithCurrentUserProvider(currentUser, 
     <GiftList
@@ -116,7 +128,7 @@ test('shows proper modal when unclaiming gift', async () => {
     />
   );
   const allGifts = screen.getAllByRole('listitem');
-  const item = allGifts[3];
+  const item = allGifts[0];
 
   expect(screen.queryByRole('dialog')).toBeNull();
 
@@ -125,13 +137,15 @@ test('shows proper modal when unclaiming gift', async () => {
   const modal = screen.queryByRole('dialog');
 
   expect(modal).toBeInTheDocument();
-  expect(within(modal).queryByText(giftlist[3].title)).toBeInTheDocument();
+  expect(within(modal).queryByText(giftlist[0].title)).toBeInTheDocument();
 });
 
 test('updates gift when unclaiming', async () => {
   const visitor = userEvent.setup();
   const currentUser = mockUser(1);
-  const giftlist = mockGiftList(1);
+  const giftlist = sortGiftList(currentUser, mockGiftList({
+    authenticatedUser: currentUser,
+  }));
 
   renderWithCurrentUserProvider(currentUser, 
     <GiftList
@@ -140,7 +154,7 @@ test('updates gift when unclaiming', async () => {
     />
   );
   const allGifts = screen.getAllByRole('listitem');
-  const item = allGifts[3];
+  const item = allGifts[0];
 
   visitor.click(within(item).getByText("Cancel"));
   await waitFor(() => screen.getByRole('dialog'));
@@ -157,7 +171,9 @@ test('updates gift when unclaiming', async () => {
 test('does not update gift when cancelling claim', async () => {
   const visitor = userEvent.setup();
   const currentUser = mockUser(1);
-  const giftlist = mockGiftList(1);
+  const giftlist = sortGiftList(currentUser, mockGiftList({
+    authenticatedUser: currentUser,
+  }));
 
   renderWithCurrentUserProvider(currentUser, 
     <GiftList
@@ -166,7 +182,7 @@ test('does not update gift when cancelling claim', async () => {
     />
   );
   const allGifts = screen.getAllByRole('listitem');
-  const item = allGifts[3];
+  const item = allGifts[0];
 
   visitor.click(within(item).getByText("Cancel"));
   await waitFor(() => screen.getByRole('dialog'));

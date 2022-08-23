@@ -5,7 +5,7 @@ import { mockUser } from 'test/__mocks__/users.js';
 import { mockAskList, mockClaimList } from 'test/__mocks__/giftLists.js';
 
 export const handlers = [
-  rest.patch('/api/v1/gifts/:giftId', async (req, res, ctx) => {
+  rest.patch('/api/v1/gifts/:giftId/claim', async (req, res, ctx) => {
     const reqData = await req.json();
     const { giftId } = req.params;
     const { claimerId } = reqData;

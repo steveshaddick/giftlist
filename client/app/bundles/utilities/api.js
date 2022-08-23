@@ -77,8 +77,6 @@ export async function claimGift(data) {
     claimerId: currentUser.id,
   }
 
-  console.log(giftId, currentUser.id, requestData);
-
   return callApi(`gifts/${giftId}/claim`, requestData, {
     method: 'PATCH',
   });

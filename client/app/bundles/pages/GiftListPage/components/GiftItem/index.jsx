@@ -21,9 +21,9 @@ const GiftItem = (props) => {
    const { id: giftId, title, description, priceHigh, priceLow, claimer, owner, groupOwner } = gift;
    const { id: currentUserId } = currentUser;
 
-   const isClaimed = claimer !== null;
+   const isClaimed = claimer ? true : false;
    const currentUserClaimed = claimer?.id === currentUserId;
-   const isGroupOwned = groupOwner !== null;
+   const isGroupOwned = groupOwner ? true : false;
 
    const [ isExpanded, setIsExpanded ] = useState(false);
    const [ isEditing, setIsEditing ] = useState(false);

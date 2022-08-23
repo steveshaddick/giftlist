@@ -8,15 +8,13 @@ import GiftList from './components/GiftList';
 import { GlobalStyle } from 'common/_styles/global';
 import * as layout from 'common/_styles/layout';
 
-const GiftListPage = (props) => {
-  const { currentUser, user, gifts } = props;
-
+export function sortGiftList(currentUser, list) {
   let currentClaimedGifts = [];
   let askingGifts = [];
   let groupGifts = [];
   let otherClaimedGifts = [];
-
-  gifts.forEach((gift) => {
+  
+  list.forEach((gift) => {
     const { claimer, groupOwner } = gift;
     if (claimer?.id == currentUser.id) {
       currentClaimedGifts.push(gift);
@@ -29,7 +27,13 @@ const GiftListPage = (props) => {
     }
   });
 
-  const sortedGifts = [].concat(currentClaimedGifts, askingGifts, groupGifts, otherClaimedGifts);
+  return [].concat(currentClaimedGifts, askingGifts, groupGifts, otherClaimedGifts);
+
+}
+
+const GiftListPage = (props) => {
+  const { currentUser, user, gifts } = props;
+  const sortedGifts = sortGiftList(currentUser, gifts);
 
   return (
     <>
