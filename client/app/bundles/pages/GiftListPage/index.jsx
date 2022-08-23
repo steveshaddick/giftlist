@@ -28,7 +28,6 @@ export function sortGiftList(currentUser, list) {
   });
 
   return [].concat(currentClaimedGifts, askingGifts, groupGifts, otherClaimedGifts);
-
 }
 
 const GiftListPage = (props) => {

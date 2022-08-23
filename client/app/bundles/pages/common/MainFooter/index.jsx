@@ -9,7 +9,7 @@ const MainFooter = () => {
   const signoutClickHandler = (e) => {
     e.preventDefault();
 
-    api.signout().then(response => {
+    api.signout().then(() => {
       window.location = "/";
     });
   }
