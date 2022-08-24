@@ -16,26 +16,27 @@ export const SubmitContainer = styled.div`
 `;
 
 export const SubmitButton = styled.button`
-    background: var(--green);
-    cursor: pointer;
-    color: white;
-    border: 2px solid var(--green);
-    border-radius: 5px;
-    padding: 0.5rem;
-    width: 100%;
+  background: var(--green);
+  cursor: pointer;
+  color: white;
+  border: 2px solid var(--green);
+  border-radius: 5px;
+  padding: 0.5rem;
+  width: 100%;
 
-    &:not([disabled]) {
-      &:hover, &:active {
-        background: var(--dark-green);
-        color: white;
-      }
+  &:not([disabled]) {
+    &:hover,
+    &:active {
+      background: var(--dark-green);
+      color: white;
     }
+  }
 
-    &:disabled {
-      cursor: inherit;
-      opacity: 0.5;
-      background: #eee;
-    }
+  &:disabled {
+    cursor: inherit;
+    opacity: 0.5;
+    background: #eee;
+  }
 `;
 
 export const SavingButton = styled(SubmitButton)`
@@ -112,8 +113,7 @@ export const FieldContainer = styled.div`
   margin: 1.5rem 0;
 `;
 
-export const EditGiftForm = styled.form`
-`;
+export const EditGiftForm = styled.form``;
 
 export const Title = styled.h1`
   font-size: 1.5rem;

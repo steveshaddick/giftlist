@@ -5,8 +5,7 @@ export const EmptyList = styled.div`
   padding: 5rem 0;
 `;
 
-export const AddButton = styled.button`
-`;
+export const AddButton = styled.button``;
 
 export const AskerNameContainer = styled.div`
   background: #f6f6f6;
@@ -22,7 +21,8 @@ export const AskerName = styled.h2`
     color: inherit;
     text-decoration-color: #999;
 
-    &:hover, &:active {
+    &:hover,
+    &:active {
       color: #999;
     }
   }

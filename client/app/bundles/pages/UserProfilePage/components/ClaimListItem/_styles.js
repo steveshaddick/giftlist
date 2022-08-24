@@ -32,7 +32,8 @@ export const Title = styled.h1`
   font-family: var(--standard-font);
   margin-bottom: 0.25rem;
 
-  &:hover, &:active {
+  &:hover,
+  &:active {
     text-decoration: underline;
   }
 `;
@@ -68,7 +69,8 @@ export const UnclaimButton = styled.button`
   border-color: #ddbfbf;
   padding: 0.3rem 1.5rem;
 
-  &:hover, &:active {
+  &:hover,
+  &:active {
     background: #b74a4a;
   }
 `;
@@ -84,7 +86,7 @@ export const Component = styled.article`
   border-bottom: 1px solid #ddd;
   padding-bottom: 1rem;
 
-  ${props => {
+  ${(props) => {
     if (props.isGot) {
       return `
         ${Title} {
@@ -96,5 +98,6 @@ export const Component = styled.article`
         }
       `;
     }
+    return ``;
   }};
 `;

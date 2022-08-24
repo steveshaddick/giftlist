@@ -23,7 +23,8 @@ export const MemberListLink = styled.a`
   display: block;
   border-radius: 10px;
 
-  &:hover, &:active {
+  &:hover,
+  &:active {
     background: #eceae1;
   }
 `;

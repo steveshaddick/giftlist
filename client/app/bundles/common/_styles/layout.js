@@ -11,5 +11,4 @@ export const GridRow = styled.div`
   padding-right: 20px;
 `;
 
-export const OpinionsSection = styled.section`
-`;
+export const OpinionsSection = styled.section``;

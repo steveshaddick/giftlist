@@ -5,8 +5,7 @@ export const EmptyList = styled.div`
   padding: 5rem 0;
 `;
 
-export const AddButton = styled.button`
-`;
+export const AddButton = styled.button``;
 
 export const TopContainer = styled.div`
   padding: 2rem 0;
@@ -16,8 +15,7 @@ export const BottomContainer = styled.div`
   padding: 2rem 0;
 `;
 
-export const ListItem = styled.li`
-`;
+export const ListItem = styled.li``;
 
 export const List = styled.ul`
   list-style: none;

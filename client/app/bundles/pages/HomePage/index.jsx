@@ -15,10 +15,12 @@ const HomePage = (props) => {
   return (
     <>
       <GlobalStyle />
-      <CurrentUserProvider currentUser={currentUser} >
+      <CurrentUserProvider currentUser={currentUser}>
         <MainHeader />
         <layout.PageContainer id="HomePage">
-          {giftGroups.map((group) => <GiftGroup key={ group.id } currentUser={ currentUser } data={ group } />)}
+          {giftGroups.map((group) => (
+            <GiftGroup key={group.id} currentUser={currentUser} data={group} />
+          ))}
         </layout.PageContainer>
         <MainFooter />
       </CurrentUserProvider>

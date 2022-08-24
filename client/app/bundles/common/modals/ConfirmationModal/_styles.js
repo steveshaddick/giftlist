@@ -1,7 +1,6 @@
 import styled from 'styled-components';
 
-export const Component = styled.div`
-`;
+export const Component = styled.div``;
 
 export const TextContainer = styled.div`
   .gift-title {
@@ -31,7 +30,8 @@ export const ConfirmButton = styled(Button)`
   font-weight: bold;
   color: #6d886d;
 
-  &:hover, &:active {
+  &:hover,
+  &:active {
     background: #6d886d;
     color: white;
   }
@@ -41,8 +41,9 @@ export const CancelButton = styled(Button)`
   border-color: #ccc;
   color: #999;
 
-&:hover, &:active {
-  background: #ccc;
-  color: black;
-}
+  &:hover,
+  &:active {
+    background: #ccc;
+    color: black;
+  }
 `;

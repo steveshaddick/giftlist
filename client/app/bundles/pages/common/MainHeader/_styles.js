@@ -2,7 +2,7 @@ import styled from 'styled-components';
 
 export const HeaderBanner = styled.div`
   width: 100%;
-  background: #F2F1EF;
+  background: #f2f1ef;
   padding: 20px 30px;
 `;
 
@@ -27,7 +27,8 @@ export const MainLogoLink = styled.a`
   color: #616657;
   text-decoration: none;
 
-  &:hover, &:active {
+  &:hover,
+  &:active {
     text-decoration: underline;
     color: #222;
   }
@@ -43,7 +44,8 @@ export const ProfileLink = styled.a`
   color: #333;
   text-decoration: none;
 
-  &:hover, &:active {
+  &:hover,
+  &:active {
     text-decoration: underline;
     color: #222;
   }

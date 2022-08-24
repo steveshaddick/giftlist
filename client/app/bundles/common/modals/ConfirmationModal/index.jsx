@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
 import Modal from 'react-modal';
 
@@ -22,27 +22,16 @@ if (document.getElementById('AppContainer')) {
 }
 
 const ConfirmationModal = (props) => {
-  const {
-    yesHandler,
-    cancelHandler,
-    children
-   } = props;
+  const { yesHandler, cancelHandler, children } = props;
 
   return (
-    <Modal
-      isOpen={ true }
-      onRequestClose={ cancelHandler }
-      style={ modalStyles }
-      contentLabel="Confirm"
-    >
+    <Modal isOpen={true} onRequestClose={cancelHandler} style={modalStyles} contentLabel="Confirm">
       <styled.Component>
-        <styled.TextContainer>
-          { children }
-        </styled.TextContainer>
+        <styled.TextContainer>{children}</styled.TextContainer>
 
         <styled.ButtonsContainer>
-          <styled.ConfirmButton onClick={ yesHandler }>Yes</styled.ConfirmButton>
-          <styled.CancelButton onClick={ cancelHandler }>Cancel</styled.CancelButton>
+          <styled.ConfirmButton onClick={yesHandler}>Yes</styled.ConfirmButton>
+          <styled.CancelButton onClick={cancelHandler}>Cancel</styled.CancelButton>
         </styled.ButtonsContainer>
       </styled.Component>
     </Modal>
@@ -50,6 +39,13 @@ const ConfirmationModal = (props) => {
 };
 
 ConfirmationModal.propTypes = {
+  yesHandler: PropTypes.func.isRequired,
+  cancelHandler: PropTypes.func.isRequired,
+  children: PropTypes.array,
+};
+
+ConfirmationModal.defaultProps = {
+  children: [],
 };
 
 export default ConfirmationModal;

@@ -12,14 +12,14 @@ const GiftGroup = (props) => {
     <styled.Component>
       <styled.List>
         {members.map((member) => (
-            <li key={ member.id }>
-              <layout.GridRow>
-                <styled.MemberListLink href={`/users/${member.id}/giftlist`}>
-                  { member.name }
-                </styled.MemberListLink>
-              </layout.GridRow>
-            </li>
-          ))}
+          <li key={member.id}>
+            <layout.GridRow>
+              <styled.MemberListLink href={`/users/${member.id}/giftlist`}>
+                {member.name}
+              </styled.MemberListLink>
+            </layout.GridRow>
+          </li>
+        ))}
       </styled.List>
     </styled.Component>
   );
