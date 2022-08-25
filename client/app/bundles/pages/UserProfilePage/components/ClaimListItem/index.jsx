@@ -25,12 +25,12 @@ const ClaimListItem = (props) => {
             <IconContext.Provider value={iconContextValue}>
               {!isGot && (
                 <styled.CheckboxButton onClick={gotHandler}>
-                  <MdCheckBoxOutlineBlank />
+                  <MdCheckBoxOutlineBlank focusable="false" />
                 </styled.CheckboxButton>
               )}
               {isGot && (
                 <styled.CheckboxButton onClick={gotHandler}>
-                  <MdOutlineCheckBox />
+                  <MdOutlineCheckBox focusable="false" />
                 </styled.CheckboxButton>
               )}
             </IconContext.Provider>
