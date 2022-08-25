@@ -41,7 +41,7 @@ const ConfirmationModal = (props) => {
 ConfirmationModal.propTypes = {
   yesHandler: PropTypes.func.isRequired,
   cancelHandler: PropTypes.func.isRequired,
-  children: PropTypes.array,
+  children: PropTypes.node,
 };
 
 ConfirmationModal.defaultProps = {

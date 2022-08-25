@@ -37,7 +37,7 @@ const CurrentUserProvider = ({ currentUser, children }) => {
 
 CurrentUserProvider.propTypes = {
   currentUser: PropTypes.object.isRequired,
-  children: PropTypes.array.isRequired,
+  children: PropTypes.node.isRequired,
 };
 
 export function getCurrentUser() {
