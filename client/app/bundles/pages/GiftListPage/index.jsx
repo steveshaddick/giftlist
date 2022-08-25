@@ -1,22 +1,23 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import { CurrentUserProvider } from 'utilities/CurrentUserContext';
 
 import MainHeader from 'pages/common/MainHeader';
 import MainFooter from 'pages/common/MainFooter';
-import GiftList from './components/GiftList';
 
 import { GlobalStyle } from 'common/_styles/global';
 import * as layout from 'common/_styles/layout';
+import GiftList from './components/GiftList';
 
 export function sortGiftList(currentUser, list) {
-  let currentClaimedGifts = [];
-  let askingGifts = [];
-  let groupGifts = [];
-  let otherClaimedGifts = [];
-  
+  const currentClaimedGifts = [];
+  const askingGifts = [];
+  const groupGifts = [];
+  const otherClaimedGifts = [];
+
   list.forEach((gift) => {
     const { claimer, groupOwner } = gift;
-    if (claimer?.id == currentUser.id) {
+    if (claimer?.id === currentUser.id) {
       currentClaimedGifts.push(gift);
     } else if (claimer) {
       otherClaimedGifts.push(gift);
@@ -28,7 +29,6 @@ export function sortGiftList(currentUser, list) {
   });
 
   return [].concat(currentClaimedGifts, askingGifts, groupGifts, otherClaimedGifts);
-
 }
 
 const GiftListPage = (props) => {
@@ -38,15 +38,21 @@ const GiftListPage = (props) => {
   return (
     <>
       <GlobalStyle />
-      <CurrentUserProvider currentUser={currentUser} >
+      <CurrentUserProvider currentUser={currentUser}>
         <MainHeader />
         <layout.PageContainer id="GiftListPage">
-          <GiftList user={ user } items={ sortedGifts } />
+          <GiftList user={user} items={sortedGifts} />
         </layout.PageContainer>
         <MainFooter />
       </CurrentUserProvider>
     </>
   );
+};
+
+GiftListPage.propTypes = {
+  currentUser: PropTypes.object.isRequired,
+  user: PropTypes.object.isRequired,
+  gifts: PropTypes.array.isRequired,
 };
 
 export default GiftListPage;

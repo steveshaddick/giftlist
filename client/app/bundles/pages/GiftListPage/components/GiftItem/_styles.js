@@ -15,7 +15,8 @@ export const Title = styled.h1`
   font-family: var(--standard-font);
   margin-bottom: 0.25rem;
 
-  &:hover, &:active {
+  &:hover,
+  &:active {
     text-decoration: underline;
   }
 `;
@@ -68,8 +69,7 @@ export const ActionRow = styled.div`
   justify-content: space-between;
 `;
 
-export const ActionButton = styled.button`
-`;
+export const ActionButton = styled.button``;
 
 export const ClaimedRow = styled.div`
   display: flex;
@@ -92,7 +92,7 @@ export const Component = styled.article`
   border-bottom: 1px solid #ddd;
   padding: 1rem 0;
 
-  ${props => {
+  ${(props) => {
     if (props.isClaimed) {
       if (props.currentUserClaimed) {
         return `
@@ -101,16 +101,16 @@ export const Component = styled.article`
           color: #12620f;
           border: none;
         `;
-      } else {
-        return `
+      }
+      return `
           opacity: 0.5;
         `;
-      }
     }
     if (props.isGroupOwned) {
       return `
         background-color: #fffbf9;
       `;
     }
+    return ``;
   }}
 `;

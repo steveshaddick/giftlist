@@ -1,5 +1,6 @@
 import { createGlobalStyle } from 'styled-components';
 
+// eslint-disable-next-line import/prefer-default-export
 export const GlobalStyle = createGlobalStyle`
   html {
     scroll-behavior: smooth;

@@ -63,7 +63,8 @@ export const DeleteButton = styled.button`
   border-color: #ddbfbf;
   padding: 0.3rem 1.5rem;
 
-  &:hover, &:active {
+  &:hover,
+  &:active {
     background: #b74a4a;
   }
 `;
@@ -73,7 +74,8 @@ export const EditButton = styled.button`
   border-color: #c8d6e1;
   padding: 0.3rem 1.5rem;
 
-  &:hover, &:active {
+  &:hover,
+  &:active {
     background: #5d859d;
   }
 `;
@@ -99,5 +101,5 @@ export const Component = styled.article`
   border-bottom: 1px solid #ddd;
   padding: 1.5rem 0;
 
-  background: ${props => props.isEditing ? "#f6f6f6" : 'transparent'}
+  background: ${(props) => (props.isEditing ? '#f6f6f6' : 'transparent')};
 `;

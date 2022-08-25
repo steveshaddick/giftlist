@@ -1,43 +1,44 @@
-const apiHost = ((typeof process !== 'undefined') && (process?.env?.NODE_ENV === 'test')) ? 'http://localhost' : '';
+const apiHost =
+  typeof process !== 'undefined' && process?.env?.NODE_ENV === 'test' ? 'http://localhost' : '';
 const apiBase = `${apiHost}/api/v1`;
 
 const csrfToken = document.querySelector('[name=csrf-token]')?.content;
 
 let currentUser = null;
 
-let inFlight = {};
-
 function generalError() {
   return new Promise((resolve) => {
-    alert("There was an error, please try again.");
+    // eslint-disable-next-line no-alert
+    alert('There was an error, please try again.');
 
     resolve({
       success: false,
       data: null,
-      message: "Unknown json error",
+      message: 'Unknown json error',
     });
   });
 }
 
-async function callApi(path, data=null, options={}) {
-  const defaultOptions = {
-  }
-  const defaultHeaders =  {
+async function callApi(path, data = null, options = {}) {
+  const defaultOptions = {};
+  const defaultHeaders = {
     'Content-Type': 'application/json',
     'X-CSRF-TOKEN': csrfToken,
-  }
+  };
 
-  let requestOptions = {
+  const requestOptions = {
     ...defaultOptions,
     ...options,
-  }
-  requestOptions.headers = options.headers ? {
-    ...defaultHeaders,
-    ...options.headers,
-  } : defaultHeaders;
+  };
+  requestOptions.headers = options.headers
+    ? {
+        ...defaultHeaders,
+        ...options.headers,
+      }
+    : defaultHeaders;
 
   if (data) {
-    requestOptions.body = JSON.stringify(data)
+    requestOptions.body = JSON.stringify(data);
   }
 
   const response = await fetch(`${apiBase}/${path}`, requestOptions);
@@ -47,7 +48,7 @@ async function callApi(path, data=null, options={}) {
 
   let returnData = null;
   try {
-    returnData = await response.json()
+    returnData = await response.json();
   } catch (e) {
     return generalError();
   }
@@ -55,12 +56,8 @@ async function callApi(path, data=null, options={}) {
   return returnData;
 }
 
-
 export async function signout() {
-  return await fetch(`/users/sign_out`, {
-    headers: {
-      'X-CSRF-TOKEN': csrfToken,
-    },
+  return callApi('/users/sign_out', null, {
     method: 'DELETE',
   });
 }
@@ -70,12 +67,12 @@ export async function setApiCurrentUser(userData) {
 }
 
 export async function claimGift(data) {
-  const { gift} = data;
+  const { gift } = data;
   const { id: giftId } = gift;
 
-  let requestData = {
+  const requestData = {
     claimerId: currentUser.id,
-  }
+  };
 
   return callApi(`gifts/${giftId}/claim`, requestData, {
     method: 'PATCH',
@@ -83,12 +80,12 @@ export async function claimGift(data) {
 }
 
 export async function unclaimGift(data) {
-  const { gift} = data;
+  const { gift } = data;
   const { id: giftId } = gift;
 
-  let requestData = {
+  const requestData = {
     claimerId: null,
-  }
+  };
 
   return callApi(`gifts/${giftId}/claim`, requestData, {
     method: 'PATCH',
@@ -107,10 +104,9 @@ export async function setGiftGot(data) {
   const { gift } = data;
   const { isGot, id: giftId } = gift;
 
-  let requestData = {
+  const requestData = {
     claimerGot: isGot,
-
-  }
+  };
 
   return callApi(`gifts/${giftId}/got`, requestData, {
     method: 'PATCH',
@@ -125,7 +121,7 @@ export async function addGift(data) {
   const { gift } = data;
   const { askerId, title, description, priceHigh, priceLow, groupOwnerId } = gift;
 
-  let requestData = {
+  const requestData = {
     askerId,
     title,
     description,
@@ -134,7 +130,7 @@ export async function addGift(data) {
     priceLow: parseInt(priceLow, 10),
   };
 
-  return callApi(`gifts`, requestData, {
+  return callApi('gifts', requestData, {
     method: 'POST',
   });
 }
@@ -143,7 +139,7 @@ export async function updateGift(data) {
   const { gift } = data;
   const { id, title, description, priceHigh, priceLow } = gift;
 
-  let requestData = {
+  const requestData = {
     title,
     description,
     priceHigh: parseInt(priceHigh, 10),

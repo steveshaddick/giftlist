@@ -9,12 +9,13 @@ export const TabButton = styled.button`
   font-weight: bold;
   border-radius: 0;
 
-  &:hover, &:active {
+  &:hover,
+  &:active {
     background: #eee;
     color: inherit;
   }
 
-  ${props => {
+  ${(props) => {
     if (props.selected) {
       return `
         background: #e1e1e1;
@@ -26,6 +27,7 @@ export const TabButton = styled.button`
         }
       `;
     }
+    return ``;
   }}
 `;
 

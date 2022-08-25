@@ -1,3 +1,4 @@
+import React from 'react';
 import '@testing-library/jest-dom';
 import { screen, within, waitFor, waitForElementToBeRemoved } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
@@ -11,17 +12,15 @@ import GiftList from '.';
 
 test('renders all GiftList items', () => {
   const currentUser = mockUser(1);
-  const giftlist = sortGiftList(currentUser, mockGiftList({
-    authenticatedUser: currentUser,
-  }));
-
-  renderWithCurrentUserProvider(currentUser, 
-    <GiftList
-      user={ mockUser(3) }
-      items={ giftlist }
-    />
+  const giftlist = sortGiftList(
+    currentUser,
+    mockGiftList({
+      authenticatedUser: currentUser,
+    }),
   );
-  
+
+  renderWithCurrentUserProvider(currentUser, <GiftList user={mockUser(3)} items={giftlist} />);
+
   expect(screen.getAllByRole('listitem')).toHaveLength(6);
 });
 
@@ -32,16 +31,14 @@ test('renders all GiftList items', () => {
 test('shows proper modal when claiming gift', async () => {
   const visitor = userEvent.setup();
   const currentUser = mockUser(1);
-  const giftlist = sortGiftList(currentUser, mockGiftList({
-    authenticatedUser: currentUser,
-  }));
-
-  renderWithCurrentUserProvider(currentUser, 
-    <GiftList
-      user={ mockUser(3) }
-      items={ giftlist }
-    />
+  const giftlist = sortGiftList(
+    currentUser,
+    mockGiftList({
+      authenticatedUser: currentUser,
+    }),
   );
+
+  renderWithCurrentUserProvider(currentUser, <GiftList user={mockUser(3)} items={giftlist} />);
   const allGifts = screen.getAllByRole('listitem');
   const item = allGifts[1];
 
@@ -57,16 +54,14 @@ test('shows proper modal when claiming gift', async () => {
 test('updates gift when claiming', async () => {
   const visitor = userEvent.setup();
   const currentUser = mockUser(1);
-  const giftlist = sortGiftList(currentUser, mockGiftList({
-    authenticatedUser: currentUser,
-  }));
-
-  renderWithCurrentUserProvider(currentUser, 
-    <GiftList
-      user={ mockUser(3) }
-      items={ giftlist }
-    />
+  const giftlist = sortGiftList(
+    currentUser,
+    mockGiftList({
+      authenticatedUser: currentUser,
+    }),
   );
+
+  renderWithCurrentUserProvider(currentUser, <GiftList user={mockUser(3)} items={giftlist} />);
   const allGifts = screen.getAllByRole('listitem');
   const item = allGifts[1];
 
@@ -85,16 +80,14 @@ test('updates gift when claiming', async () => {
 test('does not update gift when cancelling claim', async () => {
   const visitor = userEvent.setup();
   const currentUser = mockUser(1);
-  const giftlist = sortGiftList(currentUser, mockGiftList({
-    authenticatedUser: currentUser,
-  }));
-
-  renderWithCurrentUserProvider(currentUser, 
-    <GiftList
-      user={ mockUser(3) }
-      items={ giftlist }
-    />
+  const giftlist = sortGiftList(
+    currentUser,
+    mockGiftList({
+      authenticatedUser: currentUser,
+    }),
   );
+
+  renderWithCurrentUserProvider(currentUser, <GiftList user={mockUser(3)} items={giftlist} />);
   const allGifts = screen.getAllByRole('listitem');
   const item = allGifts[1];
 
@@ -117,22 +110,20 @@ test('does not update gift when cancelling claim', async () => {
 test('shows proper modal when unclaiming gift', async () => {
   const visitor = userEvent.setup();
   const currentUser = mockUser(1);
-  const giftlist = sortGiftList(currentUser, mockGiftList({
-    authenticatedUser: currentUser,
-  }));
-
-  renderWithCurrentUserProvider(currentUser, 
-    <GiftList
-      user={ mockUser(3) }
-      items={ giftlist }
-    />
+  const giftlist = sortGiftList(
+    currentUser,
+    mockGiftList({
+      authenticatedUser: currentUser,
+    }),
   );
+
+  renderWithCurrentUserProvider(currentUser, <GiftList user={mockUser(3)} items={giftlist} />);
   const allGifts = screen.getAllByRole('listitem');
   const item = allGifts[0];
 
   expect(screen.queryByRole('dialog')).toBeNull();
 
-  visitor.click(within(item).getByText("Cancel"));
+  visitor.click(within(item).getByText('Cancel'));
   await waitFor(() => screen.getByRole('dialog'));
   const modal = screen.queryByRole('dialog');
 
@@ -143,20 +134,18 @@ test('shows proper modal when unclaiming gift', async () => {
 test('updates gift when unclaiming', async () => {
   const visitor = userEvent.setup();
   const currentUser = mockUser(1);
-  const giftlist = sortGiftList(currentUser, mockGiftList({
-    authenticatedUser: currentUser,
-  }));
-
-  renderWithCurrentUserProvider(currentUser, 
-    <GiftList
-      user={ mockUser(3) }
-      items={ giftlist }
-    />
+  const giftlist = sortGiftList(
+    currentUser,
+    mockGiftList({
+      authenticatedUser: currentUser,
+    }),
   );
+
+  renderWithCurrentUserProvider(currentUser, <GiftList user={mockUser(3)} items={giftlist} />);
   const allGifts = screen.getAllByRole('listitem');
   const item = allGifts[0];
 
-  visitor.click(within(item).getByText("Cancel"));
+  visitor.click(within(item).getByText('Cancel'));
   await waitFor(() => screen.getByRole('dialog'));
   const modal = screen.queryByRole('dialog');
 
@@ -165,26 +154,24 @@ test('updates gift when unclaiming', async () => {
 
   await waitForElementToBeRemoved(() => screen.getByRole('dialog'));
   expect(screen.queryByRole('dialog')).not.toBeInTheDocument();
-  expect(within(item).queryByText("Cancel")).not.toBeInTheDocument();
+  expect(within(item).queryByText('Cancel')).not.toBeInTheDocument();
 });
 
 test('does not update gift when cancelling claim', async () => {
   const visitor = userEvent.setup();
   const currentUser = mockUser(1);
-  const giftlist = sortGiftList(currentUser, mockGiftList({
-    authenticatedUser: currentUser,
-  }));
-
-  renderWithCurrentUserProvider(currentUser, 
-    <GiftList
-      user={ mockUser(3) }
-      items={ giftlist }
-    />
+  const giftlist = sortGiftList(
+    currentUser,
+    mockGiftList({
+      authenticatedUser: currentUser,
+    }),
   );
+
+  renderWithCurrentUserProvider(currentUser, <GiftList user={mockUser(3)} items={giftlist} />);
   const allGifts = screen.getAllByRole('listitem');
   const item = allGifts[0];
 
-  visitor.click(within(item).getByText("Cancel"));
+  visitor.click(within(item).getByText('Cancel'));
   await waitFor(() => screen.getByRole('dialog'));
   const modal = screen.queryByRole('dialog');
 
@@ -193,5 +180,5 @@ test('does not update gift when cancelling claim', async () => {
 
   await waitForElementToBeRemoved(() => screen.getByRole('dialog'));
   expect(screen.queryByRole('dialog')).not.toBeInTheDocument();
-  expect(within(item).queryByText("Cancel")).toBeInTheDocument();
+  expect(within(item).queryByText('Cancel')).toBeInTheDocument();
 });

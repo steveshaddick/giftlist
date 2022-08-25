@@ -5,30 +5,28 @@ import * as layout from 'common/_styles/layout';
 import * as styled from './_styles';
 
 const GiftGroup = (props) => {
-  const { data, currentUser } = props;
+  const { data } = props;
   const { members } = data;
 
   return (
     <styled.Component>
       <styled.List>
-        {members.map((member) => {
-          return (
-            <li key={ member.id }>
-              <layout.GridRow>
-                <styled.MemberListLink href={`/users/${member.id}/giftlist`}>
-                  { member.name }
-                </styled.MemberListLink>
-              </layout.GridRow>
-            </li>
-          )
-        })}
+        {members.map((member) => (
+          <li key={member.id}>
+            <layout.GridRow>
+              <styled.MemberListLink href={`/users/${member.id}/giftlist`}>
+                {member.name}
+              </styled.MemberListLink>
+            </layout.GridRow>
+          </li>
+        ))}
       </styled.List>
     </styled.Component>
   );
 };
 
 GiftGroup.propTypes = {
-  items: PropTypes.array,
+  data: PropTypes.object.isRequired,
 };
 
 export default GiftGroup;
