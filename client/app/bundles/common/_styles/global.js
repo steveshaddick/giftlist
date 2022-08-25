@@ -1,4 +1,5 @@
 import { createGlobalStyle } from 'styled-components';
+import { breakpoints } from 'common/_styles/breakpoints';
 
 // eslint-disable-next-line import/prefer-default-export
 export const GlobalStyle = createGlobalStyle`
@@ -37,9 +38,11 @@ export const GlobalStyle = createGlobalStyle`
     border-radius: 5px;
     padding: 0.5rem 1rem;
 
-    &:hover, &:active {
-      background: #aaa;
-      color: white;
+    @media ${breakpoints.tabletPortraitAndUp} {
+      &:hover, &:active {
+        background: #aaa;
+        color: white;
+      }
     }
 
     &:disabled {
