@@ -16,6 +16,11 @@ const ClaimListItem = (props) => {
   const { title, priceLow, priceHigh, description, isGot } = gift;
 
   const [isExpanded, setIsExpanded] = useState(false);
+  const [showIsGot, setShowIsGot] = useState(isGot);
+
+  const gotClickHandler = () => {
+    setShowIsGot(gotHandler(index));
+  };
 
   return (
     <styled.Component data-item-index={index} isGot={isGot}>
@@ -23,13 +28,13 @@ const ClaimListItem = (props) => {
         <styled.SummaryRow>
           <styled.CheckboxContainer>
             <IconContext.Provider value={iconContextValue}>
-              {!isGot && (
-                <styled.CheckboxButton onClick={gotHandler}>
+              {!showIsGot && (
+                <styled.CheckboxButton onClick={gotClickHandler}>
                   <MdCheckBoxOutlineBlank focusable="false" />
                 </styled.CheckboxButton>
               )}
-              {isGot && (
-                <styled.CheckboxButton onClick={gotHandler}>
+              {showIsGot && (
+                <styled.CheckboxButton onClick={gotClickHandler}>
                   <MdOutlineCheckBox focusable="false" />
                 </styled.CheckboxButton>
               )}
