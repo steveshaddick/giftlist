@@ -66,22 +66,16 @@ const ClaimList = () => {
     setIsAdding(false);
   };
 
-  const gotHandler = (e) => {
-    const parent = e.currentTarget.closest('[data-item-index]');
-    const item = items.current[parent.dataset.itemIndex];
+  const gotHandler = (index) => {
+    const item = items.current[index];
 
     item.isGot = !item.isGot;
 
-    api
-      .setGiftGot({
-        gift: item,
-      })
-      .then((response) => {
-        const { success } = response;
-        if (success) {
-          setClaims(sortClaims(items.current));
-        }
-      });
+    api.setGiftGot({
+      gift: item,
+    });
+
+    return item.isGot;
   };
 
   const unClaimHandler = (e) => {
