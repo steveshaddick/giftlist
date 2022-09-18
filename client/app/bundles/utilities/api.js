@@ -57,9 +57,18 @@ async function callApi(path, data = null, options = {}) {
 }
 
 export async function signout() {
-  return callApi('/users/sign_out', null, {
+  const response = await fetch('/users/sign_out', {
+    headers: {
+      'X-CSRF-TOKEN': csrfToken,
+    },
     method: 'DELETE',
   });
+
+  if (response.status >= 500) {
+    return generalError();
+  }
+
+  return response;
 }
 
 export async function setApiCurrentUser(userData) {
