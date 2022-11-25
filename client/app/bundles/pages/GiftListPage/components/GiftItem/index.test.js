@@ -28,13 +28,13 @@ test('renders public gift item', () => {
   );
 
   expect(screen.queryAllByRole('button')[0].innerHTML).toContain(gift.title);
-  expect(screen.queryByText(gift.description)).not.toBeInTheDocument();
+  expect(screen.queryByText(gift.description)).toBeInTheDocument();
   expect(screen.queryByText(gift.priceLow)).toBeInTheDocument();
   expect(screen.queryByText(gift.priceHigh)).toBeInTheDocument();
   expect(screen.queryByText("I'll get it")).toBeInTheDocument();
 });
 
-test('shows description when clicked', async () => {
+test('hides description when clicked', async () => {
   const visitor = userEvent.setup();
   const currentUser = mockUser(1);
   const gift = mockGift(1);
@@ -53,12 +53,12 @@ test('shows description when clicked', async () => {
     />,
   );
 
-  expect(screen.queryByText(gift.description)).not.toBeInTheDocument();
+  expect(screen.queryByText(gift.description)).toBeInTheDocument();
 
   const titleButton = screen.queryAllByRole('button')[0];
   await visitor.click(titleButton);
 
-  expect(screen.queryByText(gift.description)).toBeInTheDocument();
+  expect(screen.queryByText(gift.description)).not.toBeInTheDocument();
 });
 
 test('renders gift item claimed by current user', () => {
@@ -81,7 +81,7 @@ test('renders gift item claimed by current user', () => {
   );
 
   expect(screen.queryAllByRole('button')[0].innerHTML).toContain(gift.title);
-  expect(screen.queryByText(gift.description)).not.toBeInTheDocument();
+  expect(screen.queryByText(gift.description)).toBeInTheDocument();
   expect(screen.queryByText(gift.priceLow)).toBeInTheDocument();
   expect(screen.queryByText(gift.priceHigh)).toBeInTheDocument();
   expect(screen.queryByText("I'll get it")).not.toBeInTheDocument();
@@ -110,7 +110,7 @@ test('renders gift item claimed by another user', () => {
   );
 
   expect(screen.queryAllByRole('button')[0].innerHTML).toContain(gift.title);
-  expect(screen.queryByText(gift.description)).not.toBeInTheDocument();
+  expect(screen.queryByText(gift.description)).toBeInTheDocument();
   expect(screen.queryByText(gift.priceLow)).toBeInTheDocument();
   expect(screen.queryByText(gift.priceHigh)).toBeInTheDocument();
   expect(screen.queryByText("I'll get it")).not.toBeInTheDocument();
@@ -136,7 +136,7 @@ test("does not show claim button for current user's own list", () => {
   );
 
   expect(screen.queryAllByRole('button')[0].innerHTML).toContain(gift.title);
-  expect(screen.queryByText(gift.description)).not.toBeInTheDocument();
+  expect(screen.queryByText(gift.description)).toBeInTheDocument();
   expect(screen.queryByText(gift.priceLow)).toBeInTheDocument();
   expect(screen.queryByText(gift.priceHigh)).toBeInTheDocument();
   expect(screen.queryByText("I'll get it")).not.toBeInTheDocument();
