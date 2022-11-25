@@ -25,7 +25,7 @@ const GiftItem = (props) => {
   const currentUserClaimed = claimer?.id === currentUserId;
   const isGroupOwned = groupOwner && typeof groupOwner === 'object';
 
-  const [isExpanded, setIsExpanded] = useState(false);
+  const [isExpanded, setIsExpanded] = useState(true);
   const [isEditing, setIsEditing] = useState(false);
 
   const editClickHandler = () => {
