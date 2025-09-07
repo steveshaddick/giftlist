@@ -10,6 +10,7 @@ const ProfileDetails = (props) => {
   return (
     <styled.Component>
       <layout.GridRow>
+        <styled.BackToGroupLink href="/" />
         <p>{name}</p>
       </layout.GridRow>
     </styled.Component>

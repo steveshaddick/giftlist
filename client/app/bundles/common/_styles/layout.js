@@ -9,6 +9,7 @@ export const PageContainer = styled.div`
 export const GridRow = styled.div`
   padding-left: 20px;
   padding-right: 20px;
+  position: relative;
 `;
 
 export const OpinionsSection = styled.section``;
