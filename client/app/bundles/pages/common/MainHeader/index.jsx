@@ -1,10 +1,8 @@
 import React from 'react';
-import { getCurrentUser } from 'utilities/CurrentUserContext';
 
 import * as styled from './_styles';
 
 const MainHeader = () => {
-  const currentUser = getCurrentUser();
 
   return (
     <header>
@@ -17,9 +15,9 @@ const MainHeader = () => {
           </li>
 
           <li>
-            <styled.ProfileLink href={`/users/${currentUser.id}/profile`}>
-              My Lists
-            </styled.ProfileLink>
+            <styled.AccountLink href="/account">
+              My Account
+            </styled.AccountLink>
           </li>
         </styled.HeaderBannerList>
       </styled.HeaderBanner>

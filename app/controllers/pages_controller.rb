@@ -60,6 +60,10 @@ class PagesController < ApplicationController
     assign_props
   end
 
+  def account
+    assign_props
+  end
+
   private
 
   def assign_props(props = {})
@@ -70,6 +74,7 @@ class PagesController < ApplicationController
       current_user: {
         id: current_user.id,
         name: current_user[:name],
+        email: current_user[:email],
         group: {
           id: current_group[:id],
           title: current_group[:title],

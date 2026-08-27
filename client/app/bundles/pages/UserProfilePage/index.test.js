@@ -23,7 +23,7 @@ test('renders header and footer', () => {
   const header = document.getElementsByTagName('header')[0];
   const footer = document.getElementsByTagName('footer')[0];
 
-  expect(header.innerHTML).toContain('My Lists');
+  expect(header.innerHTML).toContain('My Account');
   expect(footer.innerHTML).toContain('Suggest improvement');
 });
 

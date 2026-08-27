@@ -39,7 +39,7 @@ export const MainLogoLink = styled.a`
   }
 `;
 
-export const ProfileLink = styled.a`
+export const AccountLink = styled.a`
   font-size: 1rem;
   color: #333;
   text-decoration: none;

@@ -11,6 +11,7 @@ Rails.application.routes.draw do
 
   get 'users/:id/giftlist', to: 'pages#giftlist'
   get 'users/:id/profile(/:tab)', to: 'pages#user_profile'
+  get '/account', to: 'pages#account'
 
   #api
   namespace :api do
